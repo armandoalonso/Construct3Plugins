@@ -1,0 +1,428 @@
+@@START ADDON.JSON
+{
+  "is-c3-addon": true,
+  "type": "plugin",
+  "name": "RotJs",
+  "id": "Piranha305_RotJs",
+  "version": "1.0.0.0",
+  "author": "Piranha305",
+  "website": "https://www.construct.net",
+  "documentation": "https://www.construct.net",
+  "description": "Rot.js Roguelike Toolkit",
+  "editor-scripts": [
+    "plugin.js",
+    "type.js",
+    "instance.js"
+  ],
+  "file-list": [
+    "c3runtime/plugin.js",
+    "c3runtime/type.js",
+    "c3runtime/instance.js",
+    "c3runtime/conditions.js",
+    "c3runtime/actions.js",
+    "c3runtime/expressions.js",
+    "lang/en-US.json",
+    "aces.json",
+    "addon.json",
+    "icon.svg",
+    "instance.js",
+    "plugin.js",
+    "type.js",
+    "c3runtime/rot.js"
+  ]
+}
+@@END ADDON.JSON
+
+@@START PLUGIN_EDIT.JS
+"use strict";
+
+{
+	////////////////////////////////////////////
+	// The plugin ID is how Construct identifies different kinds of plugins.
+	// *** NEVER CHANGE THE PLUGIN ID! ***
+	// If you change the plugin ID after releasing the plugin, Construct will think it is an entirely different
+	// plugin and assume it is incompatible with the old one, and YOU WILL BREAK ALL EXISTING PROJECTS USING THE PLUGIN.
+	// Only the plugin name is displayed in the editor, so to rename your plugin change the name but NOT the ID.
+	// If you want to completely replace a plugin, make it deprecated (it will be hidden but old projects keep working),
+	// and create an entirely new plugin with a different plugin ID.
+	const PLUGIN_ID = "Piranha305_RotJs";
+	////////////////////////////////////////////
+	
+	const PLUGIN_VERSION = "1.0.0.0";
+	const PLUGIN_CATEGORY = "general";
+	
+	const PLUGIN_CLASS = SDK.Plugins.Piranha305_RotJs = class RotJsPlugin extends SDK.IPluginBase
+	{
+		constructor()
+		{
+			super(PLUGIN_ID);
+			
+			SDK.Lang.PushContext("plugins." + PLUGIN_ID.toLowerCase());
+			
+			this._info.SetName(lang(".name"));
+			this._info.SetDescription(lang(".description"));
+			this._info.SetVersion(PLUGIN_VERSION);
+			this._info.SetCategory(PLUGIN_CATEGORY);
+			this._info.SetAuthor("Piranha305");
+			this._info.SetHelpUrl(lang(".help-url"));
+			this._info.SetIsSingleGlobal(true);
+			
+			// Support both the C2 and C3 runtimes
+			this._info.SetSupportedRuntimes(["c3"]);
+			
+			SDK.Lang.PushContext(".properties");
+			
+			this._info.SetProperties([
+				new SDK.PluginProperty("check", "use-seed", false),
+				new SDK.PluginProperty("integer", "seed", 12345)
+			]);
+
+			this._info.AddFileDependency({
+				filename: "c3runtime/rot.js",
+				type: "inline-script"
+			});	
+			
+			SDK.Lang.PopContext();		// .properties
+			SDK.Lang.PopContext();
+		}
+	};
+	
+	PLUGIN_CLASS.Register(PLUGIN_ID, PLUGIN_CLASS);
+}
+@@END PLUGIN_EDIT.JS
+
+@@START PLUGIN_RUN.JS
+"use strict";
+
+{
+	C3.Plugins.Piranha305_RotJs = class RotJsPlugin extends C3.SDKPluginBase
+	{
+		constructor(opts)
+		{
+			super(opts);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+	};
+}
+@@END PLUGIN_RUN.JS
+
+@@START TYPE_EDIT.JS
+"use strict";
+
+{
+	const PLUGIN_CLASS = SDK.Plugins.Piranha305_RotJs;
+	
+	PLUGIN_CLASS.Type = class RotJsType extends SDK.ITypeBase
+	{
+		constructor(sdkPlugin, iObjectType)
+		{
+			super(sdkPlugin, iObjectType);
+		}
+	};
+}
+@@END TYPE_EDIT.JS
+
+@@START TYPE_RUN.JS
+"use strict";
+
+{
+	C3.Plugins.Piranha305_RotJs.Type = class RotJsType extends C3.SDKTypeBase
+	{
+		constructor(objectClass)
+		{
+			super(objectClass);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+@@END TYPE_RUN.JS
+
+@@START INSTANCE_EDIT.JS
+"use strict";
+
+{
+	const PLUGIN_CLASS = SDK.Plugins.Piranha305_RotJs;
+	
+	PLUGIN_CLASS.Instance = class RotJsInstance extends SDK.IInstanceBase
+	{
+		constructor(sdkType, inst)
+		{
+			super(sdkType, inst);
+		}
+		
+		Release()
+		{
+		}
+		
+		OnCreate()
+		{
+		}
+		
+		OnPropertyChanged(id, value)
+		{
+		}
+		
+		LoadC2Property(name, valueString)
+		{
+			return false;		// not handled
+		}
+	};
+}
+@@END INSTANCE_EDIT.JS
+
+@@START INSTANCE_RUN.JS
+"use strict";
+
+{
+	C3.Plugins.Piranha305_RotJs.Instance = class RotJsInstance extends C3.SDKInstanceBase
+	{
+		constructor(inst, properties)
+		{
+			super(inst);
+			
+			this._seed = ROT.RNG.getSeed();
+			this._useSeed = false;
+
+			this.gen = {};
+			this.map = {};
+			this.rooms = [];
+			this.doors = [];
+			this.cells = [];
+			this.width = 0;
+			this.height = 0;
+			this.blobs = [];
+			this.fovMap = [];
+			this.floorCleared = true;
+			this.wallCleared = true;
+			this.floorTiles = { "0" : "100"};
+			this.wallTiles =  { "1" : "100"};
+
+			//room iteration
+			this.curRoomIndex = -1;
+			this.curRoom = {};
+
+			//blob iteration
+			this.curBlobIndex = -1;
+			this.curBlob = [];
+
+			//door iteration
+			this.curDoorIndex = -1;
+			this.curDoor = {};
+
+			//cell iteration
+			this.curCellIndex = -1;
+			this.curCell = {};
+
+			//fov iteration
+			this.curFovIndex = -1;
+			this.curFovCell = {};
+
+			if (properties)		// note properties may be null in some cases
+			{
+				this._useSeed = properties[0];
+
+				if(this._useSeed){
+					this._seed = properties[1];
+					ROT.RNG.setSeed(this._seed);
+				}
+			}
+		}	
+
+		Release()
+		{
+			super.Release();
+		}
+		
+		SaveToJson()
+		{
+			//TODO: save state
+			return {
+				seed : this._seed,
+				useSeed : this._useSeed,
+				gen : this.gen,
+				map : this.map,
+				rooms : this.rooms,
+				doors : this.doors,
+				cells : this.cells,
+				blobs : this.blobs,
+				fovMap : this.fovMap,
+				curRoomIndex: this.curRoomIndex,
+				curRoom : this.curRoom,
+				curDoorIndex: this.curDoorIndex,
+				curDoor : this.curDoor ,
+				curCellIndex: this.curCellIndex,
+				curCell : this.curCell,
+				curBlobIndex :this.curBlobIndex,
+				curBlob : this.curBlob,			
+				curFovIndex :this.curFovIndex,
+				curFovCell : this.curFovCell,
+				floorTiles : this.floorTiles,
+				wallTiles : this.wallTiles,
+				floorCleared : this.floorCleared,
+				wallCleared : this.wallCleared
+			};
+		}
+		
+		LoadFromJson(o)
+		{
+			this._seed = o["seed"];
+			this._useSeed = o["useSeed"];
+			this.gen = o["gen"];
+			this.map = o["map"];
+			this.rooms = o["rooms"];
+			this.doors = o["doors"];
+			this.cells = o["cells"];
+			this.curRoomIndex = o["curRoomIndex"];
+			this.curRoom = o["curRoom"];
+			this.curDoorIndex = o["curDoorIndex"];
+			this.curDoor = o["curDoor"];
+			this.curCellIndex = o["curCellIndex"];
+			this.curCell = o["curCell"];
+			this.blobs = o["blobs"];
+			this.curBlobIndex = o["curBlobIndex"];
+			this.curBlob = o["curBlob"];
+			this.fovMap = o["fovMap"];
+			this.curFovIndex = o["curFovIndex"];
+			this.curFovCell = o["curFovCell"];
+			this.floorTiles = o["floorTiles"];
+			this.wallTiles = o["wallTiles"];
+			this.floorCleared = o["floorCleared"];
+			this.this.wallCleared = o["wallCleared"];
+		}
+
+		_clearRooms()
+		{
+			this.gen = {};
+			this.map = {};
+			this.rooms = [];
+			this.doors = [];
+			this.cells = [];
+
+			//room iteration
+			this.curRoomIndex = -1;
+			this.curRoom = {};
+
+			//door iteration
+			this.curDoorIndex = -1;
+			this.curDoor = {};
+
+			//cell iteration
+			this.curCellIndex = -1;
+			this.curCell = {};
+		}
+
+		_setupRooms(room, index)
+		{
+			const rm = {
+				centerX : room.getCenter()[0],
+				centerY : room.getCenter()[1],
+				top : room.getTop(),
+				bottom :room.getBottom(),
+				left: room.getLeft(),
+				right: room.getRight(),
+				height: room.getBottom() - room.getTop() + 1,
+				width : room.getRight() - room.getLeft() + 1,
+				doors : [],
+				cells : []
+			};
+
+			room.getDoors((x,y) => {
+				rm.doors.push({x:x, y:y});
+				this.doors.push({room:index, x:x, y:y});
+			});
+			
+			//get free room cells
+			for(var b=room.getTop();b<room.getBottom()+1; b++){
+				for(var a=room.getLeft(); a<room.getRight()+1; a++){
+					rm.cells.push({x:a, y:b});
+					this.map[a+','+b].type = 'room';
+				}
+			};
+			this.rooms.push(rm);
+		}
+
+		_visitCell(x, y, label, matrix, visited, cellValue){
+			if(x<0 || y<0) return;
+			if(x>=this.width || y>=this.height) return;
+			if(visited[x][y] >= 0 ) return;
+			if(matrix[x][y] >= 0) return;
+
+			if(cellValue == 1){
+				if(this.map[x+','+y].value == 0) return;
+			}
+			else{
+				if(this.map[x+','+y].value == 1) return;
+			}
+			
+			visited[x][y] = label;
+			matrix[x][y] = label;
+			//recursivly visit all cells
+			this._visitCell(x+1, y, label, matrix, visited, cellValue);
+			this._visitCell(x-1, y, label, matrix, visited, cellValue);
+			this._visitCell(x, y+1, label, matrix, visited, cellValue);
+			this._visitCell(x, y-1, label, matrix, visited, cellValue);
+		}
+
+		_getFloorTile() {
+			if(this.floorCleared){
+				return 0;
+			}
+
+			console.log('getFloor');
+			return Number(ROT.RNG.getWeightedValue(this.floorTiles));
+		}
+
+		_getWallTile() {
+			if(this.wallCleared){
+				return 1;
+			}
+			console.log('getWall');
+			return Number(ROT.RNG.getWeightedValue(this.wallTiles));
+		}
+
+	};
+}
+@@END INSTANCE_RUN.JS
+
+@@START LANG_PROP.JSON
+"properties": {
+  "use-seed": {
+    "name": "Use Seed",
+    "desc": "Use the seed property in rotjs rng functions"
+  },
+  "seed": {
+    "name": "Seed",
+    "desc": "The seed to use to generate the random content"
+  }
+}
+@@END LANG_PROP.JSON
+
+@@START LANG_CAT.JSON
+"aceCategories": {
+  "misc": "Misc",
+  "arena-gen": "Generate Arena",
+  "maze-gen": "Generate Maze",
+  "cellular-automata-gen": "Generate Cellular Automata",
+  "dungeon-gen": "Generate Dungeons",
+  "import-export": "Import / Export",
+  "rng": "Random (RNG)",
+  "rooms": "Rooms",
+  "islands": "Islands",
+  "cell": "Cells",
+  "fov": "Field Of Vision",
+  "setup": "Setup"
+}
+@@END LANG_CAT.JSON
+

@@ -1,0 +1,1181 @@
+@@START get-map-as-json|import-export
+@@ACE
+{
+  "id": "get-map-as-json",
+  "expressionName": "AsJson",
+  "returnType": "string"
+}
+@@LANG
+"get-map-as-json":{
+  "description": "Get Map Data as Json String",
+  "translated-name": "AsJson"
+}
+@@CODE
+AsJson()
+{
+    var data = this.SaveToJson();
+    return JSON.stringify(data);
+}
+@@END get-map-as-json
+
+@@START get-seed|rng
+@@ACE
+{
+  "id": "get-seed",
+  "expressionName": "Seed",
+  "returnType": "number"
+}
+@@LANG
+"get-seed":{
+  "description": "Get Seed",
+  "translated-name": "Seed"
+}
+@@CODE
+Seed()
+{
+    return this._seed;
+}
+@@END get-seed
+
+@@START get-uniform|rng
+@@ACE
+{
+  "id": "get-uniform",
+  "expressionName": "GetUniform",
+  "returnType": "number"
+}
+@@LANG
+"get-uniform":{
+  "description": "Get float [0-1] with uniform distribution",
+  "translated-name": "GetUniform"
+}
+@@CODE
+GetUniform()
+{
+    return ROT.RNG.getUniform();
+}
+@@END get-uniform
+
+@@START get-normal|rng
+@@ACE
+{
+  "id": "get-normal",
+  "expressionName": "GetNormal",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "mean",
+      "type": "number"
+    },
+    {
+      "id": "stddev",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-normal":{
+  "description": "random number with normal distribution",
+  "translated-name": "GetNormal",
+  "params": {
+    "mean": {
+      "name": "Mean",
+      "desc": "Mean"
+    },
+    "stddev": {
+      "name": "StdDev",
+      "desc": "Standard Deviation"
+    }
+  }
+}
+@@CODE
+GetNormal(mean, stddev)
+{
+    return ROT.RNG.getNormal(mean, stddev);
+}
+@@END get-normal
+
+@@START get-percent|rng
+@@ACE
+{
+  "id": "get-percent",
+  "expressionName": "GetPercent",
+  "returnType": "number"
+}
+@@LANG
+"get-percent":{
+  "description": "Get integer [0-100]",
+  "translated-name": "GetPercent"
+}
+@@CODE
+GetPercent()
+{
+    return ROT.RNG.getPercentage();
+}
+@@END get-percent
+
+@@START get-weighted|rng
+@@ACE
+{
+  "id": "get-weighted",
+  "expressionName": "GetWeighted",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "list",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"get-weighted":{
+  "description": "Get Weighted Value",
+  "translated-name": "Getweighted",
+  "params": {
+    "list": {
+      "name": "list",
+      "desc": "Comma seperated list of weighted values \"item:weight,item:weight,..\""
+    }
+  }
+}
+@@CODE
+GetWeighted(list)
+{
+    var items = list.split(",");
+    var obj = {};
+    items.forEach((ele) => {
+        var item = ele.split(":");
+        obj[item[0].trim()] = Number(item[1].trim());
+    });
+    return ROT.RNG.getWeightedValue(obj);
+}
+@@END get-weighted
+
+@@START get-room-count|rooms
+@@ACE
+{
+  "id": "get-room-count",
+  "expressionName": "RoomCount",
+  "returnType": "number"
+}
+@@LANG
+"get-room-count":{
+  "description": "Get number of rooms in dungeon",
+  "translated-name": "RoomCount"
+}
+@@CODE
+RoomCount()
+{
+    return this.rooms.length;
+}
+@@END get-room-count
+
+@@START get-cur-room-index|rooms
+@@ACE
+{
+  "id": "get-cur-room-index",
+  "expressionName": "CurRoomIndex",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-index":{
+  "description": "The current rooms index",
+  "translated-name": "CurRoomIndex"
+}
+@@CODE
+CurRoomIndex()
+{
+    return this.curRoomIndex;
+}
+@@END get-cur-room-index
+
+@@START get-cur-room-height|rooms
+@@ACE
+{
+  "id": "get-cur-room-height",
+  "expressionName": "CurRoomHeight",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-height":{
+  "description": "The current rooms height",
+  "translated-name": "CurRoomHeight"
+}
+@@CODE
+CurRoomHeight()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.height;
+}
+@@END get-cur-room-height
+
+@@START get-cur-room-width|rooms
+@@ACE
+{
+  "id": "get-cur-room-width",
+  "expressionName": "CurRoomWidth",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-width":{
+  "description": "The current rooms width",
+  "translated-name": "CurRoomWidth"
+}
+@@CODE
+CurRoomWidth()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.width;
+}
+@@END get-cur-room-width
+
+@@START get-cur-room-top|rooms
+@@ACE
+{
+  "id": "get-cur-room-top",
+  "expressionName": "CurRoomTop",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-top":{
+  "description": "The current rooms top coordinate",
+  "translated-name": "CurRoomTop"
+}
+@@CODE
+CurRoomTop()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.top;
+}
+@@END get-cur-room-top
+
+@@START get-cur-room-bottom|rooms
+@@ACE
+{
+  "id": "get-cur-room-bottom",
+  "expressionName": "CurRoomBottom",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-bottom":{
+  "description": "The current rooms bottom coordinate",
+  "translated-name": "CurRoomBottom"
+}
+@@CODE
+CurRoomBottom()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.bottom;
+}
+@@END get-cur-room-bottom
+
+@@START get-cur-room-right|rooms
+@@ACE
+{
+  "id": "get-cur-room-right",
+  "expressionName": "CurRoomRight",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-right":{
+  "description": "The current rooms right coordinate",
+  "translated-name": "CurRoomRight"
+}
+@@CODE
+CurRoomRight()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.right;
+}
+@@END get-cur-room-right
+
+@@START get-cur-room-left|rooms
+@@ACE
+{
+  "id": "get-cur-room-left",
+  "expressionName": "CurRoomLeft",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-left":{
+  "description": "The current rooms left coordinate",
+  "translated-name": "CurRoomLeft"
+}
+@@CODE
+CurRoomLeft()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.left;
+}
+@@END get-cur-room-left
+
+@@START get-cur-room-centerx|rooms
+@@ACE
+{
+  "id": "get-cur-room-centerx",
+  "expressionName": "CurRoomCenterX",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-centerx":{
+  "description": "The current rooms center x coordinate",
+  "translated-name": "CurRoomCenterX"
+}
+@@CODE
+CurRoomCenterX()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.centerX;
+}
+@@END get-cur-room-centerx
+
+@@START get-cur-room-centery|rooms
+@@ACE
+{
+  "id": "get-cur-room-centery",
+  "expressionName": "CurRoomCenterY",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-centery":{
+  "description": "The current rooms center y coordinate",
+  "translated-name": "CurRoomCenterY"
+}
+@@CODE
+CurRoomCenterY()
+{
+    if (!this.curRoom) return -1;
+    return this.curRoom.centerY;
+}
+@@END get-cur-room-centery
+
+@@START get-cur-room-door-count|rooms
+@@ACE
+{
+  "id": "get-cur-room-door-count",
+  "expressionName": "CurRoomDoorCount",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-door-count":{
+  "description": "the current rooms amount of doors",
+  "translated-name": "CurRoomDoorCount"
+}
+@@CODE
+CurRoomDoorCount()
+{
+    if (!this.curRoom || !this.curRoom.doors) return -1;
+    return this.curRoom.doors.length;
+}
+@@END get-cur-room-door-count
+
+@@START get-cur-room-freecell-count|rooms
+@@ACE
+{
+  "id": "get-cur-room-freecell-count",
+  "expressionName": "CurRoomFreeCellCount",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-room-freecell-count":{
+  "description": "the current rooms amoutn of non wall cells",
+  "translated-name": "CurRoomFreeCellCount"
+}
+@@CODE
+CurRoomFreeCellCount()
+{
+    if (!this.curRoom || !this.curRoom.cells) return -1;
+    return this.curRoom.cells.length;
+}
+@@END get-cur-room-freecell-count
+
+@@START get-room-height|rooms
+@@ACE
+{
+  "id": "get-room-height",
+  "expressionName": "RoomHeight",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-height":{
+  "description": "The  rooms height",
+  "translated-name": "RoomHeight",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomHeight(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].height;
+}
+@@END get-room-height
+
+@@START get-room-width|rooms
+@@ACE
+{
+  "id": "get-room-width",
+  "expressionName": "RoomWidth",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-width":{
+  "description": "The  rooms width",
+  "translated-name": "RoomWidth",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomWidth(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].width;
+}
+@@END get-room-width
+
+@@START get-room-top|rooms
+@@ACE
+{
+  "id": "get-room-top",
+  "expressionName": "RoomTop",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-top":{
+  "description": "The  rooms top coordinate",
+  "translated-name": "RoomTop",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomTop(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].top;
+}
+@@END get-room-top
+
+@@START get-room-bottom|rooms
+@@ACE
+{
+  "id": "get-room-bottom",
+  "expressionName": "RoomBottom",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-bottom":{
+  "description": "The  rooms bottom coordinate",
+  "translated-name": "RoomBottom",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomBottom(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].bottom;
+}
+@@END get-room-bottom
+
+@@START get-room-right|rooms
+@@ACE
+{
+  "id": "get-room-right",
+  "expressionName": "RoomRight",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-right":{
+  "description": "The  rooms right coordinate",
+  "translated-name": "RoomRight",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomRight(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].right;
+}
+@@END get-room-right
+
+@@START get-room-left|rooms
+@@ACE
+{
+  "id": "get-room-left",
+  "expressionName": "RoomLeft",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-left":{
+  "description": "The  rooms left coordinate",
+  "translated-name": "RoomLeft",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomLeft(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].left;
+}
+@@END get-room-left
+
+@@START get-room-centerx|rooms
+@@ACE
+{
+  "id": "get-room-centerx",
+  "expressionName": "RoomCenterX",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-centerx":{
+  "description": "The  rooms center x coordinate",
+  "translated-name": "RoomCenterX",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomCenterX(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].centerX;
+}
+@@END get-room-centerx
+
+@@START get-room-centery|rooms
+@@ACE
+{
+  "id": "get-room-centery",
+  "expressionName": "RoomCenterY",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-centery":{
+  "description": "The  rooms center y coordinate",
+  "translated-name": "RoomCenterY",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomCenterY(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    return this.rooms[roomIndex].centerY;
+}
+@@END get-room-centery
+
+@@START get-room-door-count|rooms
+@@ACE
+{
+  "id": "get-room-door-count",
+  "expressionName": "RoomDoorCount",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-door-count":{
+  "description": "the  rooms amount of doors",
+  "translated-name": "RoomDoorCount",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomDoorCount(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    if (!this.rooms.doors) return -1;
+    return this.rooms[roomIndex].doors.length;
+}
+@@END get-room-door-count
+
+@@START get-room-freecell-count|rooms
+@@ACE
+{
+  "id": "get-room-freecell-count",
+  "expressionName": "RoomFreeCellCount",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "room-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-room-freecell-count":{
+  "description": "the  rooms amount of non wall cells",
+  "translated-name": "RoomFreeCellCount",
+  "params": {
+    "room-index": {
+      "name": "RoomIndex",
+      "desc": "The index of the room"
+    }
+  }
+}
+@@CODE
+RoomFreeCellCount(roomIndex)
+{
+    if (!this.rooms) return -1;
+    if (this.rooms.length <= roomIndex) return -1;
+    if (!this.rooms.cells) return -1;
+    return this.rooms[roomIndex].cells.length;
+}
+@@END get-room-freecell-count
+
+@@START get-curdoor-roomindex|rooms
+@@ACE
+{
+  "id": "get-curdoor-roomindex",
+  "expressionName": "CurDoorRoomIndex",
+  "returnType": "number"
+}
+@@LANG
+"get-curdoor-roomindex":{
+  "description": "The Current Doors room index",
+  "translated-name": "CurDoorRoomIndex"
+}
+@@CODE
+CurDoorRoomIndex()
+{
+    if (!this.curDoor) return -1;
+    return this.curDoor.room;
+}
+@@END get-curdoor-roomindex
+
+@@START get-curdoor-x|rooms
+@@ACE
+{
+  "id": "get-curdoor-x",
+  "expressionName": "CurDoorX",
+  "returnType": "number"
+}
+@@LANG
+"get-curdoor-x":{
+  "description": "The Current Doors center x coordinate",
+  "translated-name": "CurDoorX"
+}
+@@CODE
+CurDoorX()
+{
+    if (!this.curDoor) return -1;
+    return this.curDoor.x;
+}
+@@END get-curdoor-x
+
+@@START get-curdoor-y|rooms
+@@ACE
+{
+  "id": "get-curdoor-y",
+  "expressionName": "CurDoorY",
+  "returnType": "number"
+}
+@@LANG
+"get-curdoor-y":{
+  "description": "The Current Doors center y coordinate",
+  "translated-name": "CurDoorY"
+}
+@@CODE
+CurDoorY()
+{
+    if (!this.curDoor) return -1;
+    return this.curDoor.y;
+}
+@@END get-curdoor-y
+
+@@START get-door-roomindex|rooms
+@@ACE
+{
+  "id": "get-door-roomindex",
+  "expressionName": "DoorRoomIndex",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "door-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-door-roomindex":{
+  "description": "The Doors room index",
+  "translated-name": "DoorRoomIndex",
+  "params": {
+    "door-index": {
+      "name": "DoorIndex",
+      "desc": "The index of the door"
+    }
+  }
+}
+@@CODE
+DoorRoomIndex(doorIndex)
+{
+    if (!this.doors) return -1;
+    if (this.doors.length <= doorIndex) return -1;
+    return this.doors[doorIndex].room;
+}
+@@END get-door-roomindex
+
+@@START get-door-x|rooms
+@@ACE
+{
+  "id": "get-door-x",
+  "expressionName": "DoorX",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "door-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-door-x":{
+  "description": "The Doors center x coordinate",
+  "translated-name": "DoorX",
+  "params": {
+    "door-index": {
+      "name": "DoorIndex",
+      "desc": "The index of the door"
+    }
+  }
+}
+@@CODE
+DoorX(doorIndex)
+{
+    if (!this.doors) return -1;
+    if (this.doors.length <= doorIndex) return -1;
+    return this.doors[doorIndex].x;
+}
+@@END get-door-x
+
+@@START get-door-y|rooms
+@@ACE
+{
+  "id": "get-door-y",
+  "expressionName": "DoorY",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "door-index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-door-y":{
+  "description": "The Doors center y coordinate",
+  "translated-name": "DoorY",
+  "params": {
+    "door-index": {
+      "name": "DoorIndex",
+      "desc": "The index of the door"
+    }
+  }
+}
+@@CODE
+DoorY(doorIndex)
+{
+    if (!this.doors) return -1;
+    if (this.doors.length <= doorIndex) return -1;
+    return this.doors[doorIndex].y;
+}
+@@END get-door-y
+
+@@START get-blob-count|islands
+@@ACE
+{
+  "id": "get-blob-count",
+  "expressionName": "IslandCount",
+  "returnType": "number"
+}
+@@LANG
+"get-blob-count":{
+  "description": "Get number of islands that were generated",
+  "translated-name": "IslandCount"
+}
+@@CODE
+IslandCount()
+{
+    return this.blobs.length;
+}
+@@END get-blob-count
+
+@@START get-cur-blob-index|islands
+@@ACE
+{
+  "id": "get-cur-blob-index",
+  "expressionName": "CurIslandIndex",
+  "returnType": "number"
+}
+@@LANG
+"get-cur-blob-index":{
+  "description": "The current islands index",
+  "translated-name": "CurIslandIndex"
+}
+@@CODE
+CurIslandIndex()
+{
+    return this.curBlobIndex;
+}
+@@END get-cur-blob-index
+
+@@START get-curcell-x|cell
+@@ACE
+{
+  "id": "get-curcell-x",
+  "expressionName": "CurCellX",
+  "returnType": "number"
+}
+@@LANG
+"get-curcell-x":{
+  "description": "The Current Cell x coordinate",
+  "translated-name": "CurCellX"
+}
+@@CODE
+CurCellX()
+{
+    if (!this.curCell) return -1;
+    return this.curCell.x;
+}
+@@END get-curcell-x
+
+@@START get-curcell-y|cell
+@@ACE
+{
+  "id": "get-curcell-y",
+  "expressionName": "CurCellY",
+  "returnType": "number"
+}
+@@LANG
+"get-curcell-y":{
+  "description": "The Current Cell y coordinate",
+  "translated-name": "CurCellY"
+}
+@@CODE
+CurCellY()
+{
+    if (!this.curCell) return -1;
+    return this.curCell.y;
+}
+@@END get-curcell-y
+
+@@START get-curcell-value|cell
+@@ACE
+{
+  "id": "get-curcell-value",
+  "expressionName": "CurCellValue",
+  "returnType": "number"
+}
+@@LANG
+"get-curcell-value":{
+  "description": "The Current Cell Value",
+  "translated-name": "CurCellValue"
+}
+@@CODE
+CurCellValue()
+{
+    if (!this.curCell) return -1;
+    return this.curCell.value;
+}
+@@END get-curcell-value
+
+@@START get-cell-value|cell
+@@ACE
+{
+  "id": "get-cell-value",
+  "expressionName": "CellValue",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-cell-value":{
+  "description": "The Cell Value",
+  "translated-name": "CellValue",
+  "params": {
+    "x": {
+      "name": "X",
+      "desc": "the x coordinate of the cell"
+    },
+    "y": {
+      "name": "Y",
+      "desc": "the y coordinate of the cell"
+    }
+  }
+}
+@@CODE
+CellValue(x, y)
+{
+    if (!this.map) return -1;
+    if (!this.map.hasOwnProperty(x + ',' + y)) return -1;
+    return this.map[x + ',' + y].value;
+}
+@@END get-cell-value
+
+@@START get-curcell-type|cell
+@@ACE
+{
+  "id": "get-curcell-type",
+  "expressionName": "CurCellType",
+  "returnType": "string"
+}
+@@LANG
+"get-curcell-type":{
+  "description": "The Current Cell Type",
+  "translated-name": "CurCellType"
+}
+@@CODE
+CurCellType()
+{
+    if (!this.curCell) return -1;
+    return this.curCell.type;
+}
+@@END get-curcell-type
+
+@@START get-cell-type|cell
+@@ACE
+{
+  "id": "get-cell-type",
+  "expressionName": "CellType",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-cell-type":{
+  "description": "The Cell Type",
+  "translated-name": "CellType",
+  "params": {
+    "x": {
+      "name": "X",
+      "desc": "the x coordinate of the cell"
+    },
+    "y": {
+      "name": "Y",
+      "desc": "the y coordinate of the cell"
+    }
+  }
+}
+@@CODE
+CellType(x, y)
+{
+    if (!this.map) return -1;
+    if (!this.map.hasOwnProperty(x + ',' + y)) return -1;
+    return this.map[x + ',' + y].type;
+}
+@@END get-cell-type
+
+@@START get-fov-index|fov
+@@ACE
+{
+  "id": "get-fov-index",
+  "expressionName": "FovCellIndex",
+  "returnType": "number"
+}
+@@LANG
+"get-fov-index":{
+  "description": "Current FOV cell index",
+  "translated-name": "FovCellIndex"
+}
+@@CODE
+FovCellIndex()
+{
+    return this.curFovIndex;
+}
+@@END get-fov-index
+
+@@START get-fov-x|fov
+@@ACE
+{
+  "id": "get-fov-x",
+  "expressionName": "FovCellX",
+  "returnType": "number"
+}
+@@LANG
+"get-fov-x":{
+  "description": "Current FOV cell x",
+  "translated-name": "FovCellX"
+}
+@@CODE
+FovCellX()
+{
+    if (!this.curFovCell) return -1;
+    return this.curFovCell.x;
+}
+@@END get-fov-x
+
+@@START get-fov-y|fov
+@@ACE
+{
+  "id": "get-fov-y",
+  "expressionName": "FovCellY",
+  "returnType": "number"
+}
+@@LANG
+"get-fov-y":{
+  "description": "Current FOV cell y",
+  "translated-name": "FovCellY"
+}
+@@CODE
+FovCellY()
+{
+    if (!this.curFovCell) return -1;
+    return this.curFovCell.y;
+}
+@@END get-fov-y
+
+@@START get-fov-rad|fov
+@@ACE
+{
+  "id": "get-fov-rad",
+  "expressionName": "FovCellRadius",
+  "returnType": "number"
+}
+@@LANG
+"get-fov-rad":{
+  "description": "Current FOV cell radius",
+  "translated-name": "FovCellRadius"
+}
+@@CODE
+FovCellRadius()
+{
+    if (!this.curFovCell) return -1;
+    return this.curFovCell.radius;
+}
+@@END get-fov-rad
+
+@@START get-fov-vis|fov
+@@ACE
+{
+  "id": "get-fov-vis",
+  "expressionName": "FovCellVisibility",
+  "returnType": "number"
+}
+@@LANG
+"get-fov-vis":{
+  "description": "Current FOV cell visibility",
+  "translated-name": "FovCellVisibility"
+}
+@@CODE
+FovCellVisibility()
+{
+    if (!this.curFovCell) return -1;
+    return this.curFovCell.visibility;
+}
+@@END get-fov-vis
+

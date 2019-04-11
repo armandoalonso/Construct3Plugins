@@ -1,0 +1,1808 @@
+@@START debug-rot|misc
+@@ACE
+{
+  "id": "debug-rot",
+  "scriptName": "DebugRot"
+}
+@@LANG
+"debug-rot":{
+  "list-name": "Debug",
+  "display-text": "Debug",
+  "description": "Prints plugin information to the browser console"
+}
+@@CODE
+DebugRot()
+{
+    console.log('seed =>');
+    console.log(this._seed);
+    console.log('map =>');
+    console.log(this.map);
+    console.log('rooms =>');
+    console.log(this.rooms);
+    console.log('doors =>');
+    console.log(this.doors);
+}
+@@END debug-rot
+
+@@START debug-fov|misc
+@@ACE
+{
+  "id": "debug-fov",
+  "scriptName": "DebugFov"
+}
+@@LANG
+"debug-fov":{
+  "list-name": "Debug FOV",
+  "display-text": "Debug FOV",
+  "description": "Prints fov information to the browser console"
+}
+@@CODE
+DebugFov()
+{
+    console.log("fov => ");
+    console.log(this.fovMap);
+}
+@@END debug-fov
+
+@@START gen-digger-dungen-to-tm|dungeon-gen
+@@ACE
+{
+  "id": "gen-digger-dungen-to-tm",
+  "scriptName": "GenerateDiggerToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-digger-dungen-to-tm":{
+  "list-name": "Generate Dungeon (Digger) To Tilemap",
+  "display-text": "Generate Dungeon (Digger) {0}x{1} On Tilemap {2}",
+  "description": "Generate Dungeon (Digger), Random dungeon generator using human-like digging patterns; based on Mike Anderson's ideas from the \"Tyrant\" algo",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateDiggerToTileMap(width, height, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Digger(width, height);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'coor'
+        };
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    //get rooms info
+    var r = this.gen.getRooms();
+    for (var i = 0; i < r.length; i++)
+    {
+        var room = r[i];
+        this._setupRooms(room, i);
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.DungeonGenerated);
+}
+@@END gen-digger-dungen-to-tm
+
+@@START gen-uniform-dungen-to-tm|dungeon-gen
+@@ACE
+{
+  "id": "gen-uniform-dungen-to-tm",
+  "scriptName": "GenerateUniformToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-uniform-dungen-to-tm":{
+  "list-name": "Generate Dungeon (Uniform) To Tilemap",
+  "display-text": "Generate Dungeon (Uniform) {0}x{1} On Tilemap {2}",
+  "description": "Generate Dungeon (Uniform), Generates a set of rooms; tries to connect them afterwards",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateUniformToTileMap(width, height, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Uniform(width, height);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'coor'
+        };
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    //get rooms info
+    var r = this.gen.getRooms();
+    for (var i = 0; i < r.length; i++)
+    {
+        var room = r[i];
+        this._setupRooms(room, i);
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.DungeonGenerated);
+}
+@@END gen-uniform-dungen-to-tm
+
+@@START gen-rouge-dungen-to-tm|dungeon-gen
+@@ACE
+{
+  "id": "gen-rouge-dungen-to-tm",
+  "scriptName": "GenerateRogueToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-rouge-dungen-to-tm":{
+  "list-name": "Generate Dungeon (Rogue) To Tilemap",
+  "display-text": "Generate Dungeon (Rogue) {0}x{1} On Tilemap {2}",
+  "description": "Generate Dungeon (Rogue), The original Rogue dungeon algorithm, NOTE: no room or cooridor information will be availble with this dungeon type.",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateRogueToTileMap(width, height, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Rogue(width, height);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'floor'
+        };
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.DungeonGenerated);
+}
+@@END gen-rouge-dungen-to-tm
+
+@@START gen-digger-dungen-adv-to-tm|dungeon-gen
+@@ACE
+{
+  "id": "gen-digger-dungen-adv-to-tm",
+  "scriptName": "GenerateDiggerAdvancedToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "minRoomWidth",
+      "type": "number",
+      "initialValue": 3
+    },
+    {
+      "id": "maxRoomWidth",
+      "type": "number",
+      "initialValue": 5
+    },
+    {
+      "id": "minRoomHeight",
+      "type": "number",
+      "initialValue": 3
+    },
+    {
+      "id": "maxRoomHeight",
+      "type": "number",
+      "initialValue": 6
+    },
+    {
+      "id": "minCooridorLength",
+      "type": "number",
+      "initialValue": 3
+    },
+    {
+      "id": "maxCooridorLength",
+      "type": "number",
+      "initialValue": 6
+    },
+    {
+      "id": "dugPercentage",
+      "type": "number",
+      "initialValue": 0.2
+    },
+    {
+      "id": "timeLimit",
+      "type": "number",
+      "initialValue": 5000
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-digger-dungen-adv-to-tm":{
+  "list-name": "Generate Dungeon (Digger) Advanced To Tilemap",
+  "display-text": "Generate Dungeon (Digger) {0}x{1} On Tilemap {10}, RoomWidth [{2},{3}] RoomHeight [{4},{5}], CooridorLength [{6},{7}], Dug% {8}, TimeOut {9} milliseconds",
+  "description": "Generate Dungeon (Digger), Random dungeon generator using human-like digging patterns; based on Mike Anderson's ideas from the \"Tyrant\" algo",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "minRoomWidth": {
+      "name": "Min Room Width",
+      "desc": "Minimum Room Width"
+    },
+    "maxRoomWidth": {
+      "name": "Max Room Width",
+      "desc": "Maximum Room Width"
+    },
+    "minRoomHeight": {
+      "name": "Min Room Height",
+      "desc": "Minimum Room Height"
+    },
+    "maxRoomHeight": {
+      "name": "Max Room Height",
+      "desc": "Maximum Room Height"
+    },
+    "minCooridorLength": {
+      "name": "Min Cooridor Length",
+      "desc": "Minimum Cooridor Length"
+    },
+    "maxCooridorLength": {
+      "name": "Max Cooridor Length",
+      "desc": "Maximum Cooridor Length"
+    },
+    "dugPercentage": {
+      "name": "Dug Percentage",
+      "desc": "algorithm stops after this fraction of map area has been dug out (0-1)"
+    },
+    "timeLimit": {
+      "name": "Time Limit (milliseconds)",
+      "desc": "algorithm stops after this amount of milliseconds has passed (1 sec = 1000 mil)"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateDiggerAdvancedToTileMap(width, height, minrw, maxrw, minrh, maxrh, mincl, maxcl, dp, to, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Digger(width, height,
+    {
+        roomWidth: [minrw, maxrw],
+        roomHeight: [minrh, maxrh],
+        corridorLength: [mincl, maxcl],
+        dugPercentage: dp,
+        timeLimit: to
+    });
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'coor'
+        };
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    //get rooms info
+    var r = this.gen.getRooms();
+    for (var i = 0; i < r.length; i++)
+    {
+        var room = r[i];
+        this._setupRooms(room, i);
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.DungeonGenerated);
+}
+@@END gen-digger-dungen-adv-to-tm
+
+@@START gen-uniform-dungen-adv-to-tm|dungeon-gen
+@@ACE
+{
+  "id": "gen-uniform-dungen-adv-to-tm",
+  "scriptName": "GenerateUniformAdvancedToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "minRoomWidth",
+      "type": "number",
+      "initialValue": 3
+    },
+    {
+      "id": "maxRoomWidth",
+      "type": "number",
+      "initialValue": 5
+    },
+    {
+      "id": "minRoomHeight",
+      "type": "number",
+      "initialValue": 3
+    },
+    {
+      "id": "maxRoomHeight",
+      "type": "number",
+      "initialValue": 6
+    },
+    {
+      "id": "dugPercentage",
+      "type": "number",
+      "initialValue": 0.2
+    },
+    {
+      "id": "timeLimit",
+      "type": "number",
+      "initialValue": 5000
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-uniform-dungen-adv-to-tm":{
+  "list-name": "Generate Dungeon (Unifrom) Advanced To Tilemap",
+  "display-text": "Generate Dungeon (Uniform) {0}x{1} On Tilemap {8}, RoomWidth [{2},{3}] RoomHeight [{4},{5}], Dug% {6}, TimeOut {7} milliseconds",
+  "description": "Generate Dungeon (Uniform), Generate Dungeon (Uniform), Generates a set of rooms; tries to connect them afterwards",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "minRoomWidth": {
+      "name": "Min Room Width",
+      "desc": "Minimum Room Width"
+    },
+    "maxRoomWidth": {
+      "name": "Max Room Width",
+      "desc": "Maximum Room Width"
+    },
+    "minRoomHeight": {
+      "name": "Min Room Height",
+      "desc": "Minimum Room Height"
+    },
+    "maxRoomHeight": {
+      "name": "Max Room Height",
+      "desc": "Maximum Room Height"
+    },
+    "dugPercentage": {
+      "name": "Dug Percentage",
+      "desc": "algorithm stops after this fraction of map area has been dug out (0-1)"
+    },
+    "timeLimit": {
+      "name": "Time Limit (milliseconds)",
+      "desc": "algorithm stops after this amount of milliseconds has passed (1 sec = 1000 mil)"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateUniformAdvancedToTileMap(width, height, minrw, maxrw, minrh, maxrh, dp, to, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Uniform(width, height,
+    {
+        roomWidth: [minrw, maxrw],
+        roomHeight: [minrh, maxrh],
+        dugPercentage: dp,
+        timeLimit: to
+    });
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'coor'
+        };
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    //get rooms info
+    var r = this.gen.getRooms();
+    for (var i = 0; i < r.length; i++)
+    {
+        var room = r[i];
+        this._setupRooms(room, i);
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.DungeonGenerated);
+}
+@@END gen-uniform-dungen-adv-to-tm
+
+@@START gen-arena-to-tm|arena-gen
+@@ACE
+{
+  "id": "gen-arena-to-tm",
+  "scriptName": "GenerateArenaToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-arena-to-tm":{
+  "list-name": "Generate Arena To Tilemap",
+  "display-text": "Generate Arena {0}x{1} On Tilemap {2}",
+  "description": "Generate Arena Map",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the arena"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the arena"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateArenaToTileMap(width, height, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Arena(width, height);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'floor'
+        };
+        //populate tilemap
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.ArenaGenerated);
+}
+@@END gen-arena-to-tm
+
+@@START gen-divmaze-to-tm|maze-gen
+@@ACE
+{
+  "id": "gen-divmaze-to-tm",
+  "scriptName": "GenerateDividedMazeToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-divmaze-to-tm":{
+  "list-name": "Generate Divided Maze To Tilemap",
+  "display-text": "Generate Divided Maze {0}x{1} On Tilemap {2}",
+  "description": "Generate Divided Maze",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateDividedMazeToTileMap(width, height, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.DividedMaze(width, height);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'floor'
+        };
+        //populate tilemap
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MazeGenerated);
+}
+@@END gen-divmaze-to-tm
+
+@@START gen-iceymaze-to-tm|maze-gen
+@@ACE
+{
+  "id": "gen-iceymaze-to-tm",
+  "scriptName": "GenerateIceyMazeToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "regularity",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-iceymaze-to-tm":{
+  "list-name": "Generate Icey Maze To Tilemap",
+  "display-text": "Generate Icey Maze {0}x{1} On Tilemap {3} With Regularity of {2}",
+  "description": "Generate Icey Maze",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "regularity": {
+      "name": "Regularity",
+      "desc": "The Regularity of the maze (0 = most random)"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateIceyMazeToTileMap(width, height, reg, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.IceyMaze(width, height, reg);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'floor'
+        };
+        //populate tilemap
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MazeGenerated);
+}
+@@END gen-iceymaze-to-tm
+
+@@START gen-ellermaze-to-tm|maze-gen
+@@ACE
+{
+  "id": "gen-ellermaze-to-tm",
+  "scriptName": "GenerateEllersPerfectMazeToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-ellermaze-to-tm":{
+  "list-name": "Generate Eller Perfect Maze To Tilemap",
+  "display-text": "Generate Eller Perfect Maze {0}x{1} On Tilemap {2}",
+  "description": "Generate Eller Perfect Maze (every two cells are connected by exactly one path)",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateEllersPerfectMazeToTileMap(width, height, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.EllerMaze(width, height);
+    this.map = {};
+    this.gen.create((x, y, value) => {
+        var key = x + "," + y;
+        this.map[key] = {
+            x: x,
+            y: y,
+            value: value,
+            type: value === 1 ? 'wall' : 'floor'
+        };
+        //populate tilemap
+        value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MazeGenerated);
+}
+@@END gen-ellermaze-to-tm
+
+@@START gen-cellular-automata-to-tm|cellular-automata-gen
+@@ACE
+{
+  "id": "gen-cellular-automata-to-tm",
+  "scriptName": "GenerateCellularAutomataToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "randomize",
+      "type": "number",
+      "initialValue": 0.5
+    },
+    {
+      "id": "iterations",
+      "type": "number",
+      "initialValue": 10
+    },
+    {
+      "id": "connected",
+      "type": "combo",
+      "items": [
+        "yes",
+        "no"
+      ],
+      "initialValue": "no"
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-cellular-automata-to-tm":{
+  "list-name": "Generate Cellular Automata To Tilemap",
+  "display-text": "Generate Cellular Automata {0}x{1} On Tilemap {5} with Randomize ({2}), {3} Iterations, {4}",
+  "description": "Generate Cellular Automata",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "randomize": {
+      "name": "Randomize",
+      "desc": "Set all cells to \"alive\" with a given probability (0.5 = 50% chance) (0 = no cells, 1 = all cells)"
+    },
+    "iterations": {
+      "name": "Iterations",
+      "desc": "Each iteration will call a new generation using the existing map"
+    },
+    "connected": {
+      "name": "Connected",
+      "desc": "Connect all islands of free space",
+      "items": {
+        "yes": "Connected",
+        "no": "Not Connected"
+      }
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateCellularAutomataToTileMap(width, height, rnd, it, conn, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    this.gen = new ROT.Map.Cellular(width, height,
+    {
+        connected: conn === 0 ? true : false
+    });
+    this.gen.randomize(rnd);
+    this.map = {};
+    //iterate
+    for (var i = 0; i < it; i++)
+    {
+        //last iteration, draw map
+        if (i == it - 1)
+        {
+            this.gen.create((x, y, value) => {
+                var key = x + "," + y;
+                this.map[key] = {
+                    x: x,
+                    y: y,
+                    value: value,
+                    type: value === 1 ? 'wall' : 'floor'
+                };
+                value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+            });
+        }
+        else
+        {
+            this.gen.create((x, y, value) => {
+                var key = x + "," + y;
+                this.map[key] = {
+                    x: x,
+                    y: y,
+                    value: value,
+                    type: value === 1 ? 'wall' : 'floor'
+                };
+            });
+        }
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.CellularAutomataGenerated);
+}
+@@END gen-cellular-automata-to-tm
+
+@@START gen-cellular-automata-adv-to-tm|cellular-automata-gen
+@@ACE
+{
+  "id": "gen-cellular-automata-adv-to-tm",
+  "scriptName": "GenerateCellularAutomataAdvancedToTileMap",
+  "params": [
+    {
+      "id": "width",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "height",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "randomize",
+      "type": "number",
+      "initialValue": 0.5
+    },
+    {
+      "id": "born",
+      "type": "string",
+      "initialValue": "\"5,6,7,8\""
+    },
+    {
+      "id": "survive",
+      "type": "string",
+      "initialValue": "\"4,5,6,7,8\""
+    },
+    {
+      "id": "iterations",
+      "type": "number",
+      "initialValue": 10
+    },
+    {
+      "id": "connected",
+      "type": "combo",
+      "items": [
+        "yes",
+        "no"
+      ],
+      "initialValue": "no"
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"gen-cellular-automata-adv-to-tm":{
+  "list-name": "Generate Cellular Automata Advanced To Tilemap",
+  "display-text": "Generate Cellular Automata {0}x{1} On Tilemap {7} with Randomize ({2}), {5} Iterations, {6}, Born [{3}], Survive [{4}]",
+  "description": "Generate Cellular Automata Advanced",
+  "params": {
+    "width": {
+      "name": "Width",
+      "desc": "The Width of the maze"
+    },
+    "height": {
+      "name": "Height",
+      "desc": "The Height of the maze"
+    },
+    "randomize": {
+      "name": "Randomize",
+      "desc": "Set all cells to \"alive\" with a given probability (0.5 = 50% chance) (0 = no cells, 1 = all cells)"
+    },
+    "born": {
+      "name": "Born [Array]",
+      "desc": " Comma Seperated Values of neighbor counts; when an empty cell has this number of neighbors, a new cell is born, (0-8)"
+    },
+    "survive": {
+      "name": "Survive [Array]",
+      "desc": "Comma Seperated Values of neighbor counts; when an existing cell has this number of neighbors, it will survive into next iteration, (0-8)"
+    },
+    "iterations": {
+      "name": "Iterations",
+      "desc": "Each iteration will call a new generation using the existing map"
+    },
+    "connected": {
+      "name": "Connected",
+      "desc": "Connect all islands of free space",
+      "items": {
+        "yes": "Connected",
+        "no": "Not Connected"
+      }
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+GenerateCellularAutomataAdvancedToTileMap(width, height, rnd, born, survive, it, conn, tm)
+{
+    this._clearRooms();
+    this.width = width;
+    this.height = height;
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    var b = born.split(",").map(x => Number(x));
+    var s = survive.split(",").map(x => Number(x));
+    this.gen = new ROT.Map.Cellular(width, height,
+    {
+        connected: conn === 0 ? true : false,
+        born: b,
+        survive: s
+    });
+    this.gen.randomize(rnd);
+    this.map = {};
+    //iterate
+    for (var i = 0; i < it; i++)
+    {
+        //last iteration, draw map
+        if (i == it - 1)
+        {
+            this.gen.create((x, y, value) => {
+                var key = x + "," + y;
+                this.map[key] = {
+                    x: x,
+                    y: y,
+                    value: value,
+                    type: value === 1 ? 'wall' : 'floor'
+                };
+                value ? instance.SetTileAt(x, y, this._getWallTile()) : instance.SetTileAt(x, y, this._getFloorTile());
+            });
+        }
+        else
+        {
+            this.gen.create((x, y, value) => {
+                var key = x + "," + y;
+                this.map[key] = {
+                    x: x,
+                    y: y,
+                    value: value,
+                    type: value === 1 ? 'wall' : 'floor'
+                };
+            });
+        }
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.MapGenerated);
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.CellularAutomataGenerated);
+}
+@@END gen-cellular-automata-adv-to-tm
+
+@@START download-json|import-export
+@@ACE
+{
+  "id": "download-json",
+  "scriptName": "DownloadMapAsJson"
+}
+@@LANG
+"download-json":{
+  "list-name": "Download Map as JSON",
+  "display-text": "Download Map as JSON",
+  "description": "Downloads the map as JSON"
+}
+@@CODE
+DownloadMapAsJson()
+{
+    var data = this.SaveToJson();
+    var json = JSON.stringify(data);
+    var blob = new Blob([json],
+    {
+        type: "application/json"
+    });
+    var url = URL.createObjectURL(blob);
+    const runtime = this._runtime;
+    runtime.InvokeDownload(url, 'map.json');
+}
+@@END download-json
+
+@@START load-json-to-tm|import-export
+@@ACE
+{
+  "id": "load-json-to-tm",
+  "scriptName": "LoadJsonToTilemap",
+  "params": [
+    {
+      "id": "json",
+      "type": "string"
+    },
+    {
+      "id": "tm",
+      "type": "object",
+      "allowedPluginIds": [
+        "Tilemap"
+      ]
+    }
+  ]
+}
+@@LANG
+"load-json-to-tm":{
+  "list-name": "Load Map JSON To Tilemap",
+  "display-text": "Load Map JSON {0} To Tilemap {1}",
+  "description": "Load Map JSON To Tilemap",
+  "params": {
+    "json": {
+      "name": "Map Json",
+      "desc": "The Map Json"
+    },
+    "tm": {
+      "name": "Timemap",
+      "desc": "The Tilemap to use"
+    }
+  }
+}
+@@CODE
+LoadJsonToTilemap(json, tm)
+{
+    var o = JSON.parse(json);
+    this.LoadFromJson(o);
+    var instance = tm.GetInstances()[0].GetSdkInstance();
+    var mapValues = Object.values(this.map);
+    for (const cell of mapValues)
+    {
+        instance.SetTileAt(cell.x, cell.y, cell.value);
+    }
+}
+@@END load-json-to-tm
+
+@@START load-json-to-map|import-export
+@@ACE
+{
+  "id": "load-json-to-map",
+  "scriptName": "LoadMapFromJson",
+  "params": [
+    {
+      "id": "json",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"load-json-to-map":{
+  "list-name": "Load Map From JSON",
+  "display-text": "Load Map From JSON {0}",
+  "description": "Load Map From JSON",
+  "params": {
+    "json": {
+      "name": "Map Json",
+      "desc": "The Map Json"
+    }
+  }
+}
+@@CODE
+LoadMapFromJson(json)
+{
+    var o = JSON.parse(json);
+    this.LoadFromJson(o);
+}
+@@END load-json-to-map
+
+@@START set-seed|rng
+@@ACE
+{
+  "id": "set-seed",
+  "scriptName": "SetSeed",
+  "params": [
+    {
+      "id": "seed",
+      "type": "number",
+      "initialValue": 123456789
+    }
+  ]
+}
+@@LANG
+"set-seed":{
+  "list-name": "Set Seed",
+  "display-text": "Set {0} As Seed",
+  "description": "The seed for Rot.js",
+  "params": {
+    "seed": {
+      "name": "Seed",
+      "desc": "The seed to use"
+    }
+  }
+}
+@@CODE
+SetSeed(seed)
+{
+    //set the seed => enable the ssed
+    this._useSeed = true;
+    this._seed = seed;
+    ROT.RNG.setSeed(this._seed);
+}
+@@END set-seed
+
+@@START generate-blob-index|islands
+@@ACE
+{
+  "id": "generate-blob-index",
+  "scriptName": "GenerateBlobIndex",
+  "params": [
+    {
+      "id": "cell-value",
+      "type": "number",
+      "initialValue": 0
+    }
+  ]
+}
+@@LANG
+"generate-blob-index":{
+  "list-name": "Generate Island Index",
+  "display-text": "Generate Island Index For ({0}) Cell Type",
+  "description": "Assigns index to seperated sections of floor (islands), use after map is generated",
+  "params": {
+    "cell-value": {
+      "name": "Cell Value",
+      "desc": "The type of cell used to find islands (0=floor, 1=wall)"
+    }
+  }
+}
+@@CODE
+GenerateBlobIndex(cellValue)
+{
+    //create new visited 2d array [width][height]
+    var matrix = new Array(this.width).fill(-1).map(() => new Array(this.height).fill(-1));
+    var visited = new Array(this.width).fill(-1).map(() => new Array(this.height).fill(-1));
+    var count = 0;
+    for (var x = 0; x < this.width; x++)
+    {
+        for (var y = 0; y < this.height; y++)
+        {
+            //check cell is not vistsed
+            if (matrix[x][y] == -1 && visited[x][y] == -1 && this.map[x + ',' + y].value === cellValue)
+            {
+                this._visitCell(x, y, count, matrix, visited, cellValue);
+                count++;
+            }
+        }
+    }
+    //assign blob maps
+    for (var x = 0; x < this.width; x++)
+    {
+        for (var y = 0; y < this.height; y++)
+        {
+            var index = matrix[x][y];
+            if (index >= 0)
+            {
+                if (this.blobs[index])
+                {
+                    this.blobs[index].push(
+                    {
+                        x: x,
+                        y: y
+                    });
+                }
+                else
+                {
+                    this.blobs[index] = [];
+                    this.blobs[index].push(
+                    {
+                        x: x,
+                        y: y
+                    });
+                }
+            }
+        }
+    }
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.BlobsGenerated);
+}
+@@END generate-blob-index
+
+@@START generate-fov-percise-shadowcasting|fov
+@@ACE
+{
+  "id": "generate-fov-percise-shadowcasting",
+  "scriptName": "GenerateFovPerciseShadowcasting",
+  "params": [
+    {
+      "id": "x",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "y",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "rad",
+      "type": "number",
+      "initialValue": 25
+    }
+  ]
+}
+@@LANG
+"generate-fov-percise-shadowcasting":{
+  "list-name": "Generate FOV (Percise Shadow Casting)",
+  "display-text": "Generate FOV (Percise Shadow Casting) At ({0},{1}) With Radius {2}",
+  "description": "Generates FOV using Percise Shadow Casting Algorithm http://www.roguebasin.roguelikedevelopment.org/index.php?title=Precise_Shadowcasting_in_JavaScript",
+  "params": {
+    "x": {
+      "name": "X Cell",
+      "desc": "Starting Cell X Position"
+    },
+    "y": {
+      "name": "Y Cell",
+      "desc": "Starting Cell Y Position"
+    },
+    "rad": {
+      "name": "Radius",
+      "desc": "Maximum Visibility Radius"
+    }
+  }
+}
+@@CODE
+GenerateFovPerciseShadowcasting(x, y, rad)
+{
+    this.fovMap = [];
+    var fov = new ROT.FOV.PreciseShadowcasting((x, y) => {
+        if (x + ',' + y in this.map)
+        {
+            //if value is 0 (empty space) light is allowed to pass
+            return (this.map[x + ',' + y].value === 0);
+        }
+        return false;
+    });
+    fov.compute(x, y, rad, (x, y, r, v) => {
+        this.fovMap.push(
+        {
+            x: x,
+            y: y,
+            radius: r,
+            visibility: v
+        });
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.FovGenerated);
+}
+@@END generate-fov-percise-shadowcasting
+
+@@START generate-fov-recurive-shadowcasting360|fov
+@@ACE
+{
+  "id": "generate-fov-recurive-shadowcasting360",
+  "scriptName": "GenerateFovRecursiveShadowcasting360",
+  "params": [
+    {
+      "id": "x",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "y",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "rad",
+      "type": "number",
+      "initialValue": 25
+    }
+  ]
+}
+@@LANG
+"generate-fov-recurive-shadowcasting360":{
+  "list-name": "Generate FOV (Recusive Shadow Casting 360°)",
+  "display-text": "Generate 360° FOV (Recusive Shadow Casting) At ({0},{1}) With Radius {2}",
+  "description": "Generates 360° FOV using Recusive Shadow Casting Algorithm http://www.roguebasin.com/index.php?title=FOV_using_recursive_shadowcasting",
+  "params": {
+    "x": {
+      "name": "X Cell",
+      "desc": "Starting Cell X Position"
+    },
+    "y": {
+      "name": "Y Cell",
+      "desc": "Starting Cell Y Position"
+    },
+    "rad": {
+      "name": "Radius",
+      "desc": "Maximum Visibility Radius"
+    }
+  }
+}
+@@CODE
+GenerateFovRecursiveShadowcasting360(x, y, rad)
+{
+    this.fovMap = [];
+    var fov = new ROT.FOV.RecursiveShadowcasting((x, y) => {
+        if (x + ',' + y in this.map)
+        {
+            //if value is 0 (empty space) light is allowed to pass
+            return (this.map[x + ',' + y].value === 0);
+        }
+        return false;
+    });
+    fov.compute(x, y, rad, (x, y, r, v) => {
+        this.fovMap.push(
+        {
+            x: x,
+            y: y,
+            radius: r,
+            visibility: v
+        });
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.FovGenerated);
+}
+@@END generate-fov-recurive-shadowcasting360
+
+@@START generate-fov-recurive-shadowcasting180|fov
+@@ACE
+{
+  "id": "generate-fov-recurive-shadowcasting180",
+  "scriptName": "GenerateFovRecursiveShadowcasting180",
+  "params": [
+    {
+      "id": "x",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "y",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "rad",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "dir",
+      "type": "string",
+      "initialValue": "\"N\""
+    }
+  ]
+}
+@@LANG
+"generate-fov-recurive-shadowcasting180":{
+  "list-name": "Generate FOV (Recusive Shadow Casting 180°)",
+  "display-text": "Generate 180° FOV (Recusive Shadow Casting) At ({0},{1}) With Radius {2}, And Direction {3}",
+  "description": "Generates 180° FOV using Recusive Shadow Casting Algorithm http://www.roguebasin.com/index.php?title=FOV_using_recursive_shadowcasting",
+  "params": {
+    "x": {
+      "name": "X Cell",
+      "desc": "Starting Cell X Position"
+    },
+    "y": {
+      "name": "Y Cell",
+      "desc": "Starting Cell Y Position"
+    },
+    "rad": {
+      "name": "Radius",
+      "desc": "Maximum Visibility Radius"
+    },
+    "dir": {
+      "name": "Direction",
+      "desc": "The direction of the FOV (N, NE, E, SE, S, SW, W, NW)"
+    }
+  }
+}
+@@CODE
+GenerateFovRecursiveShadowcasting180(x, y, rad, dir)
+{
+    this.fovMap = [];
+    //direction 0=north, 1=northeast, 2=east, 3=southeast, 4=south, 5=southwest, 6=west, 7=northwest
+    var dirEnum = {
+        N: 0,
+        NE: 1,
+        E: 2,
+        SE: 3,
+        S: 4,
+        SW: 5,
+        W: 6,
+        NW: 7
+    };
+    var fov = new ROT.FOV.RecursiveShadowcasting((x, y) => {
+        if (x + ',' + y in this.map)
+        {
+            //if value is 0 (empty space) light is allowed to pass
+            return (this.map[x + ',' + y].value === 0);
+        }
+        return false;
+    });
+    let direction = dirEnum[dir.toUpperCase()];
+    console.log(direction);
+    if (direction === null)
+    {
+        console.log('error => invalid direction code');
+        return;
+    }
+    fov.compute180(x, y, rad, direction, (x, y, r, v) => {
+        this.fovMap.push(
+        {
+            x: x,
+            y: y,
+            radius: r,
+            visibility: v
+        });
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.FovGenerated);
+}
+@@END generate-fov-recurive-shadowcasting180
+
+@@START generate-fov-recurive-shadowcasting90|fov
+@@ACE
+{
+  "id": "generate-fov-recurive-shadowcasting90",
+  "scriptName": "GenerateFovRecursiveShadowcasting90",
+  "params": [
+    {
+      "id": "x",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "y",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "rad",
+      "type": "number",
+      "initialValue": 25
+    },
+    {
+      "id": "dir",
+      "type": "string",
+      "initialValue": "\"N\""
+    }
+  ]
+}
+@@LANG
+"generate-fov-recurive-shadowcasting90":{
+  "list-name": "Generate FOV (Recusive Shadow Casting 90°)",
+  "display-text": "Generate 90° FOV (Recusive Shadow Casting) At ({0},{1}) With Radius {2}, And Direction {3}",
+  "description": "Generates 90° FOV using Recusive Shadow Casting Algorithm http://www.roguebasin.com/index.php?title=FOV_using_recursive_shadowcasting",
+  "params": {
+    "x": {
+      "name": "X Cell",
+      "desc": "Starting Cell X Position"
+    },
+    "y": {
+      "name": "Y Cell",
+      "desc": "Starting Cell Y Position"
+    },
+    "rad": {
+      "name": "Radius",
+      "desc": "Maximum Visibility Radius"
+    },
+    "dir": {
+      "name": "Direction",
+      "desc": "The direction of the FOV (N, NE, E, SE, S, SW, W, NW)"
+    }
+  }
+}
+@@CODE
+GenerateFovRecursiveShadowcasting90(x, y, rad, dir)
+{
+    this.fovMap = [];
+    //direction 0=north, 1=northeast, 2=east, 3=southeast, 4=south, 5=southwest, 6=west, 7=northwest
+    var dirEnum = {
+        N: 0,
+        NE: 1,
+        E: 2,
+        SE: 3,
+        S: 4,
+        SW: 5,
+        W: 6,
+        NW: 7
+    };
+    var fov = new ROT.FOV.RecursiveShadowcasting((x, y) => {
+        if (x + ',' + y in this.map)
+        {
+            //if value is 0 (empty space) light is allowed to pass
+            return (this.map[x + ',' + y].value === 0);
+        }
+        return false;
+    });
+    let direction = dirEnum[dir.toUpperCase()];
+    console.log(direction);
+    if (direction === null)
+    {
+        console.log('error => invalid direction code');
+        return;
+    }
+    fov.compute90(x, y, rad, direction, (x, y, r, v) => {
+        this.fovMap.push(
+        {
+            x: x,
+            y: y,
+            radius: r,
+            visibility: v
+        });
+    });
+    this.Trigger(C3.Plugins.Piranha305_RotJs.Cnds.FovGenerated);
+}
+@@END generate-fov-recurive-shadowcasting90
+
+@@START add-floor-tile|setup
+@@ACE
+{
+  "id": "add-floor-tile",
+  "scriptName": "AddFloorTile",
+  "params": [
+    {
+      "id": "index",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "weight",
+      "type": "number",
+      "initialValue": 100
+    }
+  ]
+}
+@@LANG
+"add-floor-tile":{
+  "list-name": "Add Floor Tile",
+  "display-text": "Add Floor Tile {0} With Weight {1}",
+  "description": "Adds a floor tile to be choosen (weighted value) for floor generation.",
+  "params": {
+    "index": {
+      "name": "Index of Tile",
+      "desc": "Index of tile on the tilemap"
+    },
+    "weight": {
+      "name": "Weight",
+      "desc": "Weight value (0-100), the higher the number the more likely it is to be choosen for generation"
+    }
+  }
+}
+@@CODE
+AddFloorTile(index, weight)
+{
+    if (this.floorCleared)
+    {
+        this.floorTiles = {};
+        this.floorCleared = false;
+    }
+    //todo: fix this use objetc property
+    this.floorTiles[index] = weight;
+}
+@@END add-floor-tile
+
+@@START add-wall-tile|setup
+@@ACE
+{
+  "id": "add-wall-tile",
+  "scriptName": "AddWallTile",
+  "params": [
+    {
+      "id": "index",
+      "type": "number",
+      "initialValue": 0
+    },
+    {
+      "id": "weight",
+      "type": "number",
+      "initialValue": 100
+    }
+  ]
+}
+@@LANG
+"add-wall-tile":{
+  "list-name": "Add Wall Tile",
+  "display-text": "Add Wall Tile {0} With Weight {1}",
+  "description": "Adds a wall tile to be choosen (weighted value) for floor generation.",
+  "params": {
+    "index": {
+      "name": "Index of Tile",
+      "desc": "Index of tile on the tilemap"
+    },
+    "weight": {
+      "name": "Weight",
+      "desc": "Weight value (0-100), the higher the number the more likely it is to be choosen for generation"
+    }
+  }
+}
+@@CODE
+AddWallTile(index, weight)
+{
+    if (this.wallCleared)
+    {
+        this.wallTiles = {};
+        this.wallCleared = false;
+    }
+    //todo: fix this use objetc property
+    this.wallTiles[index] = weight;
+}
+@@END add-wall-tile
+
+@@START clear-floor-tile|setup
+@@ACE
+{
+  "id": "clear-floor-tile",
+  "scriptName": "ClearFloorTile"
+}
+@@LANG
+"clear-floor-tile":{
+  "list-name": "Clear Floor Tile",
+  "display-text": "Clear All Floor Tiles",
+  "description": "Remove all added tiles for floor generation (0 will be used by default)"
+}
+@@CODE
+ClearFloorTile()
+{
+    this.floorCleared = true;
+    this.floorTiles = {
+        "0": "100"
+    };
+}
+@@END clear-floor-tile
+
+@@START clear-wall-tile|setup
+@@ACE
+{
+  "id": "clear-wall-tile",
+  "scriptName": "ClearWallTile"
+}
+@@LANG
+"clear-wall-tile":{
+  "list-name": "Clear Wall Tile",
+  "display-text": "Clear All Wall Tiles",
+  "description": "Remove all added tiles for wall generation (1 will be used by default)"
+}
+@@CODE
+ClearWallTile()
+{
+    this.wallCleared = true;
+    this.wallTiles = {
+        "1": "100"
+    };
+}
+@@END clear-wall-tile
+

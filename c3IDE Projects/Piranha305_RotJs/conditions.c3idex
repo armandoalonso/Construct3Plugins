@@ -1,0 +1,751 @@
+@@START map-generated|misc
+@@ACE
+{
+  "id": "map-generated",
+  "scriptName": "MapGenerated",
+  "isTrigger": true
+}
+@@LANG
+"map-generated":{
+  "list-name": "Any Map Generated",
+  "display-text": "Any Map Generated",
+  "description": "Triggered when any map is generated"
+}
+@@CODE
+MapGenerated()
+{
+    return true;
+}
+@@END map-generated
+
+@@START dungeon-generated|dungeon-gen
+@@ACE
+{
+  "id": "dungeon-generated",
+  "scriptName": "DungeonGenerated",
+  "isTrigger": true
+}
+@@LANG
+"dungeon-generated":{
+  "list-name": "Dungeon Generated",
+  "display-text": "Dungeon Generated",
+  "description": "Triggered when a dungeon is generated"
+}
+@@CODE
+DungeonGenerated()
+{
+    return true;
+}
+@@END dungeon-generated
+
+@@START rogue-dungeon-generated|dungeon-gen
+@@ACE
+{
+  "id": "rogue-dungeon-generated",
+  "scriptName": "RogueDungeonGenerated",
+  "isTrigger": true
+}
+@@LANG
+"rogue-dungeon-generated":{
+  "list-name": "Rogue Dungeon Generated",
+  "display-text": "Rogue Dungeon Generated",
+  "description": "Triggered when a rogue dungeon is generated"
+}
+@@CODE
+RogueDungeonGenerated()
+{
+    return true;
+}
+@@END rogue-dungeon-generated
+
+@@START arena-generated|arena-gen
+@@ACE
+{
+  "id": "arena-generated",
+  "scriptName": "ArenaGenerated",
+  "isTrigger": true
+}
+@@LANG
+"arena-generated":{
+  "list-name": "Arena Generated",
+  "display-text": "Arena Generated",
+  "description": "Triggered when an arena is generated"
+}
+@@CODE
+ArenaGenerated()
+{
+    return true;
+}
+@@END arena-generated
+
+@@START maze-generated|maze-gen
+@@ACE
+{
+  "id": "maze-generated",
+  "scriptName": "MazeGenerated",
+  "isTrigger": true
+}
+@@LANG
+"maze-generated":{
+  "list-name": "Maze Generated",
+  "display-text": "Maze Generated",
+  "description": "Triggered when a maze is generated"
+}
+@@CODE
+MazeGenerated()
+{
+    return true;
+}
+@@END maze-generated
+
+@@START cellular-automata-generated|cellular-automata-gen
+@@ACE
+{
+  "id": "cellular-automata-generated",
+  "scriptName": "CellularAutomataGenerated",
+  "isTrigger": true
+}
+@@LANG
+"cellular-automata-generated":{
+  "list-name": "Celluar Automata Generated",
+  "display-text": "Celluar Automata Generated",
+  "description": "Triggered when a cellular automata is generated"
+}
+@@CODE
+CellularAutomataGenerated()
+{
+    return true;
+}
+@@END cellular-automata-generated
+
+@@START iterate-rooms|rooms
+@@ACE
+{
+  "id": "iterate-rooms",
+  "scriptName": "IterateRooms",
+  "isLooping": true,
+  "isInvertible": false
+}
+@@LANG
+"iterate-rooms":{
+  "list-name": "For Each Room",
+  "display-text": "For Each Room",
+  "description": "Loop over all rooms"
+}
+@@CODE
+IterateRooms()
+{
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    for (const room of this.rooms)
+    {
+        this.curRoomIndex = index;
+        //console.log(this.curRoomIndex);
+        this.curRoom = room;
+        //console.log(this.curRoom);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-rooms
+
+@@START iterate-doors|rooms
+@@ACE
+{
+  "id": "iterate-doors",
+  "scriptName": "IterateDoors",
+  "isLooping": true,
+  "isInvertible": false
+}
+@@LANG
+"iterate-doors":{
+  "list-name": "For Each Door",
+  "display-text": "For Each Doors",
+  "description": "Loop over all doors"
+}
+@@CODE
+IterateDoors()
+{
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    for (const door of this.doors)
+    {
+        this.curDoorIndex = index;
+        //console.log(this.curDoorIndex);
+        this.curDoor = door;
+        //console.log(this.curDoor);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-doors
+
+@@START iterate-room-cells|rooms
+@@ACE
+{
+  "id": "iterate-room-cells",
+  "scriptName": "IterateRoomCells",
+  "isLooping": true,
+  "isInvertible": false,
+  "params": [
+    {
+      "id": "roomIndex",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"iterate-room-cells":{
+  "list-name": "For Each Cell In Room",
+  "display-text": "For Each Cell In Room {0}",
+  "description": "Loop over all cells in room",
+  "params": {
+    "roomIndex": {
+      "name": "RoomIndex",
+      "desc": "The index of the room to iterate"
+    }
+  }
+}
+@@CODE
+IterateRoomCells(roomIndex)
+{
+    //check for room existance
+    if (this.rooms.length <= roomIndex) return false;
+    var rm = this.rooms[roomIndex];
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    for (const cell of rm.cells)
+    {
+        this.curCellIndex = index;
+        //console.log(this.curDoorIndex);
+        this.curCell = cell;
+        //console.log(this.curDoor);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-room-cells
+
+@@START iterate-blobs|islands
+@@ACE
+{
+  "id": "iterate-blobs",
+  "scriptName": "IterateBlobs",
+  "isLooping": true,
+  "isInvertible": false
+}
+@@LANG
+"iterate-blobs":{
+  "list-name": "For Each Island",
+  "display-text": "For Each Island",
+  "description": "Loop over all Islands"
+}
+@@CODE
+IterateBlobs()
+{
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    for (const blob of this.blobs)
+    {
+        this.curBlobIndex = index;
+        //console.log(this.curRoomIndex);
+        this.curBlob = blob;
+        //console.log(this.curRoom);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-blobs
+
+@@START iterate-blob-cells|islands
+@@ACE
+{
+  "id": "iterate-blob-cells",
+  "scriptName": "IterateBlobCells",
+  "isLooping": true,
+  "isInvertible": false,
+  "params": [
+    {
+      "id": "islandIndex",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"iterate-blob-cells":{
+  "list-name": "For Each Cell In Island",
+  "display-text": "For Each Cell In Island {0}",
+  "description": "Loop over all cells in island",
+  "params": {
+    "islandIndex": {
+      "name": "IslandIndex",
+      "desc": "The index of the island to iterate"
+    }
+  }
+}
+@@CODE
+IterateBlobCells(blobIndex)
+{
+    //check for room existance
+    if (this.blobs.length <= blobIndex) return false;
+    var blob = this.blobs[blobIndex];
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    for (const cell of blob)
+    {
+        this.curCellIndex = index;
+        //console.log(this.curDoorIndex);
+        this.curCell = cell;
+        //console.log(this.curDoor);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-blob-cells
+
+@@START blobs-generated|islands
+@@ACE
+{
+  "id": "blobs-generated",
+  "scriptName": "BlobsGenerated",
+  "isTrigger": true
+}
+@@LANG
+"blobs-generated":{
+  "list-name": "Islands Generated",
+  "display-text": "Islands Generated",
+  "description": "Triggered when the Generate Island Index action is completed"
+}
+@@CODE
+BlobsGenerated()
+{
+    return true;
+}
+@@END blobs-generated
+
+@@START iterate-all-cells|cell
+@@ACE
+{
+  "id": "iterate-all-cells",
+  "scriptName": "IterateAllCells",
+  "isLooping": true,
+  "isInvertible": false
+}
+@@LANG
+"iterate-all-cells":{
+  "list-name": "For Each Cell",
+  "display-text": "For Each Cell",
+  "description": "Loop over all cell"
+}
+@@CODE
+IterateAllCells()
+{
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    var mapKeys = Object.keys(this.map);
+    for (const key of mapKeys)
+    {
+        this.curCellIndex = index;
+        //console.log(this.curCellIndex);
+        this.curCell = this.map[key];
+        //console.log(this.curCell);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-all-cells
+
+@@START iterate-all-floor-cells|cell
+@@ACE
+{
+  "id": "iterate-all-floor-cells",
+  "scriptName": "IterateAllFloorCells",
+  "isLooping": true,
+  "isInvertible": false
+}
+@@LANG
+"iterate-all-floor-cells":{
+  "list-name": "For Each Floor Cell",
+  "display-text": "For Each Floor Cell",
+  "description": "Loop over all floor cell"
+}
+@@CODE
+IterateAllFloorCells()
+{
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    var mapValues = Object.values(this.map);
+    var floorCells = mapValues.filter(c => c.value === 0);
+    for (const cell of floorCells)
+    {
+        this.curCellIndex = index;
+        //console.log(this.curCellIndex);
+        this.curCell = cell;
+        //console.log(this.curCell);
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-all-floor-cells
+
+@@START cur-cell-is-floor|cell
+@@ACE
+{
+  "id": "cur-cell-is-floor",
+  "scriptName": "CurrentCellIsFloor"
+}
+@@LANG
+"cur-cell-is-floor":{
+  "list-name": "Current Cell Is Floor",
+  "display-text": "Current Cell is Floor",
+  "description": "Checks if the current cell in loop is floor"
+}
+@@CODE
+CurrentCellIsFloor()
+{
+    return this.map[this.curCell.x + "," + this.curCell.y].value == 0;
+}
+@@END cur-cell-is-floor
+
+@@START cell-is-floor|cell
+@@ACE
+{
+  "id": "cell-is-floor",
+  "scriptName": "CellIsFloor",
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"cell-is-floor":{
+  "list-name": "Cell Is Floor",
+  "display-text": "Cell at ({0},{1}) is Floor",
+  "description": "Checks if the cell is floor",
+  "params": {
+    "x": {
+      "name": "X",
+      "desc": "the x coordinate of the cell"
+    },
+    "y": {
+      "name": "Y",
+      "desc": "the y coordinate of the cell"
+    }
+  }
+}
+@@CODE
+CellIsFloor(x, y)
+{
+    return this.map[x + "," + y].value === 0;
+}
+@@END cell-is-floor
+
+@@START cur-cell-is-wall|cell
+@@ACE
+{
+  "id": "cur-cell-is-wall",
+  "scriptName": "CurrentCellIsWall"
+}
+@@LANG
+"cur-cell-is-wall":{
+  "list-name": "Current Cell Is Wall",
+  "display-text": "Current Cell is Wall",
+  "description": "Checks if the current cell in loop is wall"
+}
+@@CODE
+CurrentCellIsWall()
+{
+    return this.map[this.curCell.x + "," + this.curCell.y].value == 1;
+}
+@@END cur-cell-is-wall
+
+@@START cell-is-wall|cell
+@@ACE
+{
+  "id": "cell-is-wall",
+  "scriptName": "CellIsWall",
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"cell-is-wall":{
+  "list-name": "Cell Is Wall",
+  "display-text": "Cell at ({0},{1}) is Wall",
+  "description": "Checks if the cell is wall",
+  "params": {
+    "x": {
+      "name": "X",
+      "desc": "the x coordinate of the cell"
+    },
+    "y": {
+      "name": "Y",
+      "desc": "the y coordinate of the cell"
+    }
+  }
+}
+@@CODE
+CellIsWall(x, y)
+{
+    return this.map[x + "," + y].value === 1;
+}
+@@END cell-is-wall
+
+@@START cur-cell-is-room|cell
+@@ACE
+{
+  "id": "cur-cell-is-room",
+  "scriptName": "CurrentCellIsRoom"
+}
+@@LANG
+"cur-cell-is-room":{
+  "list-name": "Current Cell Is In Room",
+  "display-text": "Current Cell is in Room",
+  "description": "Checks if the current cell in loop is in a room"
+}
+@@CODE
+CurrentCellIsRoom()
+{
+    return this.map[this.curCell.x + "," + this.curCell.y].type === "room";
+}
+@@END cur-cell-is-room
+
+@@START cell-is-room|cell
+@@ACE
+{
+  "id": "cell-is-room",
+  "scriptName": "CellIsRoom",
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"cell-is-room":{
+  "list-name": "Cell Is In Room",
+  "display-text": "Cell ({0},{1}) is in Room",
+  "description": "Checks if the cell is in a room",
+  "params": {
+    "x": {
+      "name": "X",
+      "desc": "the x coordinate of the cell"
+    },
+    "y": {
+      "name": "Y",
+      "desc": "the y coordinate of the cell"
+    }
+  }
+}
+@@CODE
+CellIsRoom(x, y)
+{
+    return this.map[x + "," + y].type === "room";
+}
+@@END cell-is-room
+
+@@START cur-cell-is-cooridor|cell
+@@ACE
+{
+  "id": "cur-cell-is-cooridor",
+  "scriptName": "CurrentCellIsCooridor"
+}
+@@LANG
+"cur-cell-is-cooridor":{
+  "list-name": "Current Cell Is In Cooridor",
+  "display-text": "Current Cell is Cooridor",
+  "description": "Checks if the current cell in loop is a cooridor"
+}
+@@CODE
+CurrentCellIsCooridor()
+{
+    return this.map[this.curCell.x + "," + this.curCell.y].type === "coor";
+}
+@@END cur-cell-is-cooridor
+
+@@START cell-is-cooridor|cell
+@@ACE
+{
+  "id": "cell-is-cooridor",
+  "scriptName": "CellIsCooridor",
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"cell-is-cooridor":{
+  "list-name": "Cell Is In Cooridor",
+  "display-text": "Cell ({0},{1}) is Cooridor",
+  "description": "Checks if the cell is in a cooridor",
+  "params": {
+    "x": {
+      "name": "X",
+      "desc": "the x coordinate of the cell"
+    },
+    "y": {
+      "name": "Y",
+      "desc": "the y coordinate of the cell"
+    }
+  }
+}
+@@CODE
+CellIsCooridor(x, y)
+{
+    return this.map[x + "," + y].type === "coor";
+}
+@@END cell-is-cooridor
+
+@@START fov-generated|fov
+@@ACE
+{
+  "id": "fov-generated",
+  "scriptName": "FovGenerated",
+  "isTrigger": true
+}
+@@LANG
+"fov-generated":{
+  "list-name": "FOV Generated",
+  "display-text": "FOV Generated",
+  "description": "Triggered when the FOV is calculation is completed"
+}
+@@CODE
+FovGenerated()
+{
+    return true;
+}
+@@END fov-generated
+
+@@START iterate-fov-cells|fov
+@@ACE
+{
+  "id": "iterate-fov-cells",
+  "scriptName": "IterateFovCells",
+  "isLooping": true,
+  "isInvertible": false
+}
+@@LANG
+"iterate-fov-cells":{
+  "list-name": "For Each Visible Cell In FOV",
+  "display-text": "For Each Visible Cell In FOV",
+  "description": "Loop over all visible cells calculated by the fov"
+}
+@@CODE
+IterateFovCells()
+{
+    const runtime = this._runtime;
+    const eventSheetManager = runtime.GetEventSheetManager();
+    const currentEvent = runtime.GetCurrentEvent();
+    const solModifiers = currentEvent.GetSolModifiers();
+    const eventStack = runtime.GetEventStack();
+    const oldFrame = eventStack.GetCurrentStackFrame();
+    const newFrame = eventStack.Push(currentEvent);
+    var index = 0;
+    for (const fovCell of this.fovMap)
+    {
+        this.curFovIndex = index;
+        this.curFovCell = fovCell;
+        eventSheetManager.PushCopySol(solModifiers);
+        currentEvent.Retrigger(oldFrame, newFrame);
+        eventSheetManager.PopSol(solModifiers);
+        index++;
+    }
+    eventStack.Pop();
+    return false;
+}
+@@END iterate-fov-cells
+
