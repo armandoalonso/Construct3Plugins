@@ -1,0 +1,80 @@
+@@START set-active|fsm
+@@ACE
+{
+  "id": "set-active",
+  "scriptName": "SetActive",
+  "highlight": false,
+  "params": [
+    {
+      "id": "active",
+      "type": "combo",
+      "items": [
+        "yes",
+        "no"
+      ]
+    }
+  ]
+}
+@@LANG
+"set-active": {
+	"list-name": "Set Active",
+	"display-text": "{my} set active to [b]{0}[/b]",
+	"description": "Enables the object FSM behavior",
+	"params": {
+        "active": {
+            "name": "Active",
+            "desc": "Enables the FSM",
+            "items":{
+            	"no": "No",
+                "yes": "Yes"
+            }
+        }
+    }
+}
+@@CODE
+SetActive(value)
+{
+	this.active = (value == 1);
+}
+@@END set-active
+
+@@START go-to-state|fsm
+@@ACE
+{
+  "id": "go-to-state",
+  "scriptName": "GoToState",
+  "highlight": false,
+  "params": [
+    {
+      "id": "state",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"go-to-state": {
+	"list-name": "Go To State",
+	"display-text": "{my} go to state [b]{0}[\b]",
+	"description": "Assign the next state",
+	"params": {
+        "state": {
+            "name": "Name",
+            "desc": "State name"
+        }
+    }
+}
+@@CODE
+GoToState(state)
+{
+	if(!this.active)
+	if(state == null) return;
+	
+	this.previousState = this.currentState;
+	this.currentState = state;
+	
+	this.Trigger(C3.Behaviors.c3IDE_FSM.Cnds.OnStateChanged);
+	this.Trigger(C3.Behaviors.c3IDE_FSM.Cnds.OnEnter);
+	this.Trigger(C3.Behaviors.c3IDE_FSM.Cnds.OnExit);
+}
+@@END go-to-state
+

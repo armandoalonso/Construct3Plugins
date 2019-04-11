@@ -1,0 +1,76 @@
+@@START get-cur-x|move
+@@ACE
+{
+	"id": "get-cur-x",
+	"expressionName": "GetCurX",
+	"returnType": "number"
+}
+@@LANG
+"get-cur-x": { 
+	"translated-name": "GetCurX",
+	"description": "get the current X point"
+}
+@@CODE
+GetCurX()
+{
+	return this.list[this.currentIndex].x;
+}
+@@END get-cur-x
+
+@@START get-cur-y|move
+@@ACE
+{
+	"id": "get-cur-y",
+	"expressionName": "GetCurY",
+	"returnType": "number"
+}
+@@LANG
+"get-cur-y": { 
+	"translated-name": "GetCurY",
+	"description": "get the current Y point"
+}
+@@CODE
+GetCurY()
+{
+	return this.list[this.currentIndex].y;
+}
+@@END get-cur-y
+
+@@START get-count|list
+@@ACE
+{
+	"id": "get-count",
+	"expressionName": "GetCount",
+	"returnType": "number"
+}
+@@LANG
+"get-count": { 
+	"translated-name": "GetCount",
+	"description": "Get the number of points in the list"
+}
+@@CODE
+GetCount()
+{
+	return this.GetListSize();
+}
+@@END get-count
+
+@@START get-json|json
+@@ACE
+{
+	"id": "get-json",
+	"expressionName": "GetJSON",
+	"returnType": "string"
+}
+@@LANG
+"get-json": { 
+	"translated-name": "GetJSON",
+	"description": "Get the json string"
+}
+@@CODE
+GetJSON()
+{
+	return JSON.stringify(this.list);
+}
+@@END get-json
+

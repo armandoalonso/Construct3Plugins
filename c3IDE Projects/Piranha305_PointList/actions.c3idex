@@ -1,0 +1,221 @@
+@@START add-point|list
+@@ACE
+{
+  "id": "add-point",
+  "scriptName": "AddPoint",
+  "highlight": false,
+  "params": [
+    {
+      "id": "x",
+      "type": "number"
+    },
+    {
+      "id": "y",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"add-point": {
+    "list-name": "Add Point",
+    "display-text": "Add point [b]({0},{1})[/b] to {my}",
+    "description": "Add point (x,y) to list",
+    "params": {
+      "x": {
+        "name": "X",
+        "desc": "The x value of the point"
+      },
+      "y": {
+        "name": "Y",
+        "desc": "The y value of the point"
+      }
+    }
+  }
+@@CODE
+AddPoint(x, y)
+{
+    //check if tag list exists, if not create it
+    if (this.list == null)
+    {
+        this.list = [];
+        this.currentIndex = 0;
+    }
+
+    //insert (x,y) point to tag list
+    this.list.push(
+    {
+        'x': x,
+        'y': y
+    });
+}
+@@END add-point
+
+@@START clear-list|list
+@@ACE
+{
+	"id": "clear-list",
+	"scriptName": "ClearList",
+	"highlight": false
+}
+@@LANG
+"clear-list": {
+	"list-name": "Clear List",
+	"display-text": "Clear the {my}",
+	"description": "Clears the list of the points"
+}
+@@CODE
+ClearList()
+{
+	//clear the list, and set the current Index to none (-1) 
+	this.list = [];
+	this.currentIndex = -1;
+}
+@@END clear-list
+
+@@START move-to-next|move
+@@ACE
+{
+	"id": "move-to-next",
+	"scriptName": "MoveToNext",
+	"highlight": false
+}
+@@LANG
+"move-to-next": {
+	"list-name": "Move to Next",
+	"display-text": "Move to [b]next[/b] point in {my}",
+	"description": "Move to the next point"
+}
+@@CODE
+MoveToNext()
+{
+	var size = this.GetListSize()-1;	
+	if(this.currentIndex >= size){
+		//trigger list end event
+		console.log("shoudl trigger");
+		this.Trigger(C3.Behaviors.Piranha305_PointList.ListEnded);
+		return;
+	}
+	else{
+		//console.log(size);
+		this.currentIndex++;
+	}
+}
+@@END move-to-next
+
+@@START debug-list|debug
+@@ACE
+{
+	"id": "debug-list",
+	"scriptName": "DebugList",
+	"highlight": false
+}
+@@LANG
+"debug-list": {
+	"list-name": "Debug List",
+	"display-text": "Debug {my}",
+	"description": "Prints all the nodes of the list, and the current index"
+}
+@@CODE
+DebugList()
+{
+	//print list
+	console.log("list => ");
+	console.log(this.list);
+	
+	//print current index
+	console.log("current index => ", this.currentIndex);
+}
+@@END debug-list
+
+@@START move-to-start|move
+@@ACE
+{
+	"id": "move-to-start",
+	"scriptName": "MoveToStart",
+	"highlight": false
+}
+@@LANG
+"move-to-start": {
+	"list-name": "Move to Start",
+	"display-text": "Move to [b]start[/b] of the {my}",
+	"description": "Move to the start of the list"
+}
+@@CODE
+MoveToStart()
+{
+	this.currentIndex = 0;
+}
+@@END move-to-start
+
+@@START import-json|json
+@@ACE
+{
+  "id": "import-json",
+  "scriptName": "ImportJson",
+  "highlight": false,
+  "params": [
+    {
+      "id": "json",
+      "type": "string",
+      "initialValue": "[ ]"
+    }
+  ]
+}
+@@LANG
+"import-json": {
+	"list-name": "Import Json",
+	"display-text": "Import Json ([b]{0}[/b])",
+	"description": "Import json string",
+	"params": {
+        "json": {
+            "name": "Json",
+            "desc": "The json to import"
+        }
+    }
+}
+@@CODE
+ImportJson(json)
+{
+	this.list = JOSN.parse(json);
+}
+@@END import-json
+
+@@START download|json
+@@ACE
+{
+  "id": "download",
+  "scriptName": "Download",
+  "highlight": false,
+  "params": [
+    {
+      "id": "name",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"download": {
+	"list-name": "Download Point List",
+	"display-text": "Download '{0}' from [b]{my}[/b] json",
+	"description": "Download point list json",
+	"params": {
+        "name": {
+            "name": "filename",
+            "desc": "File name prefix"
+        }
+    }
+}
+@@CODE
+Download(name)
+{
+	var json = JSON.stringify(this.list);
+	var blob = new Blob([json], {
+		type: "application/json"
+	});
+	var url = URL.createObjectURL(blob);
+
+	const runtime = this._runtime;
+	runtime.InvokeDownload(url, name+'_path.json');
+}
+@@END download
+

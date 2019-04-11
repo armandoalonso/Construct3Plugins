@@ -1,0 +1,49 @@
+@@START get-stringify|json
+@@ACE
+{
+  "id": "get-stringify",
+  "expressionName": "GetStringify",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "path",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"get-stringify": { 
+	"translated-name": "GetStringify",
+	"description": "Get the content of json as a string",
+	"params": {
+        "path": {
+            "name": "path",
+            "desc": "The path to get the data from the json"
+        }
+    }
+}
+@@CODE
+GetStringify(path)
+{
+		 var pathData = path.split('.');
+		 var root = this.jsonObject._data;
+		 
+		 console.log(root);
+		 for (var i = 0; i < pathData.length; ++i)
+		 {
+		     if (root[pathData[i]] == undefined)
+		     {
+		         return undefined;
+		     }
+		     else
+		     {
+		         root = root[pathData[i]];
+		         console.log(root);
+		     }
+		 }
+		 var str = JSON.stringify(root);
+		 console.log(str);
+		 return str;
+}
+@@END get-stringify
+

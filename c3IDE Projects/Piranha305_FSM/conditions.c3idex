@@ -1,0 +1,203 @@
+@@START on-enter|fsm
+@@ACE
+{
+  "id": "on-enter",
+  "scriptName": "OnEnter",
+  "highlight": false,
+  "isTrigger": true,
+  "params": [
+    {
+      "id": "state",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"on-enter": {
+	"list-name": "On Enter State",
+	"display-text": "On {my} enter to [b]{0}[/b]",
+	"description": "Triggered when entering a state",
+	"params": {
+        "state": {
+            "name": "Name",
+            "desc": "State name"
+        }
+    }
+}
+@@CODE
+OnEnter(state)
+{
+	/*
+	bool C3.compare(a,cmp,b);
+	--------------
+	cmp value list
+	--------------
+	0 = equals
+	1 = not equals
+	2 = less
+	3 = less/equals
+	4 = greater
+	5 = greater/equal
+	*/
+	
+	return C3.compare(this.currentState, 0, state);
+}
+@@END on-enter
+
+@@START on-exit|fsm
+@@ACE
+{
+  "id": "on-exit",
+  "scriptName": "OnExit",
+  "highlight": false,
+  "isTrigger": true,
+  "params": [
+    {
+      "id": "state",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"on-exit": {
+	"list-name": "On Exit State",
+	"display-text": "On {my} exit from [b]{0}[/b]",
+	"description": "Triggered when exiting a state",
+	"params": {
+        "state": {
+            "name": "Name",
+            "desc": "State name"
+        }
+    }
+}
+@@CODE
+OnExit(state)
+{
+	/*
+	bool C3.compare(a,cmp,b);
+	--------------
+	cmp value list
+	--------------
+	0 = equals
+	1 = not equals
+	2 = less
+	3 = less/equals
+	4 = greater
+	5 = greater/equal
+	*/
+	
+	return C3.compare(this.previousState, 0, state);
+}
+@@END on-exit
+
+@@START on-state-changed|fsm
+@@ACE
+{
+	"id": "on-state-changed",
+	"scriptName": "OnStateChanged",
+	"highlight": false,
+	"isTrigger": true
+}
+@@LANG
+"on-state-changed": {
+	"list-name": "OnStateChanged",
+	"display-text": "On {my} state changed",
+	"description": "Triggered when the state changes."
+}
+@@CODE
+OnStateChanged()
+{
+	return true;
+}
+@@END on-state-changed
+
+@@START compare-cur-state|fsm
+@@ACE
+{
+  "id": "compare-cur-state",
+  "scriptName": "CompareCurState",
+  "highlight": false,
+  "params": [
+    {
+      "id": "state",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"compare-cur-state": {
+	"list-name": "CompareCurState",
+	"display-text": "{my} Current state = [b]{0}[/b]",
+	"description": "Compares the current state",
+	"params": {
+        "state": {
+            "name": "Name",
+            "desc": "State name"
+        }
+    }
+}
+@@CODE
+CompareCurState(state)
+{
+	/*
+	bool C3.compare(a,cmp,b);
+	--------------
+	cmp value list
+	--------------
+	0 = equals
+	1 = not equals
+	2 = less
+	3 = less/equals
+	4 = greater
+	5 = greater/equal
+	*/
+	
+	return C3.compare(this.currentState, 0, state);
+}
+@@END compare-cur-state
+
+@@START compare-prev-state|fsm
+@@ACE
+{
+  "id": "compare-prev-state",
+  "scriptName": "ComparePrevState",
+  "highlight": false,
+  "params": [
+    {
+      "id": "state",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"compare-prev-state": {
+	"list-name": "ComparePrevState",
+	"display-text": "{my} Previous state = [b]{0}[/b]",
+	"description": "Compare previous state",
+	"params": {
+        "state": {
+            "name": "Name",
+            "desc": "State name"
+        }
+    }
+}
+@@CODE
+ComparePrevState(state)
+{
+	/*
+	bool C3.compare(a,cmp,b);
+	--------------
+	cmp value list
+	--------------
+	0 = equals
+	1 = not equals
+	2 = less
+	3 = less/equals
+	4 = greater
+	5 = greater/equal
+	*/
+	
+	return C3.compare(this.previousState, 0, state);
+}
+@@END compare-prev-state
+

@@ -1,0 +1,21 @@
+@@START on-debug|debug
+@@ACE
+{
+	"id": "on-debug",
+	"scriptName": "OnDebug",
+	"highlight": false,
+	"isTrigger": true
+}
+@@LANG
+"on-debug": {
+	"list-name": "On Debug Log",
+	"display-text": "On Debug Log",
+	"description": "triggered when a debug message is logged"
+}
+@@CODE
+OnDebug()
+{
+	return this.loggingActive;
+}
+@@END on-debug
+

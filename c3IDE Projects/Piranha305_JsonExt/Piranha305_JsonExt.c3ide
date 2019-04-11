@@ -1,0 +1,16 @@
+@@METADATA
+Id|d448e811-2bb7-4c2c-a7df-c30ac25409e9
+Name|JSON Extentions
+Class|JsonExt
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|This addon is an extention plugin for json pligin
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|2/10/2019 9:34:13 AM
+DateModified|4/11/2019 10:37:12 AM
+AddonId|Piranha305_JsonExt

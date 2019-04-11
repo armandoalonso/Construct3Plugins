@@ -1,0 +1,36 @@
+@@START load-dictionary|dictionary
+@@ACE
+{
+  "id": "load-dictionary",
+  "scriptName": "LoadDictionary",
+  "highlight": false,
+  "params": [
+    {
+      "id": "obj",
+      "type": "object",
+      "allowedPluginIds": [
+        "Dictionary"
+      ]
+    }
+  ]
+}
+@@LANG
+"load-dictionary": {
+	"list-name": "Load Dicitionary",
+	"display-text": "Loads the Dictionary [b]{0}[/b]",
+	"description": "Loads the dictionary for use in other expressions",
+	"params": {
+        "obj": {
+            "name": "obj",
+            "desc": "Dictionary"
+        }
+    }
+}
+@@CODE
+LoadDictionary(obj)
+{
+	var instance = obj.GetInstances()[0].GetSdkInstance();
+    this.dict = instance;
+}
+@@END load-dictionary
+

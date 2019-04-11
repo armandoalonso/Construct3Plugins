@@ -1,0 +1,241 @@
+@@START ADDON.JSON
+{
+  "is-c3-addon": true,
+  "type": "behavior",
+  "name": "Point List",
+  "id": "Piranha305_PointList",
+  "version": "1.0.0.0",
+  "author": "Piranha305",
+  "website": "https://www.construct.net",
+  "documentation": "https://www.construct.net",
+  "description": "Behavior keeps of list of (x,y) coordinates",
+  "editor-scripts": [
+    "behavior.js",
+    "type.js",
+    "instance.js"
+  ],
+  "file-list": [
+    "c3runtime/behavior.js",
+    "c3runtime/type.js",
+    "c3runtime/instance.js",
+    "c3runtime/conditions.js",
+    "c3runtime/actions.js",
+    "c3runtime/expressions.js",
+    "lang/en-US.json",
+    "aces.json",
+    "addon.json",
+    "icon.svg",
+    "instance.js",
+    "behavior.js",
+    "type.js"
+  ]
+}
+@@END ADDON.JSON
+
+@@START PLUGIN_EDIT.JS
+"use strict";
+{
+
+	const BEHAVIOR_ID = "Piranha305_PointList";	
+	const BEHAVIOR_VERSION = "1.0.0.0";
+	const BEHAVIOR_CATEGORY = "other";
+	
+	const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_PointList = class PointListBehavior extends SDK.IBehaviorBase
+	{
+		constructor()
+		{
+			super(BEHAVIOR_ID);
+			
+			SDK.Lang.PushContext("behaviors." + BEHAVIOR_ID.toLowerCase());
+			
+			this._info.SetName(lang(".name"));
+			this._info.SetDescription(lang(".description"));
+			this._info.SetVersion(BEHAVIOR_VERSION);
+			this._info.SetCategory(BEHAVIOR_CATEGORY);
+			this._info.SetAuthor("Piranha305");
+			this._info.SetHelpUrl(lang(".help-url"));
+			this._info.SetIsOnlyOneAllowed(false);
+
+			this._info.SetSupportedRuntimes(["c3"]);
+			
+			SDK.Lang.PushContext(".properties");
+	
+			this._info.SetProperties([
+				new SDK.PluginProperty("text", "id", "list1")
+			]);
+			
+            SDK.Lang.PopContext(); //.properties
+			SDK.Lang.PopContext();
+		}
+	};
+	
+	BEHAVIOR_CLASS.Register(BEHAVIOR_ID, BEHAVIOR_CLASS);
+}
+@@END PLUGIN_EDIT.JS
+
+@@START PLUGIN_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Piranha305_PointList = class PointListBehavior extends C3.SDKBehaviorBase
+	{
+		constructor(opts)
+		{
+			super(opts);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+	};
+}
+@@END PLUGIN_RUN.JS
+
+@@START TYPE_EDIT.JS
+"use strict";
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_PointList;
+	
+	BEHAVIOR_CLASS.Type = class PointListType extends SDK.IBehaviorTypeBase
+	{
+		constructor(sdkPlugin, iBehaviorType)
+		{
+			super(sdkPlugin, iBehaviorType);
+		}
+	};
+}
+@@END TYPE_EDIT.JS
+
+@@START TYPE_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Piranha305_PointList.Type = class PointListType extends C3.SDKBehaviorTypeBase
+	{
+		constructor(objectClass)
+		{
+			super(objectClass);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+@@END TYPE_RUN.JS
+
+@@START INSTANCE_EDIT.JS
+"use strict";
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_PointList;
+	
+	BEHAVIOR_CLASS.Instance = class PointListInstance extends SDK.IBehaviorInstanceBase
+	{
+		constructor(sdkBehType, behInst)
+		{
+			super(sdkBehType, behInst);
+		}
+		
+		Release()
+		{
+		}
+		
+		OnCreate()
+		{
+		}
+		
+		OnPropertyChanged(id, value)
+		{
+		}
+		
+		LoadC2Property(name, valueString)
+		{
+			return false;		// not handled
+		}
+	};
+}
+@@END INSTANCE_EDIT.JS
+
+@@START INSTANCE_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Piranha305_PointList.Instance = class PointListInstance extends C3.SDKBehaviorInstanceBase
+	{
+		constructor(behInst, properties)
+		{
+			super(behInst);
+			
+			this.listId = "default";
+			this.list = [];
+			this.currentIndex = 0;
+			
+			if (properties)
+			{
+				this.listId = properties[0];
+			}
+
+			// Opt-in to getting calls to Tick()
+			//this._StartTicking();
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		SaveToJson()
+		{
+			return {
+				listId : this.listId,
+				list: this.lists,
+				currIndex: this.currentIndex
+			};
+		}
+		
+		LoadFromJson(o)
+		{
+			this.listId = o["listId"];
+			this.list = o["list"];
+			this.currentIndex = o["currIndex"];
+		}
+		
+		GetListSize()
+		{
+			return this.list.length;
+		}
+
+		/*
+		Tick()
+		{
+			const dt = this._runtime.GetDt(this._inst);
+			const wi = this._inst.GetWorldInfo();
+			
+			// ... code to run every tick for this behavior ...
+		}
+		*/
+	};
+}
+@@END INSTANCE_RUN.JS
+
+@@START LANG_PROP.JSON
+"properties": {
+    "id": {
+      "name": "List ID",
+      "desc": "The ID of the list (for picking)"
+    }
+  }
+@@END LANG_PROP.JSON
+
+@@START LANG_CAT.JSON
+"aceCategories": {
+    "list" : "Liat",
+    "move" : "Move",
+    "debug" : "Debug",
+    "json" : "Import/Export"
+}
+@@END LANG_CAT.JSON
+

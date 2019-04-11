@@ -1,0 +1,16 @@
+@@METADATA
+Id|794f3460-3f06-4625-9f64-d7b4616d8360
+Name|Dictionary Extentions
+Class|DictionaryExt
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|This plugin extends the offical dictionary plugin
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|2/17/2019 6:33:52 AM
+DateModified|4/11/2019 10:36:56 AM
+AddonId|Piranha305_DictionaryExt

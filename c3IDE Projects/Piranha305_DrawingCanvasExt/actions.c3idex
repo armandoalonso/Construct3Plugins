@@ -1,0 +1,119 @@
+@@START save-snaphot|snapshot
+@@ACE
+{
+  "id": "save-snaphot",
+  "scriptName": "SaveSnaphot",
+  "highlight": false,
+  "params": [
+    {
+      "id": "tag",
+      "type": "string"
+    },
+    {
+      "id": "canvas",
+      "type": "object",
+      "allowedPluginIds": [
+        "DrawingCanvas"
+      ]
+    }
+  ]
+}
+@@LANG
+"save-snaphot": {
+	"list-name": "Save Snapshot",
+	"display-text": "Saves snapshot from [b]{1}[/b] with tag [b]{0}[/b]",
+	"description": "Saves the current canvas snapshot to the specified tag",
+	    "params": {
+        "tag": {
+            "name": "tag",
+            "desc": "The tag to save the canvas snapshot"
+        },
+        "canvas": {
+            "name": "canvas",
+            "desc": "Canvas Object"
+        }
+    }
+}
+@@CODE
+SaveSnaphot(tag, canvas)
+{
+	//get canvas instance
+	var instance = canvas.GetInstances()[0].GetSdkInstance();
+	
+	//call save snapshot on drawing canvas, this actions CallAction(actMethod, ...args) a trigger on the drawing canvas
+	//instance.CallAction(C3.Plugins.DrawingCanvas.Acts.SaveSnapshot);
+	
+	//console.log(C3.Plugins.DrawingCanvas.Acts.SaveSnapshot);
+	//console.log(C3.Plugins.DrawingCanvas.Cnds.OnSnapshot);
+	
+	console.log(instance);
+	
+	//save snapshot data to tag
+	this.snapshots[tag] = instance._snapshot;
+	
+	//log all snapshots
+	//console.log(instance);
+	console.log(this.snapshots);
+	
+}
+@@END save-snaphot
+
+@@START load-snapshot|snapshot
+@@ACE
+{
+  "id": "load-snapshot",
+  "scriptName": "LoadSnapshot",
+  "highlight": false,
+  "params": [
+    {
+      "id": "tag",
+      "type": "string"
+    },
+    {
+      "id": "canvas",
+      "type": "object",
+      "allowedPluginIds": [
+        "DrawingCanvas"
+      ]
+    }
+  ]
+}
+@@LANG
+"load-snapshot": {
+	"list-name": "Load Snapshot",
+	"display-text": "Loads snapshot with tag [b]{0}[/b] to [b]{1}[/b]",
+	"description": "Loads the current canvas snapshot to the specified tag",
+	    "params": {
+        "tag": {
+            "name": "tag",
+            "desc": "The tag to save the canvas snapshot"
+        },
+        "canvas": {
+            "name": "canvas",
+            "desc": "Canvas Object"
+        }
+    }
+}
+@@CODE
+LoadSnapshot(tag, canvas)
+{
+	//get canvas instance
+	var instance = canvas.GetInstances()[0].GetSdkInstance();
+	
+	//console.log(instance);
+	
+	if(this.snapshots[tag]){
+		//restore saved snapshot to drawing canvas
+		instance._snapshot = this.snapshots[tag];
+		
+		//console.log(this.snapshots);
+	
+		//invoke the load snapshot action
+		instance.CallAction(C3.Plugins.DrawingCanvas.Acts.LoadSnapshot);
+		//console.log(C3.Plugins.DrawingCanvas.Act.LoadSnapshot);
+	}
+	
+	
+}
+@@END load-snapshot
+

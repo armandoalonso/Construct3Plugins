@@ -1,0 +1,16 @@
+@@METADATA
+Id|eae301db-10ff-4c41-94d1-0579c2462261
+Name|Drawing Canvas Extentions
+Class|DrawingCanvasExt
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|This is an extention plugin to the drawing canvas
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|2/6/2019 1:44:10 PM
+DateModified|4/11/2019 10:37:00 AM
+AddonId|Piranha305_DrawingCanvasExt

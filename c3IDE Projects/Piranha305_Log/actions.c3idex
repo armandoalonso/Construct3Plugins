@@ -1,0 +1,94 @@
+@@START add-debug-log|debug
+@@ACE
+{
+  "id": "add-debug-log",
+  "scriptName": "AddDebugLog",
+  "highlight": false,
+  "params": [
+    {
+      "id": "tag",
+      "type": "string"
+    },
+    {
+      "id": "log",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"add-debug-log": {
+	"list-name": "Add Debug Log",
+	"display-text": "Add debug log [b]{1}[/b] with tag ([b]{0}[/b])",
+	"description": "Adds a debug log to a list with tag, if tag exists overwrite it",
+	    "params": {
+        "tag": {
+            "name": "Tag",
+            "desc": "The log messages unique identifier"
+        },
+        "log": {
+            "name": "Log",
+            "desc": "The message to log"
+        }
+    }
+}
+@@CODE
+AddDebugLog(tag, log)
+{
+	if(this.loggingActive){
+		this.debugLogList[tag] = log;
+		this.Trigger(C3.Plugins.Piranha305_Log.Cnds.OnDebug);
+	}
+}
+@@END add-debug-log
+
+@@START write-log|log
+@@ACE
+{
+  "id": "write-log",
+  "scriptName": "WriteLog",
+  "highlight": true,
+  "params": [
+    {
+      "id": "log",
+      "type": "any"
+    },
+    {
+      "id": "type",
+      "type": "combo",
+      "items": [
+        "success",
+        "warning",
+        "error"
+      ]
+    },
+  ]
+}
+@@LANG
+"write-log": {
+	"list-name": "Write Log",
+	"display-text": "Log => [b]{0}[/b] ({1})",
+	"description": "Log into the console",
+    "params": {
+        "type": {
+            "name": "Log Type",
+            "desc": "The type of log you want to create",
+            "items":{
+            	"success": "Success",
+                "warning": "Warning",
+                "error": "Error"
+            }
+        },
+        "log": {
+            "name": "Log",
+            "desc": "The text you want to log"
+        }
+    }
+}
+@@CODE
+WriteLog(log, type)
+{
+	if(!this.loggingActive) return;
+	console.log("%c" + this.iconTypes[type] + " " + log, this.logTypes[type]);
+}
+@@END write-log
+

@@ -1,0 +1,172 @@
+@@START compare-speed|speed
+@@ACE
+{
+  "id": "compare-speed",
+  "scriptName": "CompareSpeed",
+  "highlight": false,
+  "params": [
+    {
+      "id": "comparison0",
+      "type": "cmp"
+    },
+    {
+      "id": "speed1",
+      "type": "number"
+    }
+  ],
+  "c2id": 1
+}
+@@LANG
+"compare-speed":{
+  "list-name": "Compare speed",
+  "display-text": "{my} speed {0} {1}",
+  "description": "Compare the current speed of the object.",
+  "params": {
+    "comparison0": {
+      "name": "Comparison",
+      "desc": "Choose the way to compare the current speed."
+    },
+    "speed1": {
+      "name": "Speed",
+      "desc": "The speed, in pixel per second, to compare the current speed to."
+    }
+  }
+}
+@@CODE
+CompareSpeed(cmp, s)
+{
+    return do_cmp(this.currentSpeed, cmp, s);
+}
+@@END compare-speed
+
+@@START on-moving|move-to
+@@ACE
+{
+  "id": "on-moving",
+  "scriptName": "OnMoving",
+  "isTrigger": "true",
+  "highlight": false,
+  "isDeprecated": true,
+  "c2id": 2
+}
+@@LANG
+"on-moving":{
+  "list-name": "On moving",
+  "display-text": "DEPRECATED: On {my} moving",
+  "description": "DEPRECATED: Triggered when object moving."
+}
+@@CODE
+OnMoving() // deprecated
+{
+    return false;
+}
+@@END on-moving
+
+@@START is-moving|move-to
+@@ACE
+{
+  "id": "is-moving",
+  "scriptName": "IsMoving",
+  "highlight": false,
+  "c2id": 3
+}
+@@LANG
+"is-moving":{
+  "list-name": "Is moving",
+  "display-text": "Is {my} moving",
+  "description": "Is object moving."
+}
+@@CODE
+IsMoving()
+{
+    return (this.enabled && this.isMoving);
+}
+@@END is-moving
+
+@@START on-reached-target|stop
+@@ACE
+{
+  "id": "on-reached-target",
+  "scriptName": "OnHitTarget",
+  "isTrigger": "true",
+  "highlight": false,
+  "c2id": 0
+}
+@@LANG
+"on-reached-target":{
+  "list-name": "On reached target position",
+  "display-text": "On {my} reached target",
+  "description": "Triggered when reached target position."
+}
+@@CODE
+OnHitTarget()
+{
+    return (this.isMyCall);
+}
+@@END on-reached-target
+
+@@START on-stopped-by-solid|stop
+@@ACE
+{
+  "id": "on-stopped-by-solid",
+  "scriptName": "OnSolidStop",
+  "isTrigger": "true",
+  "highlight": false,
+  "c2id": 5
+}
+@@LANG
+"on-stopped-by-solid":{
+  "list-name": "On stopped by solid",
+  "display-text": "On {my} stopped by solid",
+  "description": "Triggered when stopped by solid object."
+}
+@@CODE
+OnSolidStop()
+{
+    return this.isMyCall;
+}
+@@END on-stopped-by-solid
+
+@@START compare-moving-angle|moving-angle
+@@ACE
+{
+  "id": "compare-moving-angle",
+  "scriptName": "CompareMovingAngle",
+  "highlight": false,
+  "params": [
+    {
+      "id": "comparison0",
+      "type": "cmp"
+    },
+    {
+      "id": "angle1",
+      "type": "number"
+    }
+  ],
+  "c2id": 4
+}
+@@LANG
+"compare-moving-angle":{
+  "list-name": "Compare moving angle",
+  "display-text": "{my} moving angle {0} {1}",
+  "description": "Compare the current moving angle of the object.",
+  "params": {
+    "comparison0": {
+      "name": "Comparison",
+      "desc": "Choose the way to compare the current moving angle."
+    },
+    "angle1": {
+      "name": "Angle",
+      "desc": "The moving angle, in pixel per second, to compare the current moving angle to."
+    }
+  }
+}
+@@CODE
+CompareMovingAngle(cmp, s)
+{
+    var angle = this.getMovingAngle();
+    if (angle != (-1)) return do_cmp(this.getMovingAngle(), cmp, s);
+    else return false;
+}
+@@END compare-moving-angle
+

@@ -1,0 +1,34 @@
+@@START snapshot-exists|snapshot
+@@ACE
+{
+  "id": "snapshot-exists",
+  "scriptName": "SnapshotExists",
+  "highlight": false,
+  "params": [
+    {
+      "id": "tag",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"snapshot-exists": {
+	"list-name": "Snapshot Exists",
+	"display-text": "Snapshot [b]{0}[/b] exists",
+	"description": "Checks if a snapshot exists",
+	"params": {
+        "tag": {
+            "name": "tag",
+            "desc": "The name of the snapshot"
+        }
+    }
+}
+@@CODE
+SnapshotExists(tag)
+{
+	console.log(this.snapshots);
+	console.log(this.snapshots[tag]);
+	return this.snapshots[tag] != null;
+}
+@@END snapshot-exists
+

@@ -1,0 +1,80 @@
+@@START load-json|json
+@@ACE
+{
+  "id": "load-json",
+  "scriptName": "LoadJson",
+  "highlight": false,
+  "params": [
+    {
+      "id": "obj",
+      "type": "object",
+      "allowedPluginIds": [
+        "Json"
+      ]
+    }
+  ]
+}
+@@LANG
+"load-json": {
+	"list-name": "Load Json",
+	"display-text": "Load Json {0}",
+	"description": "Loads the json instance",
+	"params": {
+        "obj": {
+            "name": "obj",
+            "desc": "The json object"
+        }
+    }
+}
+@@CODE
+LoadJson(obj)
+{
+	var instance = obj.GetInstances()[0].GetSdkInstance();
+    this.jsonObject = instance;
+}
+@@END load-json
+
+@@START add-json|json
+@@ACE
+{
+  "id": "add-json",
+  "scriptName": "AddJson",
+  "highlight": false,
+  "params": [
+    {
+      "id": "path",
+      "type": "string"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-json": {
+    "list-name": "Add Json From String",
+    "display-text": "Add [b]{1}[/b] to json at path [b]{0}[/b]",
+    "description": "Adds json to from strign at path",
+    "params": {
+      "path": {
+        "name": "path",
+        "desc": "The json path to store the value"
+      },
+      "value": {
+        "name": "val",
+        "desc": "The json to attach to the path"
+      }
+    }
+  }
+@@CODE
+AddJson(path, value)
+{
+	if(this.jsonObject == null){
+		console.log('error => need to load json object')
+	}
+	
+	this.jsonObject._data[path] = JSON.parse(value);
+}
+@@END add-json
+

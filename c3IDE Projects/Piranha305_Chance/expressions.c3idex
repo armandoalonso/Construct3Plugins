@@ -1,0 +1,977 @@
+@@START get-seed|seed
+@@ACE
+{
+	"id": "get-seed",
+	"expressionName": "GetSeed",
+	"returnType": "number"
+}
+@@LANG
+"get-seed": { 
+	"translated-name": "GetSeed",
+	"description": "Gets the current seed"
+}
+@@CODE
+GetSeed()
+{
+	return this.chance.mt.seed;
+}
+@@END get-seed
+
+@@START get-char|string
+@@ACE
+{
+	"id": "get-char",
+	"expressionName": "GetCharacter",
+	"returnType": "string"
+}
+@@LANG
+"get-char": { 
+	"translated-name": "GetCharacter",
+	"description": "Gets random character"
+}
+@@CODE
+GetCharacter()
+{
+	return this.chance.character();
+}
+@@END get-char
+
+@@START get-char-lower|string
+@@ACE
+{
+	"id": "get-char-lower",
+	"expressionName": "GetCharacterLower",
+	"returnType": "string"
+}
+@@LANG
+"get-char-lower": { 
+	"translated-name": "GetCharacterLower",
+	"description": "Gets random character (lower)"
+}
+@@CODE
+GetCharacterLower()
+{
+	return this.chance.character({pool:'abcdefghijklmnopqrstuvwxyz'});
+}
+@@END get-char-lower
+
+@@START get-char-upper|string
+@@ACE
+{
+	"id": "get-char-upper",
+	"expressionName": "GetCharacterUpper",
+	"returnType": "string"
+}
+@@LANG
+"get-char-upper": { 
+	"translated-name": "GetCharacterUpper",
+	"description": "Gets random character (upper)"
+}
+@@CODE
+GetCharacterUpper()
+{
+	return this.chance.character({pool:'ABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+}
+@@END get-char-upper
+
+@@START get-char-set|string
+@@ACE
+{
+  "id": "get-char-set",
+  "expressionName": "GetCharacterFromSet",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "set",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"get-char-set": { 
+	"translated-name": "GetCharacterFromSet",
+	"description": "Gets random character (set)",
+	"params": {
+        "set": {
+            "name": "Set",
+            "desc": "List of characters to will be included in the set"
+        }
+    }
+}
+@@CODE
+GetCharacterFromSet(set)
+{
+	if(set === '') return this.chance.character();
+	return this.chance.character({pool:set});
+}
+@@END get-char-set
+
+@@START get-dice-sum|dice
+@@ACE
+{
+	"id": "get-dice-sum",
+	"expressionName": "GetLastDiceSum",
+	"returnType": "number"
+}
+@@LANG
+"get-dice-sum": { 
+	"translated-name": "GetLastDiceSum",
+	"description": "Gets the sum of the last dice roll"
+}
+@@CODE
+GetLastDiceSum()
+{
+	return this.lastDiceSum;
+}
+@@END get-dice-sum
+
+@@START get-dice-at|dice
+@@ACE
+{
+  "id": "get-dice-at",
+  "expressionName": "GetLastDiceAt",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-dice-at": { 
+	"translated-name": "GetLastDiceAt",
+	"description": "Get the value of the last dice roll at index",
+	"params": {
+        "index": {
+            "name": "Dice Index",
+            "desc": "The index of the dice to get the value"
+        }
+    }
+}
+@@CODE
+GetLastDiceAt(index)
+{
+	if(index < 0 || index > this.lastDiceRoll.length-1){
+		return -1;
+	}
+
+	return this.lastDiceRoll[index];
+}
+@@END get-dice-at
+
+@@START get-dice-sum-tag|dice
+@@ACE
+{
+  "id": "get-dice-sum-tag",
+  "expressionName": "GetDiceSum",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "tag",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"get-dice-sum-tag": { 
+	"translated-name": "GetDiceSum",
+	"description": "Gets the sum of the dice roll with given tag",
+	"params": {
+        "tag": {
+            "name": "Tag",
+            "desc": "The tag of the dice roll to get sum"
+        }
+    }
+}
+@@CODE
+GetDiceSum(tag)
+{
+	if(tag === '') tag = 'deafult';
+	return this.diceRoll[tag].sum;
+}
+@@END get-dice-sum-tag
+
+@@START get-dice-at-tag|dice
+@@ACE
+{
+  "id": "get-dice-at-tag",
+  "expressionName": "GetDiceAt",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "tag",
+      "type": "string"
+    },
+    {
+      "id": "index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-dice-at-tag": { 
+	"translated-name": "GetDiceAt",
+	"description": "Get the value of the last dice roll at index",
+	    "params": {
+        "tag": {
+            "name": "tag",
+            "desc": "Get the value of a dice with tag and index"
+        },
+        "index": {
+            "name": "Dice Index",
+            "desc": "The index of the dice to get the value"
+        }
+    }
+}
+@@CODE
+GetDiceAt(tag, index)
+{
+	if(tag === '') tag = 'deafult';
+	if(index < 0 || index > this.lastDiceRoll.length-1){
+		return -1;
+	}
+
+	return this.lastDiceRoll[index];
+}
+@@END get-dice-at-tag
+
+@@START get-string-upper|string
+@@ACE
+{
+  "id": "get-string-upper",
+  "expressionName": "GetStringUpper",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "length",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-string-upper": { 
+	"translated-name": "GetStringUpper",
+	"description": "Gets a random string (upper)",
+	"params": {
+        "length": {
+            "name": "length",
+            "desc": "Length of string"
+        }
+    }
+}
+@@CODE
+GetStringUpper(length)
+{
+	//implementation
+}
+@@END get-string-upper
+
+@@START get-string-lower|string
+@@ACE
+{
+  "id": "get-string-lower",
+  "expressionName": "GetStringLower",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "length",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-string-lower": { 
+	"translated-name": "GetStringLower",
+	"description": "Gets a random string (lower)",
+	"params": {
+        "length": {
+            "name": "length",
+            "desc": "Length of string"
+        }
+    }
+}
+@@CODE
+GetStringLower(length)
+{
+	//implementation
+}
+@@END get-string-lower
+
+@@START get-string-set|string
+@@ACE
+{
+  "id": "get-string-set",
+  "expressionName": "GetStringSet",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "length",
+      "type": "number"
+    },
+    {
+      "id": "set",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"get-string-set": {
+  "translated-name": "GetStringSet",
+  "description": "Gets a random string (set)",
+  "params": {
+    "length": {
+      "name": "length",
+      "desc": "Length of string"
+    },
+    "set": {
+      "name": "set",
+      "desc": "Set of charcters to use in string"
+    }
+  }
+}
+@@CODE
+GetStringSet(length,set)
+{
+	//implementation
+}
+@@END get-string-set
+
+@@START get-syllable|string
+@@ACE
+{
+	"id": "get-syllable",
+	"expressionName": "GetSyllable",
+	"returnType": "string"
+}
+@@LANG
+"get-syllable": { 
+	"translated-name": "GetSyllable",
+	"description": "Gets a random syllable"
+}
+@@CODE
+GetSyllable()
+{
+	//implementation
+}
+@@END get-syllable
+
+@@START get-word|string
+@@ACE
+{
+  "id": "get-word",
+  "expressionName": "GetWord",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "syllables",
+      "type": "number",
+      "initialValue": "3"
+    }
+  ]
+}
+@@LANG
+"get-word": { 
+	"translated-name": "GetWord",
+	"description": "Get a random word",
+	"params": {
+        "syllables": {
+            "name": "Syllables",
+            "desc": "Number of syllables"
+        }
+    }
+}
+@@CODE
+GetWord(syllables)
+{
+	//implementation
+}
+@@END get-word
+
+@@START get-sentence|string
+@@ACE
+{
+  "id": "get-sentence",
+  "expressionName": "GetSentence",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "words",
+      "type": "number",
+      "initialValue": "5"
+    }
+  ]
+}
+@@LANG
+"get-sentence": { 
+	"translated-name": "GetSentence",
+	"description": "get random sentence",
+	"params": {
+        "words": {
+            "name": "Words",
+            "desc": "Number of words"
+        }
+    }
+}
+@@CODE
+GetSentence(words)
+{
+	//implementation
+}
+@@END get-sentence
+
+@@START get-standard-distribution|number
+@@ACE
+{
+  "id": "get-standard-distribution",
+  "expressionName": "GetStandardDistribution",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "mean",
+      "type": "number"
+    },
+    {
+      "id": "dev",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-standard-distribution": {
+  "translated-name": "GetStandardDistribution",
+  "description": "Gets the standrd distribution",
+  "params": {
+    "mean": {
+      "name": "Mean",
+      "desc": "The median value"
+    },
+    "dev": {
+      "name": "Standard Deviation",
+      "desc": "The standard deviation"
+    }
+  }
+}
+@@CODE
+GetStandardDistribution(mean,dev)
+{
+	//implementation
+}
+@@END get-standard-distribution
+
+@@START get-int|number
+@@ACE
+{
+  "id": "get-int",
+  "expressionName": "GetInt",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "min",
+      "type": "number"
+    },
+    {
+      "id": "max",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-int": {
+  "translated-name": "GetInt",
+  "description": "Get random integer",
+  "params": {
+    "min": {
+      "name": "Min",
+      "desc": "The minimum value"
+    },
+    "max": {
+      "name": "Max",
+      "desc": "The maximum value"
+    }
+  }
+}
+@@CODE
+GetInt(min,max)
+{
+	//implementation
+}
+@@END get-int
+
+@@START get-float|number
+@@ACE
+{
+	"id": "get-float",
+	"expressionName": "GetFloat",
+	"returnType": "number"
+}
+@@LANG
+"get-float": { 
+	"translated-name": "GetFloat",
+	"description": "Get random floating point number"
+}
+@@CODE
+GetFloat()
+{
+	//implementation
+}
+@@END get-float
+
+@@START get-float-range|number
+@@ACE
+{
+  "id": "get-float-range",
+  "expressionName": "GetFloatRange",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "min",
+      "type": "number"
+    },
+    {
+      "id": "max",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-float-range": {
+  "translated-name": "GetFloatRange",
+  "description": "Get random floating point number within a given range",
+  "params": {
+    "min": {
+      "name": "Min",
+      "desc": "The minimum value"
+    },
+    "max": {
+      "name": "Max",
+      "desc": "The maximum value"
+    }
+  }
+}
+@@CODE
+GetFloatRange(min,max)
+{
+	//implementation
+}
+@@END get-float-range
+
+@@START get-float-fixed|number
+@@ACE
+{
+  "id": "get-float-fixed",
+  "expressionName": "GetFloatFixed",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "fixed",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-float-fixed": { 
+	"translated-name": "GetFloatFixed",
+	"description": "Get a random floating point number with fixed decimal places",
+	"params": {
+        "fixed": {
+            "name": "Fixed",
+            "desc": "The number of fixed decimal places"
+        }
+    }
+}
+@@CODE
+GetFloatFixed(fixed)
+{
+	//implementation
+}
+@@END get-float-fixed
+
+@@START get-float-fixed-range|number
+@@ACE
+{
+  "id": "get-float-fixed-range",
+  "expressionName": "GetFloatFixedRange",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "min",
+      "type": "number"
+    },
+    {
+      "id": "max",
+      "type": "number"
+    },
+    {
+      "id": "fixed",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"get-float-fixed-range": {
+  "translated-name": "GetFloatFixedRange",
+  "description": "Get a random floating point number within a given range",
+  "params": {
+    "min": {
+      "name": "Min",
+      "desc": "The minimum value"
+    },
+    "max": {
+      "name": "Max",
+      "desc": "The maximum value"
+    },
+    "fixed": {
+       "name": "Fixed",
+       "desc": "The number of fixed decimal places"
+    }
+  }
+}
+@@CODE
+GetFloatFixedRange(min,max,fixed)
+{
+	//implementation
+}
+@@END get-float-fixed-range
+
+@@START get-profession|string
+@@ACE
+{
+	"id": "get-profession",
+	"expressionName": "GetProfession",
+	"returnType": "string"
+}
+@@LANG
+"get-profession": { 
+	"translated-name": "GetProfession",
+	"description": "Get a random profession"
+}
+@@CODE
+GetProfession()
+{
+	//implementation
+}
+@@END get-profession
+
+@@START get-profession-ranked|string
+@@ACE
+{
+	"id": "get-profession-ranked",
+	"expressionName": "GetProfessionRanked",
+	"returnType": "string"
+}
+@@LANG
+"get-profession-ranked": { 
+	"translated-name": "GetProfessionRanked",
+	"description": "Get a random profession (ranked)"
+}
+@@CODE
+GetProfessionRanked()
+{
+	//implementation
+}
+@@END get-profession-ranked
+
+@@START get-full-name-female|string
+@@ACE
+{
+	"id": "get-full-name-female",
+	"expressionName": "GetFullNameFemale",
+	"returnType": "string"
+}
+@@LANG
+"get-full-name-female": { 
+	"translated-name": "GetFullNameFemale",
+	"description": "Get random full name (female)"
+}
+@@CODE
+GetFullNameFemale()
+{
+	//implementation
+}
+@@END get-full-name-female
+
+@@START get-full-name-male|string
+@@ACE
+{
+	"id": "get-full-name-male",
+	"expressionName": "GetFullNameMale",
+	"returnType": "string"
+}
+@@LANG
+"get-full-name-male": { 
+	"translated-name": "GetFullNameMale",
+	"description": "Get random full name (male)"
+}
+@@CODE
+GetFullNameMale()
+{
+	//implementation
+}
+@@END get-full-name-male
+
+@@START get-first-name-male|string
+@@ACE
+{
+	"id": "get-first-name-male",
+	"expressionName": "GetFirstNameMale",
+	"returnType": "string"
+}
+@@LANG
+"get-first-name-male": { 
+	"translated-name": "GetFirstNameMale",
+	"description": "get random first name (male)"
+}
+@@CODE
+GetFirstNameMale()
+{
+	//implementation
+}
+@@END get-first-name-male
+
+@@START get-first-name-female|string
+@@ACE
+{
+	"id": "get-first-name-female",
+	"expressionName": "GetFirstNameFemale",
+	"returnType": "string"
+}
+@@LANG
+"get-first-name-female": { 
+	"translated-name": "GetFirstNameFemale",
+	"description": "Get random first name (female)"
+}
+@@CODE
+GetFirstNameFemale()
+{
+	//implementation
+}
+@@END get-first-name-female
+
+@@START get-last-name|string
+@@ACE
+{
+	"id": "get-last-name",
+	"expressionName": "GetLastName",
+	"returnType": "string"
+}
+@@LANG
+"get-last-name": { 
+	"translated-name": "GetLastName",
+	"description": "Get random last name (male/female)"
+}
+@@CODE
+GetLastName()
+{
+	//implementation
+}
+@@END get-last-name
+
+@@START choose|rng
+@@ACE
+{
+  "id": "choose",
+  "expressionName": "Choose",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "csv-list",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"choose": { 
+	"translated-name": "Choose",
+	"description": "Choose random value form comma delimited string",
+	"params": {
+        "csv-list": {
+            "name": "Csv List",
+            "desc": "List of comma seperated values (ex. \"one,two,three\")"
+        }
+    }
+}
+@@CODE
+Choose(csvList)
+{
+	//implementation
+}
+@@END choose
+
+@@START get-hex-hash|misc
+@@ACE
+{
+  "id": "get-hex-hash",
+  "expressionName": "GetHexHash",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "length",
+      "type": "number",
+      "initialValue": "40"
+    }
+  ]
+}
+@@LANG
+"get-hex-hash": { 
+	"translated-name": "GetHexHash",
+	"description": "Returns a random hex hash",
+	"params": {
+        "length": {
+            "name": "Length",
+            "desc": "The length of hash"
+        }
+    }
+}
+@@CODE
+GetHexHash(length)
+{
+	//implementation
+}
+@@END get-hex-hash
+
+@@START get-guid|misc
+@@ACE
+{
+	"id": "get-guid",
+	"expressionName": "GetGuid",
+	"returnType": "string"
+}
+@@LANG
+"get-guid": { 
+	"translated-name": "GetGuid",
+	"description": "Gets a random guid"
+}
+@@CODE
+GetGuid()
+{
+	//implementation
+}
+@@END get-guid
+
+@@START get-city|location
+@@ACE
+{
+	"id": "get-city",
+	"expressionName": "GetCity",
+	"returnType": "string"
+}
+@@LANG
+"get-city": { 
+	"translated-name": "GetCity",
+	"description": "Get random city"
+}
+@@CODE
+GetCity()
+{
+	//implementation
+}
+@@END get-city
+
+@@START get-state|location
+@@ACE
+{
+	"id": "get-state",
+	"expressionName": "GetState",
+	"returnType": "string"
+}
+@@LANG
+"get-state": { 
+	"translated-name": "GetState",
+	"description": "Get random state"
+}
+@@CODE
+GetState()
+{
+	//implementation
+}
+@@END get-state
+
+@@START get-country|location
+@@ACE
+{
+	"id": "get-country",
+	"expressionName": "GetCountry",
+	"returnType": "string"
+}
+@@LANG
+"get-country": { 
+	"translated-name": "GetCountry",
+	"description": "Get random country"
+}
+@@CODE
+GetCountry()
+{
+	//implementation
+}
+@@END get-country
+
+@@START get-lat|location
+@@ACE
+{
+	"id": "get-lat",
+	"expressionName": "GetLatitude",
+	"returnType": "number"
+}
+@@LANG
+"get-lat": { 
+	"translated-name": "GetLat",
+	"description": "Get random latitude"
+}
+@@CODE
+GetLatitude()
+{
+	//implementation
+}
+@@END get-lat
+
+@@START get-long|location
+@@ACE
+{
+	"id": "get-long",
+	"expressionName": "GetLongitude",
+	"returnType": "number"
+}
+@@LANG
+"get-long": { 
+	"translated-name": "GetLongitude",
+	"description": "Get random Longitude"
+}
+@@CODE
+GetLongitude()
+{
+	//implementation
+}
+@@END get-long
+
+@@START get-weighted|rng
+@@ACE
+{
+  "id": "get-weighted",
+  "expressionName": "GetWeighted",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "values",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"get-weighted": { 
+	"translated-name": "GetWeighted",
+	"description": "Get random weighted value",
+	"params": {
+        "values": {
+            "name": "Values",
+            "desc": "Comma seperated string of values (ex. \"a,b,c\")"
+        }
+    }
+}
+@@CODE
+GetWeighted(values)
+{
+	//implementation
+}
+@@END get-weighted
+

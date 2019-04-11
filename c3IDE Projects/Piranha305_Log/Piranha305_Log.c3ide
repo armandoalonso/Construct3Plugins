@@ -1,0 +1,16 @@
+@@METADATA
+Id|0c7a8d14-1c30-4560-9d01-b9e4a58c6bc6
+Name|Log
+Class|Log
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|This addon logs stuff ot the console
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|1/16/2019 9:48:04 PM
+DateModified|4/11/2019 10:37:16 AM
+AddonId|Piranha305_Log

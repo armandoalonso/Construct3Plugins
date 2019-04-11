@@ -1,0 +1,16 @@
+@@METADATA
+Id|79e89378-bbb6-4a74-ad96-cf733479dc3e
+Name|Chance
+Class|Chance
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|Uses chance.js to help generate random stuff (strings, int, etc...)
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|2/26/2019 7:44:41 AM
+DateModified|4/11/2019 10:36:52 AM
+AddonId|Piranha305_Chance

@@ -1,0 +1,16 @@
+@@METADATA
+Id|f547382e-c154-4e34-835b-2c717c4d4010
+Name|MoveTo
+Class|MoveTo
+Company|Rex.Rainbow
+Author|Rex.Rainbow
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|Move sprite to specific position
+Category|movements
+Type|Behavior
+CreateDate|4/11/2019 5:28:30 AM
+DateModified|4/11/2019 10:37:27 AM
+AddonId|Rex_MoveTo

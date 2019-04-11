@@ -1,0 +1,28 @@
+@@START get-debug-logs|debug
+@@ACE
+{
+	"id": "get-debug-logs",
+	"expressionName": "GetDebugLogs",
+	"returnType": "string"
+}
+@@LANG
+"get-debug-logs": { 
+	"translated-name": "GetDebugLogs",
+	"description": "Gets a formatted list of all the debug tags"
+}
+@@CODE
+GetDebugLogs()
+{
+	if(!this.loggingActive) return "";
+	
+	//console.log(Object.keys(this.debugLogList));
+	var debugArr = [];
+	
+	Object.keys(this.debugLogList).forEach(function (key){
+		debugArr.push(key + " => " + this.debugLogList[key]);	
+	}.bind(this));
+	
+	return debugArr.join("\n");
+}
+@@END get-debug-logs
+

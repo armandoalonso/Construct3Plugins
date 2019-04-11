@@ -1,0 +1,558 @@
+@@START ADDON.JSON
+{
+  "is-c3-addon": true,
+  "type": "behavior",
+  "name": "MoveTo",
+  "id": "Rex_MoveTo",
+  "version": "1.0.0.0",
+  "author": "Rex.Rainbow",
+  "website": "https://www.construct.net",
+  "documentation": "https://www.construct.net",
+  "description": "Move sprite to specific position",
+  "editor-scripts": [
+    "behavior.js",
+    "type.js",
+    "instance.js"
+  ],
+  "file-list": [
+    "c3runtime/behavior.js",
+    "c3runtime/type.js",
+    "c3runtime/instance.js",
+    "c3runtime/conditions.js",
+    "c3runtime/actions.js",
+    "c3runtime/expressions.js",
+    "lang/en-US.json",
+    "aces.json",
+    "addon.json",
+    "icon.svg",
+    "instance.js",
+    "behavior.js",
+    "type.js"
+  ]
+}
+@@END ADDON.JSON
+
+@@START PLUGIN_EDIT.JS
+"use strict";
+
+{
+	const BEHAVIOR_ID = "Rex_MoveTo";
+	const BEHAVIOR_VERSION = "2.0.0.0";
+	const BEHAVIOR_CATEGORY = "movements";
+	const BEHAVIOR_CLASS = SDK.Behaviors.Rex_MoveTo = class Rex_MoveTo extends SDK.IBehaviorBase
+	{
+		constructor()
+		{
+			super(BEHAVIOR_ID);
+			SDK.Lang.PushContext("behaviors." + BEHAVIOR_ID.toLowerCase());
+			this._info.SetIcon("icon.svg", "image/svg+sml");
+			this._info.SetName(lang(".name"));
+			this._info.SetDescription(lang(".description"));
+			this._info.SetVersion(BEHAVIOR_VERSION);
+			this._info.SetCategory(BEHAVIOR_CATEGORY);
+			this._info.SetAuthor("Rex.Rainbow");
+			this._info.SetHelpUrl(lang(".help-url"));
+			this._info.SetIsOnlyOneAllowed(false);
+			this._info.SetCanBeBundled(true);
+			SDK.Lang.PushContext(".properties");
+			this._info.SetProperties([
+				new SDK.PluginProperty("check", "activated", true),
+				new SDK.PluginProperty("float", "max-speed", 400),
+				new SDK.PluginProperty("float", "acceleration", 0),
+				new SDK.PluginProperty("float", "deceleration", 0),
+				new SDK.PluginProperty("check", "stop-by-solid", false),
+				new SDK.PluginProperty("check", "continued-mode", false)
+			]);
+
+			// Support both C2 and C3 runtimes
+			this._info.SetSupportedRuntimes(["c2", "c3"]);
+
+			SDK.Lang.PopContext();		// .properties
+			SDK.Lang.PopContext();
+		}
+	};
+	BEHAVIOR_CLASS.Register(BEHAVIOR_ID, BEHAVIOR_CLASS);
+}
+@@END PLUGIN_EDIT.JS
+
+@@START PLUGIN_RUN.JS
+function newPointData(point)
+{
+    if (point == null)
+    {
+        point = {};
+    }
+    point["x"] = 0;
+    point["y"] = 0;
+    point["a"] = -1;
+    return point;
+};
+
+function clone(obj)
+{
+    if (null == obj || "object" != typeof obj) return obj;
+    var result = obj.constructor();
+    for (var attr in obj)
+    {
+        if (obj.hasOwnProperty(attr)) result[attr] = obj[attr];
+    }
+    return result;
+};
+
+function do_cmp(x, cmp, y)
+{
+    if (typeof x === "undefined" || typeof y === "undefined") return false;
+    switch (cmp)
+    {
+        case 0:
+            // equal
+            return x === y;
+        case 1:
+            // not equal
+            return x !== y;
+        case 2:
+            // less
+            return x < y;
+        case 3:
+            // less/equal
+            return x <= y;
+        case 4:
+            // greater
+            return x > y;
+        case 5:
+            // greater/equal
+            return x >= y;
+        default:
+            return false;
+    }
+};
+
+function to_clamped_radians(x)
+{
+    return C3.clampAngle(C3.toRadians(x));
+};
+
+function clamp_angle_degrees(a)
+{
+    a %= 360; // now in (-360, 360) range
+    if (a < 0) a += 360; // now in [0, 360) range
+    return a;
+};
+
+function to_clamped_degrees(x)
+{
+    return clamp_angle_degrees(C3.toDegrees(x));
+};
+
+"use strict";
+
+{
+    C3.Behaviors.Rex_MoveTo = class Rex_MoveTo extends C3.SDKBehaviorBase
+    {
+        constructor(opts)
+        {
+            super(opts);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+    };
+}
+@@END PLUGIN_RUN.JS
+
+@@START TYPE_EDIT.JS
+"use strict";
+
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Rex_MoveTo;
+
+	BEHAVIOR_CLASS.Type = class Rex_MoveToType extends SDK.IBehaviorTypeBase
+	{
+		constructor(sdkPlugin, iBehaviorType)
+		{
+			super(sdkPlugin, iBehaviorType);
+		}
+	};
+}
+@@END TYPE_EDIT.JS
+
+@@START TYPE_RUN.JS
+"use strict";
+
+{
+	C3.Behaviors.Rex_MoveTo.Type = class Rex_MoveToType extends C3.SDKBehaviorTypeBase
+	{
+		constructor(behaviorType)
+		{
+			super(behaviorType);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+@@END TYPE_RUN.JS
+
+@@START INSTANCE_EDIT.JS
+"use strict";
+
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Rex_MoveTo;
+
+	BEHAVIOR_CLASS.Instance = class Rex_MoveToInstance extends SDK.IBehaviorInstanceBase
+	{
+		constructor(sdkBehType, behInst)
+		{
+			super(sdkBehType, behInst);
+		}
+		Release()
+		{
+		}
+		OnCreate()
+		{
+		}
+		OnPropertyChanged(id, value)
+		{
+		}
+		LoadC2Property(name, valueString)
+		{
+			return false;       // not handled
+		}
+	};
+}
+@@END INSTANCE_EDIT.JS
+
+@@START INSTANCE_RUN.JS
+"use strict";
+
+{
+    C3.Behaviors.Rex_MoveTo.Instance = class Rex_MoveToInstance extends C3.SDKBehaviorInstanceBase
+    {
+        constructor(behInst, properties)
+        {
+            super(behInst);
+            this.wi = this._inst.GetWorldInfo();
+            this.inst = this._inst;
+
+            this.moveParams = {};
+            this.enabled = properties[0];
+            this.target = {
+                "x": 0,
+                "y": 0,
+                "a": 0
+            };
+            this.isMoving = false;
+            this.currentSpeed = 0;
+            this.remainDistance = 0;
+            this.remainDt = 0;
+            this.prePosition = {
+                "x": 0,
+                "y": 0
+            };
+            this.prePosition["x"] = 0;
+            this.prePosition["y"] = 0;
+            this.movingAngleData = newPointData(this.movingAngleData);
+            this.movingAngleStartData = newPointData(this.movingAngleStartData);
+            this.lastTick = null;
+            this.isMyCall = false;
+
+            if (properties)
+            {
+                this.moveParams["max"] = properties[1];
+                this.moveParams["acc"] = properties[2];
+                this.moveParams["dec"] = properties[3];
+                this.soildStopEnable = properties[4];
+                this.isContinueMode = properties[5];
+            }
+
+
+
+
+            // Opt-in to getting calls to Tick()
+            this._StartTicking();
+            this._StartTicking2();
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        SaveToJson()
+        {
+            return {
+                "en": this.enabled,
+                "v": clone(this.moveParams),
+                "t": clone(this.target),
+                "is_m": this.isMoving,
+                "c_spd": this.currentSpeed,
+                "rd": this.remainDistance,
+                "pp": clone(this.prePosition),
+                "ma": clone(this.movingAngleData),
+                "ms": clone(this.movingAngleStartData),
+                "lt": this.lastTick,
+            };
+        }
+
+        LoadFromJson(o)
+        {
+            this.enabled = o["en"];
+            this.moveParams = o["v"];
+            this.target = o["t"];
+            this.isMoving = o["is_m"];
+            this.currentSpeed = o["c_spd"];
+            this.remainDistance = o["rd"];
+            this.prePosition = o["pp"];
+            this.movingAngleData = o["ma"];
+            this.movingAngleStartData = o["ms"];
+            this.lastTick = o["lt"];
+        }
+
+        GetDebuggerProperties()
+        {
+            const Acts = C3.Behaviors.Rex_MoveTo;
+            const prefix = "Rex_MoveTo.";
+            return [
+            {
+                title: prefix + ".Debug",
+                properties: [
+                {
+                    name: prefix + "Activated",
+                    value: this.enabled},
+                {
+                    name: prefix + "Is moving",
+                    value: this.isMoving},
+                {
+                    name: prefix + "Target X",
+                    value: this.target["x"]},
+                {
+                    name: prefix + "Target Y",
+                    value: this.target["y"]},
+                {
+                    name: prefix + "Current speed",
+                    value: this.currentSpeed},
+                {
+                    name: prefix + "Remaining distance",
+                    value: this.remainDistance}
+                ]
+            }];
+        }
+        
+        Tick()
+        {
+            /*
+			const wi = this._inst.GetWorldInfo();
+			*/
+            const dt = this._runtime.GetDt(this._inst);
+            this.remainDt = 0;
+            if ((!this.enabled) || (!this.isMoving))
+            {
+                return;
+            }
+
+            this.move(dt);
+
+        }
+
+        Tick2()
+        {
+            this.movingAngleData["x"] = this.wi.GetX();
+            this.movingAngleData["y"] = this.wi.GetY();
+        }
+        
+        move(dt)
+        {
+            if (dt == 0) // can not move if dt == 0
+            return;
+
+            if ((this.prePosition["x"] !== this.wi.GetX()) || (this.prePosition["y"] !== this.wi.GetY())) this.resetCurrentPosition(); // reset this.remainDistance
+
+            // assign speed
+            var isSlowDown = false;
+            if (this.moveParams["dec"] != 0)
+            {
+                // is time to deceleration?
+                var d = (this.currentSpeed * this.currentSpeed) / (2 * this.moveParams["dec"]); // (v*v)/(2*a)
+                isSlowDown = (d >= this.remainDistance);
+            }
+            var acc = (isSlowDown) ? (-this.moveParams["dec"]) : this.moveParams["acc"];
+            if (acc != 0)
+            {
+                this.setCurrentSpeed(this.currentSpeed + (acc * dt));
+            }
+
+            // Apply movement to the object     
+            var distance = this.currentSpeed * dt;
+            this.remainDistance -= distance;
+
+            var isHitTarget = false;
+            var angle = this.target["a"];
+            var ux = Math.cos(angle);
+            var uy = Math.sin(angle);
+            // is hit to target at next tick?
+            if ((this.remainDistance <= 0) || (this.currentSpeed <= 0))
+            {
+                isHitTarget = true;
+                this.wi.SetX(this.target["x"]);
+                this.wi.GetY(this.target["y"]);
+
+                if (this.currentSpeed > 0) this.remainDt = (-this.remainDistance) / this.currentSpeed;
+
+                this.getMovingAngle();
+                this.setCurrentSpeed(0);
+                this.remainDistance = 0;
+            }
+            else
+            {
+                var angle = this.target["a"];
+                this.wi.SetX(this.wi.GetX() + (distance * ux));
+                this.wi.SetY(this.wi.GetY() + (distance * uy));
+            }
+
+            this.wi.SetBboxChanged();
+
+            var isSolidStop = false;
+            if (this.soildStopEnable)
+            {
+                const a = this._runtime.GetCollisionEngine();
+                var collobj = a.TestOverlapSolid(this.inst);
+                if (collobj)
+                {
+                    a.RegisterCollision(this.inst, collobj);
+                    a.PushOutSolid(this.inst, -ux, -uy, Math.max(distance, 50));
+                    isSolidStop = true;
+                }
+            }
+
+            this.prePosition["x"] = this.wi.GetX();
+            this.prePosition["y"] = this.wi.GetY();
+
+            if (isSolidStop)
+            {
+                this.isMoving = false; // stop
+                this.isMyCall = true;
+                this.Trigger(C3.Behaviors.Rex_MoveTo.Cnds.OnSolidStop, this.inst);
+                this.isMyCall = false;
+            }
+            else if (isHitTarget)
+            {
+                this.isMoving = false; // stop
+                this.isMyCall = true;
+                this.Trigger(C3.Behaviors.Rex_MoveTo.Cnds.OnHitTarget, this.inst);
+                this.isMyCall = false;
+            }
+        }
+
+        setCurrentSpeed(speed)
+        {
+            if (speed != null)
+            {
+                this.currentSpeed = (speed > this.moveParams["max"]) ?
+                    this.moveParams["max"] : speed;
+            }
+            else if (this.moveParams["acc"] == 0)
+            {
+                this.currentSpeed = this.moveParams["max"];
+            }
+        }
+
+        resetCurrentPosition()
+        {
+            var dx = this.target["x"] - this.wi.GetX();
+            var dy = this.target["y"] - this.wi.GetY();
+
+            this.target["a"] = Math.atan2(dy, dx);
+            this.remainDistance = Math.sqrt((dx * dx) + (dy * dy));
+            this.prePosition["x"] = this.wi.GetX();
+            this.prePosition["y"] = this.wi.GetY();
+        }
+
+        setTargetPos(_x, _y)
+        {
+            this.target["x"] = _x;
+            this.target["y"] = _y;
+            this.setCurrentSpeed(null);
+            this.resetCurrentPosition();
+            this.movingAngleData["x"] = this.wi.GetX();
+            this.movingAngleData["y"] = this.wi.GetY();
+            this.isMoving = true;
+
+            // start position
+            this.movingAngleStartData["x"] = this.wi.GetX();
+            this.movingAngleStartData["y"] = this.wi.GetY();
+            this.movingAngleStartData["a"] = clamp_angle_degrees(C3.angleTo(this.wi.GetX(), this.wi.GetY(), _x, _y));
+
+            if (this.isContinueMode) this.move(this.remainDt);
+        }
+
+        isTickChanged()
+        {
+            var curTick = this._runtime.GetTickCount();
+            var tickChanged = (this.lastTick != curTick);
+            this.lastTick = curTick;
+            return tickChanged;
+        }
+
+        getMovingAngle(ret)
+        {
+            if (this.isTickChanged())
+            {
+                var dx = this.wi.GetX() - this.movingAngleData["x"];
+                var dy = this.wi.GetY() - this.movingAngleData["y"];
+                if ((dx != 0) || (dy != 0)) this.movingAngleData["a"] = clamp_angle_degrees(Math.atan2(dy, dx));
+            }
+            return this.movingAngleData["a"];
+        }
+
+
+    };
+}
+@@END INSTANCE_RUN.JS
+
+@@START LANG_PROP.JSON
+"properties": {
+  "activated": {
+    "name": "Activated",
+    "desc": "Enable if you wish this to begin at the start of the layout."
+  },
+  "max-speed": {
+    "name": "Max speed",
+    "desc": "Maximum speed, in pixel per second."
+  },
+  "acceleration": {
+    "name": "Acceleration",
+    "desc": "Acceleration, in pixel per second per second."
+  },
+  "deceleration": {
+    "name": "Deceleration",
+    "desc": "Deceleration, in pixel per second per second."
+  },
+  "stop-by-solid": {
+    "name": "Stop by solid",
+    "desc": "Enable if you wish to stop while hitting a solid object."
+  },
+  "continued-mode": {
+    "name": "Continued mode",
+    "desc": "Moving as in continued-time."
+  }
+}
+@@END LANG_PROP.JSON
+
+@@START LANG_CAT.JSON
+"aceCategories": {
+  "enable": "Enable",
+  "speed": "Speed",
+  "move-to": "MoveTo",
+  "stop": "Stop",
+  "moving-angle": "Moving angle"
+}
+@@END LANG_CAT.JSON
+

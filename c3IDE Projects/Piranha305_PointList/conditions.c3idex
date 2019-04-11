@@ -1,0 +1,111 @@
+@@START has-next-point|move
+@@ACE
+{
+	"id": "has-next-point",
+	"scriptName": "HasNextPoint",
+	"highlight": false
+}
+@@LANG
+"has-next-point": {
+	"list-name": "Has Next",
+	"display-text": "{my} Has Next",
+	"description": "Has next point,"
+}
+@@CODE
+HasNextPoint()
+{
+	var size = this.GetListSize()-1;	
+	var next = this.currentIndex;
+	
+	console.log(size);
+	console.log(next);
+	
+	return size > next; 
+}
+@@END has-next-point
+
+@@START compare-count|list
+@@ACE
+{
+  "id": "compare-count",
+  "scriptName": "CompareCount",
+  "highlight": false,
+  "params": [
+    {
+      "id": "compare",
+      "type": "cmp"
+    },
+    {
+      "id": "count",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"compare-count": {
+    "list-name": "Compare Number of points in list",
+    "display-text": "{my} Count {0} [b]{1}[/b]",
+    "description": "Compare the number of point in the list",
+    "params": {
+      "count": {
+        "name": "Number",
+        "desc": "The Number to compare"
+      },
+      "compare": {
+        "name": "Comparison",
+        "desc": "Comparison Operator"
+      }
+    }
+  }
+@@CODE
+CompareCount(compare, count)
+{
+    /*
+	bool C3.compare(a,cmp,b);
+	--------------
+	cmp value list
+	--------------
+	0 = equals
+	1 = not equals
+	2 = less
+	3 = less/equals
+	4 = greater
+	5 = greater/equal
+	*/
+
+    return C3.compare(this.GetListSize(), compare, count);
+}
+@@END compare-count
+
+@@START compare-name|list
+@@ACE
+{
+  "id": "compare-name",
+  "scriptName": "CompareName",
+  "highlight": false,
+  "params": [
+    {
+      "id": "name",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"compare-name": {
+    "list-name": "Compare List Name",
+    "display-text": "{my} Name equals [b]{0}[/b]",
+    "description": "Compare the name of the list",
+    "params": {
+      "name": {
+        "name": "List Name",
+        "desc": "The Name of the list to compare"
+      }
+    }
+  }
+@@CODE
+CompareName(name)
+{
+    return name === this.listId;
+}
+@@END compare-name
+
