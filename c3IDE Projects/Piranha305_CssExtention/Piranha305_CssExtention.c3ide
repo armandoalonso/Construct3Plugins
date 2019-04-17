@@ -1,0 +1,16 @@
+@@METADATA
+Id|1a5ec2bf-829d-4911-9dd9-219dff8e3eb0
+Name|CSS Extention
+Class|CssExtention
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|Helps in applying css styles to html elements
+Category|input
+Type|SingleGlobalPlugin
+CreateDate|4/17/2019 11:45:10 AM
+DateModified|4/17/2019 3:30:30 PM
+AddonId|Piranha305_CssExtention

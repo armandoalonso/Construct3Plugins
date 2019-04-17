@@ -1,0 +1,16 @@
+@@METADATA
+Id|d08bc7ff-3051-4df0-8998-2c9a303b6836
+Name|Inject CSS
+Class|InjectCSS
+Company|Strani Anelli
+Author|Strani Anelli
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|Use CSS stylesheet in Construct 3 and inject simple html elements.
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|4/17/2019 11:20:13 AM
+DateModified|4/17/2019 3:34:17 PM
+AddonId|StraniAnelli_InjectCSS

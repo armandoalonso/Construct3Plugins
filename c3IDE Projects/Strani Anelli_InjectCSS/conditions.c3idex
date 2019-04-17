@@ -1,0 +1,66 @@
+@@START is-css-already-present|css
+@@ACE
+{
+  "id": "is-css-already-present",
+  "scriptName": "IsCSSAlreadyPresent",
+  "highlight": true,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"is-css-already-present":{
+  "list-name": "Is CSS Already Present",
+  "display-text": "[i]{0}[/i] is already present",
+  "description": "Test if a CSS is already present.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name to test."
+    }
+  }
+}
+@@CODE
+IsCSSAlreadyPresent(nameFile)
+{
+    const cssPresenteNellElenco = this.elencoCSSpresenti.filter(e => (e.name == nameFile)).length > 0 ? true : false;
+    return cssPresenteNellElenco;
+}
+@@END is-css-already-present
+
+@@START is-css-enabled|css
+@@ACE
+{
+  "id": "is-css-enabled",
+  "scriptName": "IsCSSEnabled",
+  "highlight": true,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"is-css-enabled":{
+  "list-name": "Is CSS Enabled",
+  "display-text": "[i]{0}[/i] is enabled",
+  "description": "Test if a CSS is enabled.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name to test."
+    }
+  }
+}
+@@CODE
+IsCSSEnabled(nameFile)
+{
+    const cssAbilitato = this.elencoCSSpresenti.filter(e => (e.name == nameFile && e.enabled)).length > 0 ? true : false;
+    return cssAbilitato;
+}
+@@END is-css-enabled
+

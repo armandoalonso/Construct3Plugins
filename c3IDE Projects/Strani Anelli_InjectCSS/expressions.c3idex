@@ -1,0 +1,349 @@
+@@START html-get-value|html
+@@ACE
+{
+  "id": "html-get-value",
+  "expressionName": "GetValue",
+  "scriptName": "GetValue",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "id",
+      "type": "string",
+      "initialValue": "id"
+    }
+  ]
+}
+@@LANG
+"html-get-value":{
+  "description": "Return the value of the element.",
+  "translated-name": "GetValue",
+  "params": {
+    "id": {
+      "name": "ID",
+      "desc": "ID of the element"
+    }
+  }
+}
+@@CODE
+GetValue(id)
+{
+    const el = document.getElementById(id);
+    return el.value;
+}
+@@END html-get-value
+
+@@START html-get-attribute|html
+@@ACE
+{
+  "id": "html-get-attribute",
+  "expressionName": "GetAttribute",
+  "scriptName": "GetAttribute",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "id",
+      "type": "string",
+      "initialValue": "id"
+    },
+    {
+      "id": "attr",
+      "type": "string",
+      "initialValue": "attr"
+    }
+  ]
+}
+@@LANG
+"html-get-attribute":{
+  "description": "Return the value of an attribute.",
+  "translated-name": "GetAttribute",
+  "params": {
+    "id": {
+      "name": "ID",
+      "desc": "ID of the element"
+    },
+    "attr": {
+      "name": "Attr",
+      "desc": "Attr"
+    }
+  }
+}
+@@CODE
+GetAttribute(id, attr)
+{
+    const el = document.getElementById(id);
+    return el.getAttribute(attr);
+}
+@@END html-get-attribute
+
+@@START html-get-value-with-query-selector|html
+@@ACE
+{
+  "id": "html-get-value-with-query-selector",
+  "expressionName": "GetValueWithQuerySelector",
+  "scriptName": "GetValueWithQuerySelector",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "selectors",
+      "type": "string",
+      "initialValue": "selectors"
+    }
+  ]
+}
+@@LANG
+"html-get-value-with-query-selector":{
+  "description": "Return the value of the element (query selector).",
+  "translated-name": "GetValueWithQuerySelector",
+  "params": {
+    "selectors": {
+      "name": "Selectors",
+      "desc": "Selectors"
+    }
+  }
+}
+@@CODE
+GetValueWithQuerySelector(selectors)
+{
+    const el = document.querySelector(selectors);
+    return el.value;
+}
+@@END html-get-value-with-query-selector
+
+@@START html-get-attribute-with-query-selector|html
+@@ACE
+{
+  "id": "html-get-attribute-with-query-selector",
+  "expressionName": "GetAttributeWithQuerySelector",
+  "scriptName": "GetAttributeWithQuerySelector",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "selectors",
+      "type": "string",
+      "initialValue": "selectors"
+    },
+    {
+      "id": "attr",
+      "type": "string",
+      "initialValue": "attr"
+    }
+  ]
+}
+@@LANG
+"html-get-attribute-with-query-selector":{
+  "description": "Return the value of an attribute (query selector).",
+  "translated-name": "GetAttributeWithQuerySelector",
+  "params": {
+    "selectors": {
+      "name": "Selectors",
+      "desc": "Selectors"
+    },
+    "attr": {
+      "name": "Attr",
+      "desc": "Attr"
+    }
+  }
+}
+@@CODE
+GetAttributeWithQuerySelector(selectors, attr)
+{
+    const el = document.querySelector(selectors);
+    return el.getAttribute(attr);
+}
+@@END html-get-attribute-with-query-selector
+
+@@START html-get-checked-status|html
+@@ACE
+{
+  "id": "html-get-checked-status",
+  "expressionName": "GetCheckedStatus",
+  "scriptName": "GetCheckedStatus",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "id",
+      "type": "string",
+      "initialValue": "id"
+    }
+  ]
+}
+@@LANG
+"html-get-checked-status":{
+  "description": "Return the check status of the element.",
+  "translated-name": "GetCheckedStatus",
+  "params": {
+    "id": {
+      "name": "ID",
+      "desc": "ID"
+    }
+  }
+}
+@@CODE
+GetCheckedStatus(id)
+{
+    const el = document.getElementById(id);
+    const bool = el.checked;
+    return bool ? 1 : 0;
+}
+@@END html-get-checked-status
+
+@@START html-get-checked-status-with-query-selector|html
+@@ACE
+{
+  "id": "html-get-checked-status-with-query-selector",
+  "expressionName": "GetCheckedStatusQuerySelector",
+  "scriptName": "GetCheckedStatusQuerySelector",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "selectors",
+      "type": "string",
+      "initialValue": "selectors"
+    }
+  ]
+}
+@@LANG
+"html-get-checked-status-with-query-selector":{
+  "description": "Return the check status of the element (query selector).",
+  "translated-name": "GetCheckedStatusQuerySelector",
+  "params": {
+    "selectors": {
+      "name": "Selectors",
+      "desc": "Selectors"
+    }
+  }
+}
+@@CODE
+GetCheckedStatusQuerySelector(selectors)
+{
+    const el = document.querySelector(selectors);
+    const bool = el.checked;
+    return bool ? 1 : 0;
+}
+@@END html-get-checked-status-with-query-selector
+
+@@START html-get-value-radio|html
+@@ACE
+{
+  "id": "html-get-value-radio",
+  "expressionName": "GetValueRadio",
+  "scriptName": "GetValueRadio",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "radioName",
+      "type": "string",
+      "initialValue": "radioName"
+    }
+  ]
+}
+@@LANG
+"html-get-value-radio":{
+  "description": "Return the value of a radio element.",
+  "translated-name": "GetValueRadio",
+  "params": {
+    "radioName": {
+      "name": "radioName",
+      "desc": "radioName"
+    }
+  }
+}
+@@CODE
+GetValueRadio(radioName)
+{
+    // http://jsfiddle.net/Xxxd3/610/
+    const radios = document.querySelectorAll(` [name = "${radioName}"]`);
+    for (let i = 0, length = radios.length; i < length; i++)
+    {
+        if (radios[i].checked)
+        {
+            return radios[i].value;
+            break;
+        }
+    }
+}
+@@END html-get-value-radio
+
+@@START html-get-attribute-from-string|html
+@@ACE
+{
+  "id": "html-get-attribute-from-string",
+  "expressionName": "GetAttrFromString",
+  "scriptName": "GetAttrFromString",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "string",
+      "type": "string",
+      "initialValue": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string",
+      "initialValue": "attr"
+    }
+  ]
+}
+@@LANG
+"html-get-attribute-from-string":{
+  "description": "Return the value of an attribute (from a string).",
+  "translated-name": "GetAttrFromString",
+  "params": {
+    "string": {
+      "name": "string",
+      "desc": "String"
+    },
+    "attr": {
+      "name": "Attr",
+      "desc": "Attr"
+    }
+  }
+}
+@@CODE
+GetAttrFromString(string, attr)
+{
+    // permette di estrarre attr da una stringa tipo
+    // <label><input name="prefer" value="2" type="checkbox" class="userRatings">Back-end Projects</label>
+
+    function extract(s, prefix, suffix)
+    {
+        var i = s.indexOf(prefix);
+        if (i >= 0)
+        {
+            s = s.substring(i + prefix.length);
+        }
+        else
+        {
+            return '';
+        }
+        if (suffix)
+        {
+            i = s.indexOf(suffix);
+            if (i >= 0)
+            {
+                s = s.substring(0, i);
+            }
+            else
+            {
+                return '';
+            }
+        }
+        return s;
+    };
+    const suffix = '" '
+    let prefix = attr + '="'
+    let risultato = extract(string, prefix, suffix);
+    if (risultato != '') return risultato;
+    prefix = attr + ' ="'
+    risultato = extract(string, prefix, suffix);
+    if (risultato != '') return risultato;
+    prefix = attr + ' = "'
+    risultato = extract(string, prefix, suffix);
+    if (risultato != '') return risultato;
+    prefix = attr + '= "'
+    risultato = extract(string, prefix, suffix);
+    if (risultato != '') return risultato;
+    return '';
+}
+@@END html-get-attribute-from-string
+

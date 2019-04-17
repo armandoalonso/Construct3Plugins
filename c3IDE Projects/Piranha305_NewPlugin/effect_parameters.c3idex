@@ -1,0 +1,30 @@
+@@START float-id|uniform lowp float floatId;
+@@JSON
+{
+    "id":"float-id",
+    "type": "float",
+    "initial-value":0,
+    "uniform": "floatId"
+}
+@@LANG
+"float-id": {
+    "name": "floatId",
+    "desc": "floatId"
+}
+@@END float-id
+
+@@START color-id|uniform lowp vec3 colorId;
+@@JSON
+{
+    "id":"color-id",
+    "type": "color",
+    "initial-value":[0,0,0],
+    "uniform": "colorId"
+}
+@@LANG
+"color-id": {
+    "name": "colorId",
+    "desc": "colorId"
+}
+@@END color-id
+

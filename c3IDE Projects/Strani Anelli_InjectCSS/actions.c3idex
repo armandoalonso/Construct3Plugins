@@ -1,0 +1,912 @@
+@@START add-local-css-file|css
+@@ACE
+{
+  "id": "add-local-css-file",
+  "scriptName": "AddLocalCSSFile",
+  "highlight": true,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-local-css-file":{
+  "list-name": "Add Local CSS",
+  "display-text": "Add Local CSS: [i]{0}[/i]",
+  "description": "Add a local CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+AddLocalCSSFile(nomeFile)
+{
+    this.ProcessaFile(nomeFile, "CSS", "isLocal", "ADD");
+}
+@@END add-local-css-file
+
+@@START add-external-css-file|css
+@@ACE
+{
+  "id": "add-external-css-file",
+  "scriptName": "AddExternalCSSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-external-css-file":{
+  "list-name": "Add External CSS",
+  "display-text": "Add External CSS: [i]{0}[/i]",
+  "description": "Add an External CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+AddExternalCSSFile(nomeFile)
+{
+    this.ProcessaFile(nomeFile, "CSS", "isNotLocal", "ADD");
+}
+@@END add-external-css-file
+
+@@START remove-local-css-file|css
+@@ACE
+{
+  "id": "remove-local-css-file",
+  "scriptName": "RemoveLocalCSSFile",
+  "highlight": true,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-local-css-file":{
+  "list-name": "Remove Local CSS",
+  "display-text": "Remove Local CSS: [i]{0}[/i]",
+  "description": "Remove a Local CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+RemoveLocalCSSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "CSS", "isLocal", "REMOVE");
+}
+@@END remove-local-css-file
+
+@@START remove-external-css-file|css
+@@ACE
+{
+  "id": "remove-external-css-file",
+  "scriptName": "RemoveExternalCSSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-external-css-file":{
+  "list-name": "Remove External CSS",
+  "display-text": "Remove External CSS: [i]{0}[/i]",
+  "description": "Remove an External CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+RemoveExternalCSSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "CSS", "isNotLocal", "REMOVE");
+}
+@@END remove-external-css-file
+
+@@START remove-all-imported-css-file|css
+@@ACE
+{
+  "id": "remove-all-imported-css-file",
+  "scriptName": "RemoveAllImportedCSSFile",
+  "highlight": false
+}
+@@LANG
+"remove-all-imported-css-file":{
+  "list-name": "Remove All Imported CSS",
+  "display-text": "Remove All [i]Imported[/i] CSS",
+  "description": "Remove all imported CSS file."
+}
+@@CODE
+RemoveAllImportedCSSFile()
+{
+    this.RemoveAllImportedCSSFromPage();
+}
+@@END remove-all-imported-css-file
+
+@@START remove-all-css-file|css
+@@ACE
+{
+  "id": "remove-all-css-file",
+  "scriptName": "RemoveAllCSSFile",
+  "highlight": false
+}
+@@LANG
+"remove-all-css-file":{
+  "list-name": "Remove All CSS From Page",
+  "display-text": "Remove [i]ALL[/i] CSS From Page",
+  "description": "Remove all CSS file."
+}
+@@CODE
+RemoveAllCSSFile()
+{
+    this.RemoveAllCSSFromPage();
+}
+@@END remove-all-css-file
+
+@@START disable-local-css-file|css
+@@ACE
+{
+  "id": "disable-local-css-file",
+  "scriptName": "DisableLocalCSSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"disable-local-css-file":{
+  "list-name": "Disable Local CSS",
+  "display-text": "Disable Local CSS: [i]{0}[/i]",
+  "description": "Disable a Local CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+DisableLocalCSSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "CSS", "isLocal", "DISABLE");
+}
+@@END disable-local-css-file
+
+@@START disable-external-css-file|css
+@@ACE
+{
+  "id": "disable-external-css-file",
+  "scriptName": "DisableExternalCSSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"disable-external-css-file":{
+  "list-name": "Disable External CSS",
+  "display-text": "Disable External CSS: [i]{0}[/i]",
+  "description": "Disable an External CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+DisableExternalCSSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "CSS", "isNotLocal", "DISABLE");
+}
+@@END disable-external-css-file
+
+@@START enable-local-css-file|css
+@@ACE
+{
+  "id": "enable-local-css-file",
+  "scriptName": "EnableLocalCSSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"enable-local-css-file":{
+  "list-name": "Enable Local CSS",
+  "display-text": "Enable Local CSS: [i]{0}[/i]",
+  "description": "Enable a Local CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+EnableLocalCSSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "CSS", "isLocal", "ENABLE");
+}
+@@END enable-local-css-file
+
+@@START enable-external-css-file|css
+@@ACE
+{
+  "id": "enable-external-css-file",
+  "scriptName": "EnableExternalCSSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeCSS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"enable-external-css-file":{
+  "list-name": "Enable External CSS",
+  "display-text": "Enable External CSS: [i]{0}[/i]",
+  "description": "Enable an External CSS file.",
+  "params": {
+    "nomeCSS": {
+      "name": "nomeCSS",
+      "desc": "CSS name"
+    }
+  }
+}
+@@CODE
+EnableExternalCSSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "CSS", "isNotLocal", "ENABLE");
+}
+@@END enable-external-css-file
+
+@@START add-local-js-file|js
+@@ACE
+{
+  "id": "add-local-js-file",
+  "scriptName": "AddLocalJSFile",
+  "highlight": true,
+  "params": [
+    {
+      "id": "nomeJS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-local-js-file":{
+  "list-name": "Add Local JS",
+  "display-text": "Add Local JS: [i]{0}[/i]",
+  "description": "Add a local JS file.",
+  "params": {
+    "nomeJS": {
+      "name": "nomeJS",
+      "desc": "JS name"
+    }
+  }
+}
+@@CODE
+AddLocalJSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "JS", "isLocal", "ADD");
+}
+@@END add-local-js-file
+
+@@START add-external-js-file|js
+@@ACE
+{
+  "id": "add-external-js-file",
+  "scriptName": "AddExternalJSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeJS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-external-js-file":{
+  "list-name": "Add External JS",
+  "display-text": "Add External JS: [i]{0}[/i]",
+  "description": "Add an External JS file.",
+  "params": {
+    "nomeJS": {
+      "name": "nomeJS",
+      "desc": "JS name"
+    }
+  }
+}
+@@CODE
+AddExternalJSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "JS", "isNotLocal", "ADD");
+}
+@@END add-external-js-file
+
+@@START remove-local-js-file|js
+@@ACE
+{
+  "id": "remove-local-js-file",
+  "scriptName": "RemoveLocalJSFile",
+  "highlight": true,
+  "params": [
+    {
+      "id": "nomeJS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-local-js-file":{
+  "list-name": "Remove Local JS",
+  "display-text": "Remove Local JS: [i]{0}[/i]",
+  "description": "Remove a Local JS file.",
+  "params": {
+    "nomeJS": {
+      "name": "nomeJS",
+      "desc": "JS name"
+    }
+  }
+}
+@@CODE
+RemoveLocalJSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "JS", "isLocal", "REMOVE");
+}
+@@END remove-local-js-file
+
+@@START remove-external-js-file|js
+@@ACE
+{
+  "id": "remove-external-js-file",
+  "scriptName": "RemoveExternalJSFile",
+  "highlight": false,
+  "params": [
+    {
+      "id": "nomeJS",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-external-js-file":{
+  "list-name": "Remove External JS",
+  "display-text": "Remove External JS: [i]{0}[/i]",
+  "description": "Remove an External JS file.",
+  "params": {
+    "nomeJS": {
+      "name": "nomeJS",
+      "desc": "JS name"
+    }
+  }
+}
+@@CODE
+RemoveExternalJSFile(nameFile)
+{
+    this.ProcessaFile(nameFile, "JS", "isNotLocal", "REMOVE");
+}
+@@END remove-external-js-file
+
+@@START remove-all-imported-js-file|js
+@@ACE
+{
+  "id": "remove-all-imported-js-file",
+  "scriptName": "RemoveAllImportedJSFile",
+  "highlight": false
+}
+@@LANG
+"remove-all-imported-js-file":{
+  "list-name": "Remove All Imported JS",
+  "display-text": "Remove All [i]Imported[/i] JS",
+  "description": "Remove all imported JS file."
+}
+@@CODE
+RemoveAllImportedJSFile()
+{
+    this.RemoveAllImportedJSFromPage();
+}
+@@END remove-all-imported-js-file
+
+@@START destroy-canvas|canvas
+@@ACE
+{
+  "id": "destroy-canvas",
+  "scriptName": "DestroyCanvas",
+  "highlight": false
+}
+@@LANG
+"destroy-canvas":{
+  "list-name": "Destroy Canvas",
+  "display-text": "[b]Destroy[/b] Canvas",
+  "description": "Destroy the Canvas from the page."
+}
+@@CODE
+DestroyCanvas()
+{
+    this.DestroyCanvasFromPage();
+}
+@@END destroy-canvas
+
+@@START add-html-element|html
+@@ACE
+{
+  "id": "add-html-element",
+  "scriptName": "AddHTMLElement",
+  "highlight": false,
+  "params": [
+    {
+      "id": "stringElement",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-html-element":{
+  "list-name": "Add HTML Element",
+  "display-text": "Add HTML Element: [i]{0}[/i]",
+  "description": "Add HTML Element.",
+  "params": {
+    "stringElement": {
+      "name": "HTML (string)",
+      "desc": "HTML code like a string"
+    }
+  }
+}
+@@CODE
+AddHTMLElement(newElement)
+{
+    const fragment = this.CreateHTMLElement(newElement);
+    document.body.appendChild(fragment);
+}
+@@END add-html-element
+
+@@START remove-html-element-by-id|html
+@@ACE
+{
+  "id": "remove-html-element-by-id",
+  "scriptName": "RemoveHTMLElementByID",
+  "highlight": false,
+  "params": [
+    {
+      "id": "idElement",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-html-element-by-id":{
+  "list-name": "Remove HTML Element By ID",
+  "display-text": "Remove HTML Element By ID: [i]{0}[/i]",
+  "description": "Remove HTML Element By ID.",
+  "params": {
+    "idElement": {
+      "name": "ID",
+      "desc": "Element ID"
+    }
+  }
+}
+@@CODE
+RemoveHTMLElementByID(idElement)
+{
+    this.DestroyHTMLElementByID(idElement);
+}
+@@END remove-html-element-by-id
+
+@@START change-viewport|html
+@@ACE
+{
+  "id": "change-viewport",
+  "scriptName": "ChangeViewport",
+  "highlight": false,
+  "params": [
+    {
+      "id": "width",
+      "type": "any",
+      "initialValue": "\"device-width\""
+    },
+    {
+      "id": "initialScale",
+      "type": "any",
+      "initialValue": "1.0"
+    },
+    {
+      "id": "maximumScale",
+      "type": "any",
+      "initialValue": "1.0"
+    },
+    {
+      "id": "mimimumScale",
+      "type": "any",
+      "initialValue": "1.0"
+    },
+    {
+      "id": "userScalable",
+      "type": "any",
+      "initialValue": "\"no\""
+    },
+    {
+      "id": "other",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"change-viewport":{
+  "list-name": "Change the viewport",
+  "display-text": "Set viewport to \"width={0}, initial-scale={1}, maximum-scale={2}, minimum-scale={3}, user-scalable={4} (,{5})\"",
+  "description": "Change the viewport meta tag.",
+  "params": {
+    "width": {
+      "name": "width",
+      "desc": "device-width"
+    },
+    "initialScale": {
+      "name": "initial-scale",
+      "desc": "initial-scale"
+    },
+    "maximumScale": {
+      "name": "maximum-scale",
+      "desc": "maximum-scale"
+    },
+    "mimimumScale": {
+      "name": "minimum-scale",
+      "desc": "minimum-scale"
+    },
+    "userScalable": {
+      "name": "user-scalable",
+      "desc": "user-scalable"
+    },
+    "other": {
+      "name": "other",
+      "desc": "other"
+    }
+  }
+}
+@@CODE
+ChangeViewport(width, initialScale, maximumScale, mimimumScale, userScalable, other)
+{
+    let viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute('content', `width = $
+    {
+        width
+    }, initial - scale = $
+    {
+        initialScale
+    }, maximum - scale = $
+    {
+        maximumScale
+    }, minimum - scale = $
+    {
+        mimimumScale
+    }, user - scalable = $
+    {
+        userScalable
+    }` + (other == "" ? "" : `, $
+    {
+        other
+    }`));
+}
+@@END change-viewport
+
+@@START add-attribute-via-id|html
+@@ACE
+{
+  "id": "add-attribute-via-id",
+  "scriptName": "AddAttributeViaID",
+  "highlight": false,
+  "params": [
+    {
+      "id": "id",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-attribute-via-id":{
+  "list-name": "Add attribute ",
+  "display-text": "Add attr [b]{1}={2}[/b] to ID=[b]{0}[/b]",
+  "description": "Add attribute.",
+  "params": {
+    "id": {
+      "name": "ID",
+      "desc": "Element ID"
+    },
+    "attr": {
+      "name": "attr",
+      "desc": "attr"
+    },
+    "value": {
+      "name": "value",
+      "desc": "value"
+    }
+  }
+}
+@@CODE
+AddAttributeViaID(id, attr, value)
+{
+    const el = document.getElementById(id);
+    if ( !! el) el.setAttribute(attr, value);
+}
+@@END add-attribute-via-id
+
+@@START remove-attribute-via-id|html
+@@ACE
+{
+  "id": "remove-attribute-via-id",
+  "scriptName": "RemoveAttributeViaID",
+  "highlight": false,
+  "params": [
+    {
+      "id": "id",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-attribute-via-id":{
+  "list-name": "Remove attribute",
+  "display-text": "Remove attr [b]{1}[/b] from ID=[b]{0}[/b]",
+  "description": "Remove attribute.",
+  "params": {
+    "id": {
+      "name": "ID",
+      "desc": "Element ID"
+    },
+    "attr": {
+      "name": "attr",
+      "desc": "attr"
+    }
+  }
+}
+@@CODE
+RemoveAttributeViaID(id, attr)
+{
+    const el = document.getElementById(id);
+    if ( !! el) el.removeAttribute(attr);
+}
+@@END remove-attribute-via-id
+
+@@START change-attribute-via-id|html
+@@ACE
+{
+  "id": "change-attribute-via-id",
+  "scriptName": "ChangeAttributeViaID",
+  "highlight": false,
+  "params": [
+    {
+      "id": "id",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"change-attribute-via-id":{
+  "list-name": "Change attribute",
+  "display-text": "Change attr: [b]{1}={2}[/b] to ID=[b]{0}[/b]",
+  "description": "Change attribute.",
+  "params": {
+    "id": {
+      "name": "ID",
+      "desc": "Element ID"
+    },
+    "attr": {
+      "name": "attr",
+      "desc": "attr"
+    },
+    "value": {
+      "name": "value",
+      "desc": "value"
+    }
+  }
+}
+@@CODE
+ChangeAttributeViaID(id, attr, value)
+{
+    const el = document.getElementById(id);
+    if ( !! el) el.setAttribute(attr, value);
+}
+@@END change-attribute-via-id
+
+@@START add-attribute-via-query-selector|html
+@@ACE
+{
+  "id": "add-attribute-via-query-selector",
+  "scriptName": "AddAttributeViaQuerySelector",
+  "highlight": false,
+  "params": [
+    {
+      "id": "selectors",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-attribute-via-query-selector":{
+  "list-name": "Add attribute (query selector)",
+  "display-text": "Add attr [b]{1}={2}[/b] to query selector [b]{0}[/b]",
+  "description": "Add attribute.",
+  "params": {
+    "selectors": {
+      "name": "selectors",
+      "desc": "selectors"
+    },
+    "attr": {
+      "name": "attr",
+      "desc": "attr"
+    },
+    "value": {
+      "name": "value",
+      "desc": "value"
+    }
+  }
+}
+@@CODE
+AddAttributeViaQuerySelector(selectors, attr, value)
+{
+    const el = document.querySelectorAll(selectors);
+    for (let i = 0, length = el.length; i < length; i++)
+    {
+        el[i].setAttribute(attr, value);
+    }
+}
+@@END add-attribute-via-query-selector
+
+@@START remove-attribute-via-query-selector|html
+@@ACE
+{
+  "id": "remove-attribute-via-query-selector",
+  "scriptName": "RemoveAttributeViaQuerySelector",
+  "highlight": false,
+  "params": [
+    {
+      "id": "selectors",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"remove-attribute-via-query-selector":{
+  "list-name": "Remove attribute (query selector)",
+  "display-text": "Remove attr [b]{1}[/b] from query selector [b]{0}[/b]",
+  "description": "Remove attribute.",
+  "params": {
+    "selectors": {
+      "name": "selectors",
+      "desc": "selectors"
+    },
+    "attr": {
+      "name": "attr",
+      "desc": "attr"
+    }
+  }
+}
+@@CODE
+RemoveAttributeViaQuerySelector(selectors, attr)
+{
+    const el = document.querySelectorAll(selectors);
+    for (let i = 0, length = el.length; i < length; i++)
+    {
+        el[i].removeAttribute(attr);
+    }
+}
+@@END remove-attribute-via-query-selector
+
+@@START change-attribute-via-query-selector|html
+@@ACE
+{
+  "id": "change-attribute-via-query-selector",
+  "scriptName": "ChangeAttributeViaQuerySelector",
+  "highlight": false,
+  "params": [
+    {
+      "id": "selectors",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"change-attribute-via-query-selector":{
+  "list-name": "Change attribute (query selector)",
+  "display-text": "Change attr: [b]{1}={2}[/b] to query selector [b]{0}[/b]",
+  "description": "Change attribute.",
+  "params": {
+    "selectors": {
+      "name": "selectors",
+      "desc": "selectors"
+    },
+    "attr": {
+      "name": "attr",
+      "desc": "attr"
+    },
+    "value": {
+      "name": "value",
+      "desc": "value"
+    }
+  }
+}
+@@CODE
+ChangeAttributeViaQuerySelector(selectors, attr, value)
+{
+    const el = document.querySelectorAll(selectors);
+    for (let i = 0, length = el.length; i < length; i++)
+    {
+        el[i].setAttribute(attr, value);
+    }
+}
+@@END change-attribute-via-query-selector
+
