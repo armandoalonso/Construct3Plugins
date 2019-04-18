@@ -62,11 +62,11 @@
 	
 			this._info.SetProperties([
 				new SDK.PluginProperty("group", "CSS"),
-				new SDK.PluginProperty("longtext", "CSS Files", ""),
-				new SDK.PluginProperty("longtext", "CSS External", ""),
+				new SDK.PluginProperty("longtext", "CSSFiles", ""),
+				new SDK.PluginProperty("longtext", "CSSExternal", ""),
 				new SDK.PluginProperty("group", "JS"),
-				new SDK.PluginProperty("longtext", "JS Files", ""),
-				new SDK.PluginProperty("longtext", "JS External", ""),
+				new SDK.PluginProperty("longtext", "JSFiles", ""),
+				new SDK.PluginProperty("longtext", "JSExternal", ""),
 			]);
 			
             SDK.Lang.PopContext(); //.properties
@@ -189,20 +189,20 @@
 			
 			//process css & js files
 			if (this.CSSExternal != '') {
-		        this.ProcessFiles(this.CSSExternal, "CSS", false);
+		        this.ProcessFiles(this.CSSExternal, "CSS");
 		    }
 		
 		    if (this.CSSFiles != '') {
-		        this.ProcessFiles(this.CSSFiles, "CSS", true);
+		        this.ProcessFiles(this.CSSFiles, "CSS");
 		    }
 		
 		    if (this.JSExternal != '') {
-		        this.ProcessFiles(this.JSExternal, "JS", false);
+		        this.ProcessFiles(this.JSExternal, "JS");
 		    }
 		
 		    if (this.JSFiles != '') {
-		        this.ProcessFiles(this.JSFiles, "JS", true);
-		    }
+		        this.ProcessFiles(this.JSFiles, "JS");
+		    }   
 		}
 		
 		Release()
@@ -222,7 +222,7 @@
 			// load state for savegames
 		}
 		
-		ProcessFiles(fileName, type = "CSS", local = false)
+		ProcessFiles(fileName, type = "CSS")
 		{
 			let files = [];
 			files = fileName.split('\n');
@@ -230,23 +230,73 @@
 			for(let i=0; i < files.length; i++){
 				let temp = files[i];
 				if(!temp.replace(/\s/g, '').length) continue;
-				this.InjectElementInHead(temp, type, local);
+				this.InjectElementInHead(temp, type);
 			}
 		}
 		
-		async InjectElementInHead(name, type = "CSS", local = false)
+		async InjectElementInHead(name, type = "CSS")
 		{
+			let url = await this._runtime.GetAssetManager().LoadProjectFileUrl(name);
 			
+			if(type == 'CSS'){
+				this.InjectCSSIntoHead(url);
+			}
+			else if(type == 'JS'){
+				this.InjectJSIntoHead(url);
+			}
+		}
+		
+		InjectCSSIntoHead(url)
+		{
+			let ele = document.createElement("link");
+			ele.setAttribute("rel", "stylesheet");
+          	ele.setAttribute("type", "text/css");
+          	ele.setAttribute("href", url);
+          	document.head.appendChild(ele);
+		}
+		
+		InjectJSIntoHead(url)
+		{
+			let ele = document.createElement("link");
+			ele.setAttribute("src", url);
+			document.head.appendChild(ele);
 		}
 	};
 }
 @@END INSTANCE_RUN.JS
 
 @@START LANG_PROP.JSON
-"properties": { }
+"properties": {
+    "CSS": {
+      "name": "CSS",
+      "desc": "CSS"
+    },
+    "CSSFiles": {
+      "name": "CSS Files",
+      "desc": "A list of css file names included in the project"
+    },
+    "CSSExternal": {
+      "name": "CSS External",
+      "desc": "A list of css urls to link to the project"
+    },
+    "JS": {
+      "name": "JS",
+      "desc": "JS"
+    },
+    "JSFiles": {
+      "name": "JS Files",
+      "desc": "A list of js file names included in the project"
+    },
+    "JSExternal": {
+      "name": "JS External",
+      "desc": "A list of js urls to link to the project"
+    }
+  }
 @@END LANG_PROP.JSON
 
 @@START LANG_CAT.JSON
-"aceCategories": { }
+"aceCategories": {
+    "html" : "HTML"
+}
 @@END LANG_CAT.JSON
 

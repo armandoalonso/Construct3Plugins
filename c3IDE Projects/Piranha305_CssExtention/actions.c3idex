@@ -1,0 +1,148 @@
+@@START add-attribute-id|html
+@@ACE
+{
+  "id": "add-attribute-id",
+  "scriptName": "AddAttributeId",
+  "highlight": false,
+  "params": [
+    {
+      "id": "id",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string",
+      "initialValue": "class"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"add-attribute-id": {
+  "list-name": "Add Attribute By ID",
+  "display-text": "Add Attribute ({1} : {2}) to HTML Element with ID : {0}",
+  "description": "Adds an attribute to an HTML element with a specific id",
+  "params": {
+    "id": {
+      "name": "Id",
+      "desc": "The id of the html element to add the attribute"
+    },
+    "attr": {
+      "name": "Attr",
+      "desc": "The attribute to add to the html element"
+    },
+    "value": {
+      "name": "Value",
+      "desc": "The value of the attribute to add"
+    }
+  }
+} 
+@@CODE
+AddAttributeId(id,attr,value)
+{
+	let el = document.getElementById(id);
+	if( !! el){
+		el.setAttribute(attr, value);
+	}
+}
+@@END add-attribute-id
+
+@@START remove-attribute-id|html
+@@ACE
+{
+  "id": "remove-attribute-id",
+  "scriptName": "RemoveAttributeId",
+  "highlight": false,
+  "params": [
+    {
+      "id": "id",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string",
+      "initialValue": "class"
+    }
+  ]
+}
+@@LANG
+"remove-attribute-id": {
+  "list-name": "Remove Attribute By ID",
+  "display-text": "Remove Attribute {1} from HTML Element with ID : {0}",
+  "description": "Remove an attribute to an HTML element with a specific id",
+  "params": {
+    "id": {
+      "name": "Id",
+      "desc": "The id of the html element to remove the attribute"
+    },
+    "attr": {
+      "name": "Attr",
+      "desc": "The attribute to remove to the html element"
+    },
+  }
+} 
+@@CODE
+RemoveAttributeId(id,attr)
+{
+	let el = document.getElementById(id);
+	if( !! el){
+		el.removeAttribute(attr);
+	}
+}
+@@END remove-attribute-id
+
+@@START change-attribute-id|html
+@@ACE
+{
+  "id": "change-attribute-id",
+  "scriptName": "ChangeAttributeId",
+  "highlight": false,
+  "params": [
+    {
+      "id": "id",
+      "type": "string"
+    },
+    {
+      "id": "attr",
+      "type": "string",
+      "initialValue": "class"
+    },
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"change-attribute-id": {
+  "list-name": "Change Attribute By ID",
+  "display-text": "Change Attribute ({1} : {2}) to HTML Element with ID : {0}",
+  "description": "Change an attribute to an HTML element with a specific id",
+  "params": {
+    "id": {
+      "name": "Id",
+      "desc": "The id of the html element to change the attribute"
+    },
+    "attr": {
+      "name": "Attr",
+      "desc": "The attribute to change to the html element"
+    },
+    "value": {
+      "name": "Value",
+      "desc": "The value of the attribute to change"
+    }
+  }
+} 
+@@CODE
+ChangeAttributeId(id,attr,value)
+{
+	let el = document.getElementById(id);
+	if( !! el){
+		el.setAttribute(attr, value);
+	}
+}
+@@END change-attribute-id
+
