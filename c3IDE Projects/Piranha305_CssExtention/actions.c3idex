@@ -39,7 +39,7 @@
       "desc": "The value of the attribute to add"
     }
   }
-} 
+}
 @@CODE
 AddAttributeId(id,attr,value)
 {
@@ -83,7 +83,7 @@ AddAttributeId(id,attr,value)
       "desc": "The attribute to remove to the html element"
     },
   }
-} 
+}
 @@CODE
 RemoveAttributeId(id,attr)
 {
@@ -135,7 +135,7 @@ RemoveAttributeId(id,attr)
       "desc": "The value of the attribute to change"
     }
   }
-} 
+}
 @@CODE
 ChangeAttributeId(id,attr,value)
 {

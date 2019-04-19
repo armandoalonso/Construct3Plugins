@@ -1,0 +1,24 @@
+@@START on-page-load|html
+@@ACE
+{
+	"id": "on-page-load",
+	"scriptName": "OnPageLoad",
+	"highlight": false,
+	"isTrigger": true,
+	"isInvertible": false,
+	"isCompatibleWithTriggers": false
+}
+@@LANG
+"on-page-load": {
+	"list-name": "On Page Load",
+	"display-text": "On Page Load",
+	"description": "Triggers when the page loads, apply your css styling here"
+}
+@@CODE
+OnPageLoad()
+{
+	console.log('load');
+	return true;
+}
+@@END on-page-load
+

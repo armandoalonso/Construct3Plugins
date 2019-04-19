@@ -189,20 +189,22 @@
 			
 			//process css & js files
 			if (this.CSSExternal != '') {
-		        this.ProcessFiles(this.CSSExternal, "CSS");
+		        this.ProcessFiles(this.CSSExternal, "CSS", false);
 		    }
 		
 		    if (this.CSSFiles != '') {
-		        this.ProcessFiles(this.CSSFiles, "CSS");
+		        this.ProcessFiles(this.CSSFiles, "CSS", true);
 		    }
 		
 		    if (this.JSExternal != '') {
-		        this.ProcessFiles(this.JSExternal, "JS");
+		        this.ProcessFiles(this.JSExternal, "JS", false);
 		    }
 		
 		    if (this.JSFiles != '') {
-		        this.ProcessFiles(this.JSFiles, "JS");
+		        this.ProcessFiles(this.JSFiles, "JS", true);
 		    }   
+		    
+		    this.Trigger(C3.Plugins.Piranha305_CssExtention.Cnds.OnPageLoad);
 		}
 		
 		Release()
@@ -222,7 +224,7 @@
 			// load state for savegames
 		}
 		
-		ProcessFiles(fileName, type = "CSS")
+		ProcessFiles(fileName, type = "CSS", local = false)
 		{
 			let files = [];
 			files = fileName.split('\n');
@@ -230,13 +232,24 @@
 			for(let i=0; i < files.length; i++){
 				let temp = files[i];
 				if(!temp.replace(/\s/g, '').length) continue;
-				this.InjectElementInHead(temp, type);
+				this.InjectElementInHead(temp, type, local);
 			}
 		}
 		
-		async InjectElementInHead(name, type = "CSS")
+		async TriggerOnPageLoad()
 		{
-			let url = await this._runtime.GetAssetManager().LoadProjectFileUrl(name);
+			await Promise.resolve('');
+		}
+		
+		async InjectElementInHead(name, type = "CSS", local = false)
+		{
+			let url = ""
+			if(local) {
+				url = await this._runtime.GetAssetManager().LoadProjectFileUrl(name);
+			} else{
+				url = name;
+			}
+			console.log(url);
 			
 			if(type == 'CSS'){
 				this.InjectCSSIntoHead(url);
