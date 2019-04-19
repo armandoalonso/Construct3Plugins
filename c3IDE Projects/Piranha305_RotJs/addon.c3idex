@@ -186,213 +186,240 @@
 "use strict";
 
 {
-	C3.Plugins.Piranha305_RotJs.Instance = class RotJsInstance extends C3.SDKInstanceBase
-	{
-		constructor(inst, properties)
-		{
-			super(inst);
-			
-			this._seed = ROT.RNG.getSeed();
-			this._useSeed = false;
+    C3.Plugins.Piranha305_RotJs.Instance = class RotJsInstance extends C3.SDKInstanceBase
+    {
+        constructor(inst, properties)
+        {
+            super(inst);
 
-			this.gen = {};
-			this.map = {};
-			this.rooms = [];
-			this.doors = [];
-			this.cells = [];
-			this.width = 0;
-			this.height = 0;
-			this.blobs = [];
-			this.fovMap = [];
-			this.floorCleared = true;
-			this.wallCleared = true;
-			this.floorTiles = { "0" : "100"};
-			this.wallTiles =  { "1" : "100"};
+            this._seed = ROT.RNG.getSeed();
+            this._useSeed = false;
 
-			//room iteration
-			this.curRoomIndex = -1;
-			this.curRoom = {};
+            this.gen = {};
+            this.map = {};
+            this.rooms = [];
+            this.doors = [];
+            this.cells = [];
+            this.width = 0;
+            this.height = 0;
+            this.blobs = [];
+            this.fovMap = [];
+            this.floorCleared = true;
+            this.wallCleared = true;
+            this.floorTiles = {
+                "0": "100"
+            };
+            this.wallTiles = {
+                "1": "100"
+            };
 
-			//blob iteration
-			this.curBlobIndex = -1;
-			this.curBlob = [];
+            //room iteration
+            this.curRoomIndex = -1;
+            this.curRoom = {};
 
-			//door iteration
-			this.curDoorIndex = -1;
-			this.curDoor = {};
+            //blob iteration
+            this.curBlobIndex = -1;
+            this.curBlob = [];
 
-			//cell iteration
-			this.curCellIndex = -1;
-			this.curCell = {};
+            //door iteration
+            this.curDoorIndex = -1;
+            this.curDoor = {};
 
-			//fov iteration
-			this.curFovIndex = -1;
-			this.curFovCell = {};
+            //cell iteration
+            this.curCellIndex = -1;
+            this.curCell = {};
 
-			if (properties)		// note properties may be null in some cases
-			{
-				this._useSeed = properties[0];
+            //fov iteration
+            this.curFovIndex = -1;
+            this.curFovCell = {};
 
-				if(this._useSeed){
-					this._seed = properties[1];
-					ROT.RNG.setSeed(this._seed);
-				}
-			}
-		}	
+            if (properties) // note properties may be null in some cases
+            {
+                this._useSeed = properties[0];
 
-		Release()
-		{
-			super.Release();
-		}
-		
-		SaveToJson()
-		{
-			//TODO: save state
-			return {
-				seed : this._seed,
-				useSeed : this._useSeed,
-				gen : this.gen,
-				map : this.map,
-				rooms : this.rooms,
-				doors : this.doors,
-				cells : this.cells,
-				blobs : this.blobs,
-				fovMap : this.fovMap,
-				curRoomIndex: this.curRoomIndex,
-				curRoom : this.curRoom,
-				curDoorIndex: this.curDoorIndex,
-				curDoor : this.curDoor ,
-				curCellIndex: this.curCellIndex,
-				curCell : this.curCell,
-				curBlobIndex :this.curBlobIndex,
-				curBlob : this.curBlob,			
-				curFovIndex :this.curFovIndex,
-				curFovCell : this.curFovCell,
-				floorTiles : this.floorTiles,
-				wallTiles : this.wallTiles,
-				floorCleared : this.floorCleared,
-				wallCleared : this.wallCleared
-			};
-		}
-		
-		LoadFromJson(o)
-		{
-			this._seed = o["seed"];
-			this._useSeed = o["useSeed"];
-			this.gen = o["gen"];
-			this.map = o["map"];
-			this.rooms = o["rooms"];
-			this.doors = o["doors"];
-			this.cells = o["cells"];
-			this.curRoomIndex = o["curRoomIndex"];
-			this.curRoom = o["curRoom"];
-			this.curDoorIndex = o["curDoorIndex"];
-			this.curDoor = o["curDoor"];
-			this.curCellIndex = o["curCellIndex"];
-			this.curCell = o["curCell"];
-			this.blobs = o["blobs"];
-			this.curBlobIndex = o["curBlobIndex"];
-			this.curBlob = o["curBlob"];
-			this.fovMap = o["fovMap"];
-			this.curFovIndex = o["curFovIndex"];
-			this.curFovCell = o["curFovCell"];
-			this.floorTiles = o["floorTiles"];
-			this.wallTiles = o["wallTiles"];
-			this.floorCleared = o["floorCleared"];
-			this.this.wallCleared = o["wallCleared"];
-		}
+                if (this._useSeed)
+                {
+                    this._seed = properties[1];
+                    ROT.RNG.setSeed(this._seed);
+                }
+            }
+        }
 
-		_clearRooms()
-		{
-			this.gen = {};
-			this.map = {};
-			this.rooms = [];
-			this.doors = [];
-			this.cells = [];
+        Release()
+        {
+            super.Release();
+        }
 
-			//room iteration
-			this.curRoomIndex = -1;
-			this.curRoom = {};
+        SaveToJson()
+        {
+            //TODO: save state
+            return {
+                seed: this._seed,
+                useSeed: this._useSeed,
+                gen: this.gen,
+                map: this.map,
+                rooms: this.rooms,
+                doors: this.doors,
+                cells: this.cells,
+                blobs: this.blobs,
+                fovMap: this.fovMap,
+                curRoomIndex: this.curRoomIndex,
+                curRoom: this.curRoom,
+                curDoorIndex: this.curDoorIndex,
+                curDoor: this.curDoor,
+                curCellIndex: this.curCellIndex,
+                curCell: this.curCell,
+                curBlobIndex: this.curBlobIndex,
+                curBlob: this.curBlob,
+                curFovIndex: this.curFovIndex,
+                curFovCell: this.curFovCell,
+                floorTiles: this.floorTiles,
+                wallTiles: this.wallTiles,
+                floorCleared: this.floorCleared,
+                wallCleared: this.wallCleared
+            };
+        }
 
-			//door iteration
-			this.curDoorIndex = -1;
-			this.curDoor = {};
+        LoadFromJson(o)
+        {
+            this._seed = o["seed"];
+            this._useSeed = o["useSeed"];
+            this.gen = o["gen"];
+            this.map = o["map"];
+            this.rooms = o["rooms"];
+            this.doors = o["doors"];
+            this.cells = o["cells"];
+            this.curRoomIndex = o["curRoomIndex"];
+            this.curRoom = o["curRoom"];
+            this.curDoorIndex = o["curDoorIndex"];
+            this.curDoor = o["curDoor"];
+            this.curCellIndex = o["curCellIndex"];
+            this.curCell = o["curCell"];
+            this.blobs = o["blobs"];
+            this.curBlobIndex = o["curBlobIndex"];
+            this.curBlob = o["curBlob"];
+            this.fovMap = o["fovMap"];
+            this.curFovIndex = o["curFovIndex"];
+            this.curFovCell = o["curFovCell"];
+            this.floorTiles = o["floorTiles"];
+            this.wallTiles = o["wallTiles"];
+            this.floorCleared = o["floorCleared"];
+            this.this.wallCleared = o["wallCleared"];
+        }
 
-			//cell iteration
-			this.curCellIndex = -1;
-			this.curCell = {};
-		}
+        _clearRooms()
+        {
+            this.gen = {};
+            this.map = {};
+            this.rooms = [];
+            this.doors = [];
+            this.cells = [];
 
-		_setupRooms(room, index)
-		{
-			const rm = {
-				centerX : room.getCenter()[0],
-				centerY : room.getCenter()[1],
-				top : room.getTop(),
-				bottom :room.getBottom(),
-				left: room.getLeft(),
-				right: room.getRight(),
-				height: room.getBottom() - room.getTop() + 1,
-				width : room.getRight() - room.getLeft() + 1,
-				doors : [],
-				cells : []
-			};
+            //room iteration
+            this.curRoomIndex = -1;
+            this.curRoom = {};
 
-			room.getDoors((x,y) => {
-				rm.doors.push({x:x, y:y});
-				this.doors.push({room:index, x:x, y:y});
-			});
-			
-			//get free room cells
-			for(var b=room.getTop();b<room.getBottom()+1; b++){
-				for(var a=room.getLeft(); a<room.getRight()+1; a++){
-					rm.cells.push({x:a, y:b});
-					this.map[a+','+b].type = 'room';
-				}
-			};
-			this.rooms.push(rm);
-		}
+            //door iteration
+            this.curDoorIndex = -1;
+            this.curDoor = {};
 
-		_visitCell(x, y, label, matrix, visited, cellValue){
-			if(x<0 || y<0) return;
-			if(x>=this.width || y>=this.height) return;
-			if(visited[x][y] >= 0 ) return;
-			if(matrix[x][y] >= 0) return;
+            //cell iteration
+            this.curCellIndex = -1;
+            this.curCell = {};
+        }
 
-			if(cellValue == 1){
-				if(this.map[x+','+y].value == 0) return;
-			}
-			else{
-				if(this.map[x+','+y].value == 1) return;
-			}
-			
-			visited[x][y] = label;
-			matrix[x][y] = label;
-			//recursivly visit all cells
-			this._visitCell(x+1, y, label, matrix, visited, cellValue);
-			this._visitCell(x-1, y, label, matrix, visited, cellValue);
-			this._visitCell(x, y+1, label, matrix, visited, cellValue);
-			this._visitCell(x, y-1, label, matrix, visited, cellValue);
-		}
+        _setupRooms(room, index)
+        {
+            const rm = {
+                centerX: room.getCenter()[0],
+                centerY: room.getCenter()[1],
+                top: room.getTop(),
+                bottom: room.getBottom(),
+                left: room.getLeft(),
+                right: room.getRight(),
+                height: room.getBottom() - room.getTop() + 1,
+                width: room.getRight() - room.getLeft() + 1,
+                doors: [],
+                cells: []
+            };
 
-		_getFloorTile() {
-			if(this.floorCleared){
-				return 0;
-			}
+            room.getDoors((x, y) => {
+                rm.doors.push(
+                {
+                    x: x,
+                    y: y
+                });
+                this.doors.push(
+                {
+                    room: index,
+                    x: x,
+                    y: y
+                });
+            });
 
-			console.log('getFloor');
-			return Number(ROT.RNG.getWeightedValue(this.floorTiles));
-		}
+            //get free room cells
+            for (var b = room.getTop(); b < room.getBottom() + 1; b++)
+            {
+                for (var a = room.getLeft(); a < room.getRight() + 1; a++)
+                {
+                    rm.cells.push(
+                    {
+                        x: a,
+                        y: b
+                    });
+                    this.map[a + ',' + b].type = 'room';
+                }
+            };
+            this.rooms.push(rm);
+        }
 
-		_getWallTile() {
-			if(this.wallCleared){
-				return 1;
-			}
-			console.log('getWall');
-			return Number(ROT.RNG.getWeightedValue(this.wallTiles));
-		}
+        _visitCell(x, y, label, matrix, visited, cellValue)
+        {
+            if (x < 0 || y < 0) return;
+            if (x >= this.width || y >= this.height) return;
+            if (visited[x][y] >= 0) return;
+            if (matrix[x][y] >= 0) return;
 
-	};
+            if (cellValue == 1)
+            {
+                if (this.map[x + ',' + y].value == 0) return;
+            }
+            else
+            {
+                if (this.map[x + ',' + y].value == 1) return;
+            }
+
+            visited[x][y] = label;
+            matrix[x][y] = label;
+            //recursivly visit all cells
+            this._visitCell(x + 1, y, label, matrix, visited, cellValue);
+            this._visitCell(x - 1, y, label, matrix, visited, cellValue);
+            this._visitCell(x, y + 1, label, matrix, visited, cellValue);
+            this._visitCell(x, y - 1, label, matrix, visited, cellValue);
+        }
+
+        _getFloorTile()
+        {
+            if (this.floorCleared)
+            {
+                return 0;
+            }
+
+            console.log('getFloor');
+            return Number(ROT.RNG.getWeightedValue(this.floorTiles));
+        }
+
+        _getWallTile()
+        {
+            if (this.wallCleared)
+            {
+                return 1;
+            }
+            console.log('getWall');
+            return Number(ROT.RNG.getWeightedValue(this.wallTiles));
+        }
+
+    };
 }
 @@END INSTANCE_RUN.JS
 
