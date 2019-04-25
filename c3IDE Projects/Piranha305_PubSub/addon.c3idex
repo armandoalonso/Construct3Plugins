@@ -54,14 +54,13 @@
             this._info.SetCategory(BEHAVIOR_CATEGORY);
             this._info.SetAuthor("Piranha305");
             this._info.SetHelpUrl(lang(".help-url"));
-            this._info.SetIsOnlyOneAllowed(false);
+            this._info.SetIsOnlyOneAllowed(true);
 
             this._info.SetSupportedRuntimes(["c3"]);
 
             SDK.Lang.PushContext(".properties");
 
             this._info.SetProperties([
-                new SDK.PluginProperty("text", "channel", ""),
                 new SDK.PluginProperty("check", "listening", true)
             ]);
 
@@ -165,15 +164,13 @@
         constructor(behInst, properties)
         {
             super(behInst);
-
-            this.channel = "";
+            
             this.listening = false;
             this.lastMessage = "";
 
             if (properties)
             {
-                this.channel = properties[0];
-                this.listening = properties[1];
+                this.listening = properties[0];
             }
 
             // Opt-in to getting calls to Tick()
@@ -197,12 +194,10 @@
             // load state for savegames
         }
 
-        SimulateMessgae(channel, message)
+        SimulateMessgae(message)
         {
-        	if(channel == this.channel){	
-				this.lastMessage = message;
-	            this.Trigger(C3.Behaviors.Piranha305_PubSub.Cnds.OnMessage);
-        	}
+			this.lastMessage = message;
+	        this.Trigger(C3.Behaviors.Piranha305_PubSub.Cnds.OnMessage);
         }
 
         /*
@@ -220,21 +215,16 @@
 
 @@START LANG_PROP.JSON
 "properties": {
-  "channel": {
-    "name": "Channel",
-    "desc": "The channel to listen to"
-  },
   "listening": {
     "name": "Listening",
-    "desc": "Enable listening to messages on the channel"
+    "desc": "Enable listening for messages"
   }
 }
 @@END LANG_PROP.JSON
 
 @@START LANG_CAT.JSON
 "aceCategories": {
-  "publish": "Publish",
-  "message": "Message"
+    "pubsub" : "Pub / Sub"
 }
 @@END LANG_CAT.JSON
 

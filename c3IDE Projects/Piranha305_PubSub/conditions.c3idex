@@ -1,4 +1,4 @@
-@@START on-message|message
+@@START on-message|pubsub
 @@ACE
 {
   "id": "on-message",

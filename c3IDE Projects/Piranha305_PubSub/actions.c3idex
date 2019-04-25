@@ -1,14 +1,10 @@
-@@START broadcast|publish
+@@START broadcast|pubsub
 @@ACE
 {
   "id": "broadcast",
   "scriptName": "Broadcast",
   "highlight": false,
   "params": [
-    {
-      "id": "channel",
-      "type": "string"
-    },
     {
       "id": "msg",
       "type": "string"
@@ -18,13 +14,9 @@
 @@LANG
 "broadcast":{
   "list-name": "Broadcast",
-  "display-text": "Sends a message [b]{1}[/b] to channel [b]{0}[/b]",
-  "description": "Sends a message to all instance listening on that channel",
+  "display-text": "Sends a message [b]{0}[/b]",
+  "description": "Sends a message to all instance listening",
   "params": {
-    "channel": {
-      "name": "Channel",
-      "desc": "The channel to send the message"
-    },
     "msg": {
       "name": "Msg",
       "desc": "The message to send"
@@ -32,41 +24,27 @@
   }
 }
 @@CODE
-Broadcast(channel, msg)
+Broadcast(msg)
 {
-    var bInstances = this._inst.GetBehaviorInstances();
-    console.log(bInstances);
-    for (let behavior of bInstances)
-    {
-        //console.log(behavior);
-        var behaviorType = behavior.GetBehaviorType();
-        if (behaviorType.GetName() == "PubSub")
-        {
-            //console.log(behaviorType.GetBehavior());
-            //console.log(behaviorType.GetBehavior().GetInstances());
-            //console.log(behavior);
-            var sdkInstance = behavior.GetSdkInstance();
-            //console.log(sdkInstance);
-            sdkInstance.CallAction(C3.Behaviors.Piranha305_PubSub.Acts.SimulateMessage, channel, msg);
-        }
-        //SDKBehaviorInstance
-    }
-    //var instances = behInst.GetBehavior().GetInstances();	
-    //console.log(instances);
+    var behavior = this._inst.GetBehaviorInstanceFromCtor(C3.Behaviors.Piranha305_PubSub);
+	var instances = behavior.GetBehavior().GetInstances();
+	
+	for(let instance of instances){
+		var behav = instance.GetBehaviorInstanceFromCtor(C3.Behaviors.Piranha305_PubSub);
+		var sdkInstance = behav.GetSdkInstance();
+		sdkInstance.CallAction(C3.Behaviors.Piranha305_PubSub.Acts.SimulateMessage, msg);
+	}
 }
+
 @@END broadcast
 
-@@START simulate-message|message
+@@START simulate-message|pubsub
 @@ACE
 {
   "id": "simulate-message",
   "scriptName": "SimulateMessage",
   "highlight": false,
   "params": [
-    {
-      "id": "channel",
-      "type": "string"
-    },
     {
       "id": "msg",
       "type": "string"
@@ -76,13 +54,9 @@ Broadcast(channel, msg)
 @@LANG
 "simulate-message":{
   "list-name": "Simulate Message",
-  "display-text": "Simulate message [b]{1}[/b] to channel [b]{0}[/b]",
+  "display-text": "Simulate message [b]{0}[/b]",
   "description": "This sets the data for the message recieved",
   "params": {
-    "channel": {
-      "name": "Channel",
-      "desc": "The channel"
-    },
     "msg": {
       "name": "Message",
       "desc": "The message"
@@ -90,9 +64,41 @@ Broadcast(channel, msg)
   }
 }
 @@CODE
-SimulateMessage(channel, msg)
+SimulateMessage(msg)
 {
-    this.SimulateMessgae(channel, msg);
+    this.SimulateMessgae(msg);
 }
 @@END simulate-message
+
+@@START set-listen|pubsub
+@@ACE
+{
+  "id": "set-listen",
+  "scriptName": "SetListen",
+  "highlight": false,
+  "params": [
+    {
+      "id": "bool",
+      "type": "boolean"
+    }
+  ]
+}
+@@LANG
+"set-listen": {
+	"list-name": "Set Listening",
+	"display-text": "Set [b]{my}[/b] to Listen {0}",
+	"description": "Set if PubSub is listening",
+	"params": {
+        "bool": {
+            "name": "Listen",
+            "desc": "Is listening?"
+        }
+    }
+}
+@@CODE
+SetListen(listen)
+{
+	this.listening = listen;
+}
+@@END set-listen
 
