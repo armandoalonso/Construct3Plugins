@@ -1,0 +1,38 @@
+@@START on-message|message
+@@ACE
+{
+  "id": "on-message",
+  "scriptName": "OnMessage",
+  "highlight": false,
+  "isTrigger": true,
+  "isInvertible": false,
+  "params": [
+    {
+      "id": "msg",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"on-message": {
+  "list-name": "On Message",
+  "display-text": "On message : [b]{0}[/b]",
+  "description": "Triggers when a Message is published",
+  "params": {
+    "msg": {
+      "name": "Msg",
+      "desc": "The message to listen for"
+    }
+  }
+} 
+@@CODE
+OnMessage(msg)
+{
+	if(this.listening && this.lastMessage == msg) {
+		return true;
+	}
+	
+	return false;
+}
+@@END on-message
+

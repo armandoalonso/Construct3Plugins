@@ -1,0 +1,240 @@
+@@START ADDON.JSON
+{
+  "is-c3-addon": true,
+  "type": "behavior",
+  "name": "PubSub",
+  "id": "Piranha305_PubSub",
+  "version": "1.0.0.0",
+  "author": "Piranha305",
+  "website": "https://www.construct.net",
+  "documentation": "https://www.construct.net",
+  "description": "A publish/subscribtion behavior ",
+  "editor-scripts": [
+    "behavior.js",
+    "type.js",
+    "instance.js"
+  ],
+  "file-list": [
+    "c3runtime/behavior.js",
+    "c3runtime/type.js",
+    "c3runtime/instance.js",
+    "c3runtime/conditions.js",
+    "c3runtime/actions.js",
+    "c3runtime/expressions.js",
+    "lang/en-US.json",
+    "aces.json",
+    "addon.json",
+    "icon.svg",
+    "instance.js",
+    "behavior.js",
+    "type.js"
+  ]
+}
+@@END ADDON.JSON
+
+@@START PLUGIN_EDIT.JS
+"use strict";
+{
+
+    const BEHAVIOR_ID = "Piranha305_PubSub";
+    const BEHAVIOR_VERSION = "1.0.0.0";
+    const BEHAVIOR_CATEGORY = "other";
+
+    const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_PubSub = class PubSubBehavior extends SDK.IBehaviorBase
+    {
+        constructor()
+        {
+            super(BEHAVIOR_ID);
+
+            SDK.Lang.PushContext("behaviors." + BEHAVIOR_ID.toLowerCase());
+
+            this._info.SetName(lang(".name"));
+            this._info.SetDescription(lang(".description"));
+            this._info.SetVersion(BEHAVIOR_VERSION);
+            this._info.SetCategory(BEHAVIOR_CATEGORY);
+            this._info.SetAuthor("Piranha305");
+            this._info.SetHelpUrl(lang(".help-url"));
+            this._info.SetIsOnlyOneAllowed(false);
+
+            this._info.SetSupportedRuntimes(["c3"]);
+
+            SDK.Lang.PushContext(".properties");
+
+            this._info.SetProperties([
+                new SDK.PluginProperty("text", "channel", ""),
+                new SDK.PluginProperty("check", "listening", true)
+            ]);
+
+            SDK.Lang.PopContext(); //.properties
+            SDK.Lang.PopContext();
+        }
+    };
+
+    BEHAVIOR_CLASS.Register(BEHAVIOR_ID, BEHAVIOR_CLASS);
+}
+@@END PLUGIN_EDIT.JS
+
+@@START PLUGIN_RUN.JS
+"use strict";
+{
+    C3.Behaviors.Piranha305_PubSub = class PubSubBehavior extends C3.SDKBehaviorBase
+    {
+        constructor(opts)
+        {
+            super(opts);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+    };
+}
+@@END PLUGIN_RUN.JS
+
+@@START TYPE_EDIT.JS
+"use strict";
+{
+    const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_PubSub;
+
+    BEHAVIOR_CLASS.Type = class PubSubType extends SDK.IBehaviorTypeBase
+    {
+        constructor(sdkPlugin, iBehaviorType)
+        {
+            super(sdkPlugin, iBehaviorType);
+        }
+    };
+}
+@@END TYPE_EDIT.JS
+
+@@START TYPE_RUN.JS
+"use strict";
+{
+    C3.Behaviors.Piranha305_PubSub.Type = class PubSubType extends C3.SDKBehaviorTypeBase
+    {
+        constructor(objectClass)
+        {
+            super(objectClass);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        OnCreate()
+        {}
+    };
+}
+@@END TYPE_RUN.JS
+
+@@START INSTANCE_EDIT.JS
+"use strict";
+{
+    const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_PubSub;
+
+    BEHAVIOR_CLASS.Instance = class PubSubInstance extends SDK.IBehaviorInstanceBase
+    {
+        constructor(sdkBehType, behInst)
+        {
+            super(sdkBehType, behInst);
+        }
+
+        Release()
+        {}
+
+        OnCreate()
+        {}
+
+        OnPropertyChanged(id, value)
+        {}
+
+        LoadC2Property(name, valueString)
+        {
+            return false; // not handled
+        }
+    };
+}
+@@END INSTANCE_EDIT.JS
+
+@@START INSTANCE_RUN.JS
+"use strict";
+{
+    C3.Behaviors.Piranha305_PubSub.Instance = class PubSubInstance extends C3.SDKBehaviorInstanceBase
+    {
+        constructor(behInst, properties)
+        {
+            super(behInst);
+
+            this.channel = "";
+            this.listening = false;
+            this.lastMessage = "";
+
+            if (properties)
+            {
+                this.channel = properties[0];
+                this.listening = properties[1];
+            }
+
+            // Opt-in to getting calls to Tick()
+            //this._StartTicking();
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        SaveToJson()
+        {
+            return {
+                // data to be saved for savegames
+            };
+        }
+
+        LoadFromJson(o)
+        {
+            // load state for savegames
+        }
+
+        SimulateMessgae(channel, message)
+        {
+        	if(channel == this.channel){	
+				this.lastMessage = message;
+	            this.Trigger(C3.Behaviors.Piranha305_PubSub.Cnds.OnMessage);
+        	}
+        }
+
+        /*
+		Tick()
+		{
+			const dt = this._runtime.GetDt(this._inst);
+			const wi = this._inst.GetWorldInfo();
+			
+			// ... code to run every tick for this behavior ...
+		}
+		*/
+    };
+}
+@@END INSTANCE_RUN.JS
+
+@@START LANG_PROP.JSON
+"properties": {
+  "channel": {
+    "name": "Channel",
+    "desc": "The channel to listen to"
+  },
+  "listening": {
+    "name": "Listening",
+    "desc": "Enable listening to messages on the channel"
+  }
+}
+@@END LANG_PROP.JSON
+
+@@START LANG_CAT.JSON
+"aceCategories": {
+  "publish": "Publish",
+  "message": "Message"
+}
+@@END LANG_CAT.JSON
+

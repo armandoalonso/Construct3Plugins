@@ -1,0 +1,16 @@
+@@METADATA
+Id|0d9c9f4c-8dbb-4c0d-b5fd-0963cf3a9736
+Name|PubSub
+Class|PubSub
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|A publish/subscribtion behavior
+Category|other
+Type|Behavior
+CreateDate|4/25/2019 2:32:39 PM
+DateModified|4/25/2019 3:28:29 PM
+AddonId|Piranha305_PubSub
