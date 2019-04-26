@@ -1,0 +1,43 @@
+@@START pubsub.js|.js|false|true|false|inline-script
+@@TEMPLATE
+this._info.AddFileDependency(
+{
+    filename: "c3runtime/pubsub.js",
+    type: "inline-script"
+});
+@@CONTENT
+//setup new instance of PubSub;
+var PubSub = (() => {
+	
+	let instances = [];
+	
+	const AddInstance = (inst, trigger) => {
+		instances.push({
+			instance : inst,
+			callback : trigger.bind(inst)
+		});
+		
+		console.log(instances);
+	};
+	
+	const RemoveInstance = (inst) => {
+		instances = instances.filter(i => i.instance != inst);
+		console.log(instances);
+	};
+	
+	const Broadcast = (message) => {
+		for(var i of instances){
+			i.callback(message);
+		}
+	};
+	
+	return {
+		AddInstance,
+		RemoveInstance,
+		Broadcast
+	};	
+})();
+@@BYTES
+Ly9zZXR1cCBuZXcgaW5zdGFuY2Ugb2YgUHViU3ViOw0KdmFyIFB1YlN1YiA9ICgoKSA9PiB7DQoJDQoJbGV0IGluc3RhbmNlcyA9IFtdOw0KCQ0KCWNvbnN0IEFkZEluc3RhbmNlID0gKGluc3QsIHRyaWdnZXIpID0+IHsNCgkJaW5zdGFuY2VzLnB1c2goew0KCQkJaW5zdGFuY2UgOiBpbnN0LA0KCQkJY2FsbGJhY2sgOiB0cmlnZ2VyLmJpbmQoaW5zdCkNCgkJfSk7DQoJCQ0KCQljb25zb2xlLmxvZyhpbnN0YW5jZXMpOw0KCX07DQoJDQoJY29uc3QgUmVtb3ZlSW5zdGFuY2UgPSAoaW5zdCkgPT4gew0KCQlpbnN0YW5jZXMgPSBpbnN0YW5jZXMuZmlsdGVyKGkgPT4gaS5pbnN0YW5jZSAhPSBpbnN0KTsNCgkJY29uc29sZS5sb2coaW5zdGFuY2VzKTsNCgl9Ow0KCQ0KCWNvbnN0IEJyb2FkY2FzdCA9IChtZXNzYWdlKSA9PiB7DQoJCWZvcih2YXIgaSBvZiBpbnN0YW5jZXMpew0KCQkJaS5jYWxsYmFjayhtZXNzYWdlKTsNCgkJfQ0KCX07DQoJDQoJcmV0dXJuIHsNCgkJQWRkSW5zdGFuY2UsDQoJCVJlbW92ZUluc3RhbmNlLA0KCQlCcm9hZGNhc3QNCgl9OwkNCn0pKCk7
+@@END pubsub.js
+

@@ -24,7 +24,7 @@
       "desc": "The message to listen for"
     }
   }
-} 
+}
 @@CODE
 OnMessage(msg)
 {

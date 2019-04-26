@@ -1,0 +1,19 @@
+@@START get-last-message|pubsub
+@@ACE
+{
+	"id": "get-last-message",
+	"expressionName": "GetLastMessage",
+	"returnType": "string"
+}
+@@LANG
+"get-last-message": { 
+	"translated-name": "GetLastMessage",
+	"description": "Gets the last message received"
+}
+@@CODE
+GetLastMessage()
+{
+	return this.lastMessage;
+}
+@@END get-last-message
+

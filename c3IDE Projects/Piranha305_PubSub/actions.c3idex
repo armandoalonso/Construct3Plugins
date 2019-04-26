@@ -26,49 +26,9 @@
 @@CODE
 Broadcast(msg)
 {
-    var behavior = this._inst.GetBehaviorInstanceFromCtor(C3.Behaviors.Piranha305_PubSub);
-	var instances = behavior.GetBehavior().GetInstances();
-	
-	for(let instance of instances){
-		var behav = instance.GetBehaviorInstanceFromCtor(C3.Behaviors.Piranha305_PubSub);
-		var sdkInstance = behav.GetSdkInstance();
-		sdkInstance.CallAction(C3.Behaviors.Piranha305_PubSub.Acts.SimulateMessage, msg);
-	}
+	PubSub.Broadcast(msg);
 }
-
 @@END broadcast
-
-@@START simulate-message|pubsub
-@@ACE
-{
-  "id": "simulate-message",
-  "scriptName": "SimulateMessage",
-  "highlight": false,
-  "params": [
-    {
-      "id": "msg",
-      "type": "string"
-    }
-  ]
-}
-@@LANG
-"simulate-message":{
-  "list-name": "Simulate Message",
-  "display-text": "Simulate message [b]{0}[/b]",
-  "description": "This sets the data for the message recieved",
-  "params": {
-    "msg": {
-      "name": "Message",
-      "desc": "The message"
-    }
-  }
-}
-@@CODE
-SimulateMessage(msg)
-{
-    this.SimulateMessgae(msg);
-}
-@@END simulate-message
 
 @@START set-listen|pubsub
 @@ACE
@@ -85,13 +45,13 @@ SimulateMessage(msg)
 }
 @@LANG
 "set-listen": {
-	"list-name": "Set Listening",
-	"display-text": "Set [b]{my}[/b] to Listen {0}",
+	"list-name": "Set Enabled",
+	"display-text": "Set [b]{my}[/b] to Enabled {0}",
 	"description": "Set if PubSub is listening",
 	"params": {
         "bool": {
             "name": "Listen",
-            "desc": "Is listening?"
+            "desc": "Is PubSub system to listen for incoming messages"
         }
     }
 }
