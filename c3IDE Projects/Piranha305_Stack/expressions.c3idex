@@ -1,0 +1,19 @@
+@@START get-value|data
+@@ACE
+{
+	"id": "get-value",
+	"expressionName": "GetValue",
+	"returnType": "string"
+}
+@@LANG
+"get-value": { 
+	"translated-name": "GetValue",
+	"description": "Get the last popped value"
+}
+@@CODE
+GetValue()
+{
+	return this.lastValue;
+}
+@@END get-value
+

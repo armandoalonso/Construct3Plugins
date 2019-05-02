@@ -1,0 +1,30 @@
+@@START stack.js|.js|false|true|false|inline-script
+@@TEMPLATE
+this._info.AddFileDependency(
+{
+    filename: "c3runtime/stack.js",
+    type: "inline-script"
+});
+@@CONTENT
+class Stack
+{
+    constructor(...items)
+    {
+        this.reverse = false;
+        this.values = [...items];
+    }
+
+    push(...items)
+    {
+        return this.reverse ? this.values.unshift(...items) : this.values.push(...items);
+    }
+
+    pop()
+    {
+        return this.reverse ? this.values.shift() : this.values.pop();
+    }
+}
+@@BYTES
+Y2xhc3MgU3RhY2sKewogICAgY29uc3RydWN0b3IoLi4uaXRlbXMpCiAgICB7CiAgICAgICAgdGhpcy5yZXZlcnNlID0gZmFsc2U7CiAgICAgICAgdGhpcy52YWx1ZXMgPSBbLi4uaXRlbXNdOwogICAgfQoKICAgIHB1c2goLi4uaXRlbXMpCiAgICB7CiAgICAgICAgcmV0dXJuIHRoaXMucmV2ZXJzZSA/IHRoaXMudmFsdWVzLnVuc2hpZnQoLi4uaXRlbXMpIDogdGhpcy52YWx1ZXMucHVzaCguLi5pdGVtcyk7CiAgICB9CgogICAgcG9wKCkKICAgIHsKICAgICAgICByZXR1cm4gdGhpcy5yZXZlcnNlID8gdGhpcy52YWx1ZXMuc2hpZnQoKSA6IHRoaXMudmFsdWVzLnBvcCgpOwogICAgfQp9
+@@END stack.js
+

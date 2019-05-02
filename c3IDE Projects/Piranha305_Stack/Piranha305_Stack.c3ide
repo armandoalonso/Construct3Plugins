@@ -1,0 +1,16 @@
+@@METADATA
+Id|7283afe3-9c74-4a85-8637-61ff51168588
+Name|Stack
+Class|Stack
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|A Stack data structure
+Category|data-and-storage
+Type|SingleGlobalPlugin
+CreateDate|5/2/2019 10:01:15 AM
+DateModified|5/2/2019 10:47:55 AM
+AddonId|Piranha305_Stack

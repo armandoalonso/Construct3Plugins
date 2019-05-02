@@ -1,0 +1,72 @@
+@@START push|data
+@@ACE
+{
+  "id": "push",
+  "scriptName": "Push",
+  "highlight": false,
+  "params": [
+    {
+      "id": "value",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"push": {
+	"list-name": "Push",
+	"display-text": "Push [b]{0}[/b]",
+	"description": "Push data to stack",
+	"params": {
+        "value": {
+            "name": "Value",
+            "desc": "Value to push to stack"
+        }
+    }
+}
+@@CODE
+Push(value)
+{
+	this.stack.push(value);
+}
+@@END push
+
+@@START pop|data
+@@ACE
+{
+	"id": "pop",
+	"scriptName": "Pop",
+	"highlight": false
+}
+@@LANG
+"pop": {
+	"list-name": "Pop",
+	"display-text": "Pop",
+	"description": "Pop the top value of the stack"
+}
+@@CODE
+Pop()
+{
+	this.lastValue = this.stack.pop();
+}
+@@END pop
+
+@@START debug|debug
+@@ACE
+{
+	"id": "debug",
+	"scriptName": "Debug",
+	"highlight": false
+}
+@@LANG
+"debug": {
+	"list-name": "Debug",
+	"display-text": "Debug Stack",
+	"description": "Prints stack values to console"
+}
+@@CODE
+Debug()
+{
+	console.log(this.stack.values);
+}
+@@END debug
+
