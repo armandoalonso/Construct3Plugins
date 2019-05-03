@@ -1,0 +1,33 @@
+@@START generate-word-list|words
+@@ACE
+{
+  "id": "generate-word-list",
+  "scriptName": "GenerateWordList",
+  "highlight": false,
+  "params": [
+    {
+      "id": "letters",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"generate-word-list": {
+	"list-name": "Generate Word List",
+	"display-text": "Generate Word List from [b]{0}[/b]",
+	"description": "Generate Word List ",
+	"params": {
+        "letters": {
+            "name": "Letters",
+            "desc": "letters used to generate words"
+        }
+    }
+}
+@@CODE
+GenerateWordList(letters)
+{
+	var words = ScrabbleWordFinder.find(letters.toLowerCase()).join('\n');
+	console.log(words);
+}
+@@END generate-word-list
+
