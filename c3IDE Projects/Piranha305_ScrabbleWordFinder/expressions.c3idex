@@ -1,0 +1,95 @@
+@@START check-word|word
+@@ACE
+{
+  "id": "check-word",
+  "expressionName": "CheckWord",
+  "returnType": "number",
+  "params": [
+    {
+      "id": "word",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"check-word": { 
+	"translated-name": "CheckWord",
+	"description": "Checks if a word appears on the word list and returns point values",
+	"params": {
+        "word": {
+            "name": "Word",
+            "desc": "The word to check"
+        }
+    }
+}
+@@CODE
+CheckWord(word)
+{
+	if(this.wordList.hasOwnProperty(word)){
+		if(!this.usedWords[word]){
+			this.usedWords[word] = true;
+			return this.wordList[word];
+		}
+	}
+	
+	return 0;
+}
+@@END check-word
+
+@@START generate-random-letters|word
+@@ACE
+{
+  "id": "generate-random-letters",
+  "expressionName": "GenerateRandomLetters",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "count",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"generate-random-letters": { 
+	"translated-name": "GenerateRandomLetters",
+	"description": "Generates random string of letters",
+	"params": {
+        "count": {
+            "name": "Count",
+            "desc": "The number of letters to generate"
+        }
+    }
+}
+@@CODE
+GenerateRandomLetters(count)
+{
+	var result = '';
+	const characters = 'aabcdeefghiijklmnoopqrstuuvwxyyz'
+	var charactersLength = characters.length;
+	
+	for ( var i = 0; i < count; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+   return result;
+}
+@@END generate-random-letters
+
+@@START word-count|word
+@@ACE
+{
+	"id": "word-count",
+	"expressionName": "WordCount",
+	"returnType": "number"
+}
+@@LANG
+"word-count": { 
+	"translated-name": "WordCount",
+	"description": "Get how many words are stored in the word list"
+}
+@@CODE
+WordCount()
+{
+	return this.wordCount;
+}
+@@END word-count
+

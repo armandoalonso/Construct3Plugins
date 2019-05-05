@@ -1,0 +1,59 @@
+@@START generate-word-list|word
+@@ACE
+{
+  "id": "generate-word-list",
+  "scriptName": "GenerateWordList",
+  "highlight": false,
+  "params": [
+    {
+      "id": "letters",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"generate-word-list": {
+	"list-name": "Generate Word List",
+	"display-text": "Generate Word List from [b]{0}[/b]",
+	"description": "Generate Word List",
+	"params": {
+        "letters": {
+            "name": "Letters",
+            "desc": "Letters used to generate words"
+        }
+    }
+}
+@@CODE
+GenerateWordList(letters)
+{
+	var words = ScrabbleWordFinder.find(letters.toLowerCase());
+	this.wordCount = words.length;
+	
+	for(var i=0;i < this.wordCount;i++){
+		this.wordList[words[i]] = words[i].length;
+		this.usedWords[words[i]] = false;
+	}	
+}
+@@END generate-word-list
+
+@@START clear-word-list|word
+@@ACE
+{
+	"id": "clear-word-list",
+	"scriptName": "ClearWordList",
+	"highlight": false
+}
+@@LANG
+"clear-word-list": {
+	"list-name": "Clear Word List",
+	"display-text": "Clear Word List",
+	"description": "Clears the current word list"
+}
+@@CODE
+ClearWordList()
+{
+	this.wordList = {};
+	this.usedWords = {};
+}
+@@END clear-word-list
+

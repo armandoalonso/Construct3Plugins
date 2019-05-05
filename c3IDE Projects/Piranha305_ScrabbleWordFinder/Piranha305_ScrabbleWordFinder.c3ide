@@ -1,0 +1,16 @@
+@@METADATA
+Id|10b56aee-0561-4235-98ae-9f233d304301
+Name|Scrabble Word Finder
+Class|ScrabbleWordFinder
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|A helper to generate list of valid words from letters
+Category|other
+Type|SingleGlobalPlugin
+CreateDate|5/3/2019 10:35:57 PM
+DateModified|5/4/2019 8:32:28 PM
+AddonId|Piranha305_ScrabbleWordFinder
