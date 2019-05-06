@@ -1,0 +1,92 @@
+@@START get-count|list
+@@ACE
+{
+	"id": "get-count",
+	"expressionName": "GetCount",
+	"returnType": "number"
+}
+@@LANG
+"get-count": { 
+	"translated-name": "GetCount",
+	"description": "Gets the length of the list"
+}
+@@CODE
+GetCount()
+{
+	return this.data.length;
+}
+@@END get-count
+
+@@START item-at|list
+@@ACE
+{
+  "id": "item-at",
+  "expressionName": "ItemAt",
+  "returnType": "any",
+  "params": [
+    {
+      "id": "index",
+      "type": "number"
+    }
+  ]
+}
+@@LANG
+"item-at": { 
+	"translated-name": "ItemAt",
+	"description": "Gets the item at specfic index (returns 0 if out of range)",
+	"params": {
+        "index": {
+            "name": "Index",
+            "desc": "The index to get from the list"
+        }
+    }
+}
+@@CODE
+ItemAt(index)
+{
+	if(this.data.length-1 >= index){
+		return this.data[index];
+	} else {
+		return 0;
+	}
+}
+@@END item-at
+
+@@START cur-value|list
+@@ACE
+{
+	"id": "cur-value",
+	"expressionName": "CurValue",
+	"returnType": "any"
+}
+@@LANG
+"cur-value": { 
+	"translated-name": "CurValue",
+	"description": "Gets the current value (used in for loop)"
+}
+@@CODE
+CurValue()
+{
+	return this.curValue;
+}
+@@END cur-value
+
+@@START cur-index|list
+@@ACE
+{
+  "id": "cur-index",
+  "expressionName": "CurIndex",
+  "returnType": "number"
+}
+@@LANG
+"cur-index": { 
+	"translated-name": "CurIndex",
+	"description": "Gets the current index (used in for loop)"
+}
+@@CODE
+CurIndex(index)
+{
+	return this.curIndex;
+}
+@@END cur-index
+

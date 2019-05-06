@@ -46,25 +46,34 @@ CheckWord(word)
     {
       "id": "count",
       "type": "number"
+    },
+    {
+      "id": "seed",
+      "type": "any"
     }
   ]
 }
 @@LANG
-"generate-random-letters": { 
-	"translated-name": "GenerateRandomLetters",
-	"description": "Generates random string of letters",
-	"params": {
-        "count": {
-            "name": "Count",
-            "desc": "The number of letters to generate"
-        }
+"generate-random-letters": {
+  "translated-name": "GenerateRandomLetters",
+  "description": "Generates random string of letters",
+  "params": {
+    "count": {
+      "name": "Count",
+      "desc": "The number of letters to generate"
+    },
+    "seed": {
+      "name": "Seed",
+      "desc": "The seed for the random generation"
     }
-}
+  }
+} 
 @@CODE
-GenerateRandomLetters(count)
+GenerateRandomLetters(count, seed)
 {
 	var result = '';
 	const characters = 'aabcdeefghiijklmnoopqrstuuvwxyyz'
+	Math.seedrandom(seed);
 	var charactersLength = characters.length;
 	
 	for ( var i = 0; i < count; i++ ) {

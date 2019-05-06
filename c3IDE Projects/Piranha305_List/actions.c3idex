@@ -1,0 +1,90 @@
+@@START add-item|list
+@@ACE
+{
+  "id": "add-item",
+  "scriptName": "AddItem",
+  "highlight": false,
+  "params": [
+    {
+      "id": "item",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"add-item": {
+	"list-name": "Add Item",
+	"display-text": "Add [b]{0}[/b] to the list",
+	"description": "Adds an item ot the list",
+	"params": {
+        "item": {
+            "name": "Item",
+            "desc": "The item to add to the list"
+        }
+    }
+}
+@@CODE
+AddItem(item)
+{
+	this.data.push(item);
+	this.lastAdded = item;
+}
+@@END add-item
+
+@@START delete-item|list
+@@ACE
+{
+  "id": "delete-item",
+  "scriptName": "DeleteItem",
+  "highlight": false,
+  "params": [
+    {
+      "id": "item",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"delete-item": {
+	"list-name": "Delete Item",
+	"display-text": "Delete [b]{0}[/b] from the list",
+	"description": "Removes an item from the list",
+	"params": {
+        "item": {
+            "name": "Item",
+            "desc": "The item to remove"
+        }
+    }
+}
+@@CODE
+DeleteItem(item)
+{
+	var index = this.data.indexOf(item);
+	if(index > -1){
+		this.data.splice(index, 1);
+		this.lastDeleted = item;
+	}
+}
+@@END delete-item
+
+@@START clear-list|list
+@@ACE
+{
+	"id": "clear-list",
+	"scriptName": "ClearList",
+	"highlight": false
+}
+
+@@LANG
+"clear-list": {
+	"list-name": "Clear List",
+	"display-text": "Clears the list",
+	"description": "Removes all items from the list"
+}
+@@CODE
+ClearList()
+{
+	this.data = [];
+}
+@@END clear-list
+

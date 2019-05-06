@@ -1,0 +1,170 @@
+@@START for-each|list
+@@ACE
+{
+	"id": "for-each",
+	"scriptName": "ForEach",
+	"highlight": false,
+	"isLooping": true,
+	"isInvertible": false
+}
+@@LANG
+"for-each": {
+	"list-name": "For Each",
+	"display-text": "For Each item in list",
+	"description": "Iterate over every element in the list"
+}
+@@CODE
+ForEach()
+{
+	// Get necessary references
+	const runtime = this._runtime;
+	const eventSheetManager = runtime.GetEventSheetManager();
+	const currentEvent = runtime.GetCurrentEvent();
+	const solModifiers = currentEvent.GetSolModifiers();
+	const eventStack = runtime.GetEventStack();
+
+	// Get current stack frame and push new one
+	const oldFrame = eventStack.GetCurrentStackFrame();
+	const newFrame = eventStack.Push(currentEvent);
+	this.curIndex = 0;
+	
+	for (const item of this.data)
+	{
+		// ... optionally update state here ...
+		this.curValue = item;
+		this.curIndex++;
+
+		// Push a copy of the current SOL
+		eventSheetManager.PushCopySol(solModifiers);
+
+		// Retrigger the current event, running a single loop iteration
+		currentEvent.Retrigger(oldFrame, newFrame);
+
+		// Pop the current SOL
+		eventSheetManager.PopSol(solModifiers);
+	}
+	
+	//reset state
+	this.curIndex = 0;
+	this.curValue = false;
+		
+	// Pop the event stack frame
+	eventStack.Pop();
+
+	// Return false since event already executed
+	return false;
+}
+@@END for-each
+
+@@START compare-current|list
+@@ACE
+{
+  "id": "compare-current",
+  "scriptName": "CompareCurrent",
+  "highlight": false,
+  "params": [
+     {
+      "id": "cmp",
+      "type": "cmp"
+    },
+    {
+      "id": "value",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"compare-current": {
+  "list-name": "Compare Current Value",
+  "display-text": "Current Value {0} [b]{1}[/b]",
+  "description": "Compares the current value (used in for each)",
+  "params": {
+    "value": {
+      "name": "Value",
+      "desc": "The value ot compare"
+    },
+    "cmp": {
+      "name": "Cmp",
+      "desc": "Compariosn operator"
+    }
+  }
+} 
+@@CODE
+CompareCurrent(cmp,value)
+{
+	return C3.compare(this.curValue, cmp, value);
+}
+@@END compare-current
+
+@@START compare-count|list
+@@ACE
+{
+  "id": "compare-count",
+  "scriptName": "CompareCount",
+  "highlight": false,
+  "params": [
+  	{
+      "id": "cmp",
+      "type": "cmp"
+    },
+    {
+      "id": "value",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"compare-count": {
+  "list-name": "Compare Count",
+  "display-text": "List.Length {0} [b]{1}[/b]",
+  "description": "Compares the List Count",
+  "params": {
+    "value": {
+      "name": "Value",
+      "desc": "The value ot compare"
+    },
+    "cmp": {
+      "name": "Cmp",
+      "desc": "Compariosn operator"
+    }
+  }
+} 
+@@CODE
+CompareCount(cmp,value)
+{
+	return C3.compare(this.data.length, cmp, value);
+}
+@@END compare-count
+
+@@START contains|list
+@@ACE
+{
+  "id": "contains",
+  "scriptName": "Contains",
+  "highlight": false,
+  "params": [
+    {
+      "id": "item",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"contains": {
+	"list-name": "List Contains",
+	"display-text": "List Contains [b]{0}[/b]",
+	"description": "Checks if list contains value",
+	"params": {
+        "item": {
+            "name": "Item",
+            "desc": "Item to check"
+        }
+    }
+}
+@@CODE
+Contains(item)
+{
+	return this.data.includes(item);
+}
+@@END contains
+

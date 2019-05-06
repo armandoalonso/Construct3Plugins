@@ -79426,3 +79426,477 @@ var ScrabbleWordFinder = (() => {
 Ly9odHRwczovL2dpdGh1Yi5jb20vZHRpbmcvc2NyYWJibGUtd29yZC1maW5kZXIKCnZhciBTY3JhYmJsZVdvcmRGaW5kZXIgPSAoKCkgPT4gewogICAgdmFyIFNjcmFiYmxlV29yZEZpbmRlciA9IGZ1bmN0aW9uKCkKICAgIHsKICAgICAgICB0aGlzLmRpY3QgPSBuZXcgU2NyYWJibGVEaWN0aW9uYXJ5KFNjcmFiYmxlV29yZExpc3QpOwogICAgfTsKCiAgICBTY3JhYmJsZVdvcmRGaW5kZXIucHJvdG90eXBlLmZpbmQgPSBmdW5jdGlvbihsZXR0ZXJzKQogICAgewogICAgICAgIHJldHVybiB2YWxpZFdvcmRzKHRoaXMuZGljdC5yb290LCBsZXR0ZXJzKTsKICAgIH07CgogICAgdmFyIHZhbGlkV29yZHMgPSBmdW5jdGlvbihub2RlLCBsZXR0ZXJzLCB3b3JkID0gJycsIHJlc3VsdHMgPSBbXSkKICAgIHsKICAgICAgICBpZiAobm9kZS5pc1dvcmQpCiAgICAgICAgewogICAgICAgICAgICByZXN1bHRzLnB1c2god29yZCk7CiAgICAgICAgfQogICAgICAgIHZhciBzZWVuID0gbmV3IFNldCgpOwogICAgICAgIGZvciAobGV0IGNoIG9mIGxldHRlcnMpCiAgICAgICAgewogICAgICAgICAgICBpZiAoIXNlZW4uaGFzKGNoKSkKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgc2Vlbi5hZGQoY2gpOwogICAgICAgICAgICAgICAgaWYgKG5vZGUuY2hpbGRyZW5bY2hdKQogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAgIHZhbGlkV29yZHMobm9kZS5jaGlsZHJlbltjaF0sIGxldHRlcnMucmVwbGFjZShjaCwgJycpLCB3b3JkICsgY2gsIHJlc3VsdHMpOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIHJldHVybiByZXN1bHRzOwogICAgfTsKCiAgICB2YXIgU2NyYWJibGVEaWN0aW9uYXJ5ID0gZnVuY3Rpb24od29yZHMpCiAgICB7CiAgICAgICAgdGhpcy5yb290ID0gbmV3IFNjcmFiYmxlVHJpZU5vZGUoKTsKICAgICAgICB3b3Jkcy5mb3JFYWNoKHdvcmQgPT4gdGhpcy5pbnNlcnQod29yZCkpOwogICAgfTsKCiAgICB2YXIgU2NyYWJibGVUcmllTm9kZSA9IGZ1bmN0aW9uKCkKICAgIHsKICAgICAgICB0aGlzLmNoaWxkcmVuID0gT2JqZWN0LmNyZWF0ZShudWxsKTsKICAgIH07CgogICAgU2NyYWJibGVEaWN0aW9uYXJ5LnByb3RvdHlwZS5pbnNlcnQgPSBmdW5jdGlvbih3b3JkKQogICAgewogICAgICAgIHZhciBjdXJzb3IgPSB0aGlzLnJvb3Q7CiAgICAgICAgZm9yIChsZXQgbGV0dGVyIG9mIHdvcmQpCiAgICAgICAgewogICAgICAgICAgICBpZiAoIWN1cnNvci5jaGlsZHJlbltsZXR0ZXJdKQogICAgICAgICAgICB7CiAgICAgICAgICAgICAgICBjdXJzb3IuY2hpbGRyZW5bbGV0dGVyXSA9IG5ldyBTY3JhYmJsZVRyaWVOb2RlKCk7CiAgICAgICAgICAgIH0KICAgICAgICAgICAgY3Vyc29yID0gY3Vyc29yLmNoaWxkcmVuW2xldHRlcl07CiAgICAgICAgfQogICAgICAgIGN1cnNvci5pc1dvcmQgPSB0cnVlOwogICAgfTsKCiAgICByZXR1cm4gbmV3IFNjcmFiYmxlV29yZEZpbmRlcigpOwp9KSgpOw==
 @@END ScrabbleWordFinder.js
 
+@@START seedrandom.js|.js|false|true|false|inline-script
+@@TEMPLATE
+this._info.AddFileDependency(
+{
+    filename: "c3runtime/seedrandom.js",
+    type: "inline-script"
+});
+@@CONTENT
+/**
+
+seedrandom.js
+=============
+
+Seeded random number generator for Javascript.
+
+version 2.3.10
+Author: David Bau
+Date: 2014 Sep 20
+
+Can be used as a plain script, a node.js module or an AMD module.
+
+Script tag usage
+----------------
+
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js>
+</script>
+
+// Sets Math.random to a PRNG initialized using the given explicit seed.
+Math.seedrandom('hello.');
+console.log(Math.random());          // Always 0.9282578795792454
+console.log(Math.random());          // Always 0.3752569768646784
+
+// Sets Math.random to an ARC4-based PRNG that is autoseeded using the
+// current time, dom state, and other accumulated local entropy.
+// The generated seed string is returned.
+Math.seedrandom();
+console.log(Math.random());          // Reasonably unpredictable.
+
+// Seeds using the given explicit seed mixed with accumulated entropy.
+Math.seedrandom('added entropy.', { entropy: true });
+console.log(Math.random());          // As unpredictable as added entropy.
+
+// Use "new" to create a local prng without altering Math.random.
+var myrng = new Math.seedrandom('hello.');
+console.log(myrng());                // Always 0.9282578795792454
+
+
+Node.js usage
+-------------
+
+npm install seedrandom
+
+// Local PRNG: does not affect Math.random.
+var seedrandom = require('seedrandom');
+var rng = seedrandom('hello.');
+console.log(rng());                  // Always 0.9282578795792454
+
+// Autoseeded ARC4-based PRNG.
+rng = seedrandom();
+console.log(rng());                  // Reasonably unpredictable.
+
+// Global PRNG: set Math.random.
+seedrandom('hello.', { global: true });
+console.log(Math.random());          // Always 0.9282578795792454
+
+// Mixing accumulated entropy.
+rng = seedrandom('added entropy.', { entropy: true });
+console.log(rng());                  // As unpredictable as added entropy.
+
+
+Require.js usage
+----------------
+
+Similar to node.js usage:
+
+bower install seedrandom
+
+require(['seedrandom'], function(seedrandom) {
+  var rng = seedrandom('hello.');
+  console.log(rng());                  // Always 0.9282578795792454
+});
+
+
+Network seeding
+---------------
+
+<script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js>
+</script>
+
+<!-- Seeds using urandom bits from a server. -->
+<script src=//jsonlib.appspot.com/urandom?callback=Math.seedrandom">
+</script>
+
+<!-- Seeds mixing in random.org bits -->
+<script>
+(function(x, u, s){
+  try {
+    // Make a synchronous request to random.org.
+    x.open('GET', u, false);
+    x.send();
+    s = unescape(x.response.trim().replace(/^|\s/g, '%'));
+  } finally {
+    // Seed with the response, or autoseed on failure.
+    Math.seedrandom(s, !!s);
+  }
+})(new XMLHttpRequest, 'https://www.random.org/integers/' +
+  '?num=256&min=0&max=255&col=1&base=16&format=plain&rnd=new');
+</script>
+
+Reseeding using user input
+--------------------------
+
+var seed = Math.seedrandom();        // Use prng with an automatic seed.
+document.write(Math.random());       // Pretty much unpredictable x.
+
+var rng = new Math.seedrandom(seed); // A new prng with the same seed.
+document.write(rng());               // Repeat the 'unpredictable' x.
+
+function reseed(event, count) {      // Define a custom entropy collector.
+  var t = [];
+  function w(e) {
+    t.push([e.pageX, e.pageY, +new Date]);
+    if (t.length &lt; count) { return; }
+    document.removeEventListener(event, w);
+    Math.seedrandom(t, { entropy: true });
+  }
+  document.addEventListener(event, w);
+}
+reseed('mousemove', 100);            // Reseed after 100 mouse moves.
+
+The "pass" option can be used to get both the prng and the seed.
+The following returns both an autoseeded prng and the seed as an object,
+without mutating Math.random:
+
+var obj = Math.seedrandom(null, { pass: function(prng, seed) {
+  return { random: prng, seed: seed };
+}});
+
+
+Version notes
+-------------
+
+The random number sequence is the same as version 1.0 for string seeds.
+* Version 2.0 changed the sequence for non-string seeds.
+* Version 2.1 speeds seeding and uses window.crypto to autoseed if present.
+* Version 2.2 alters non-crypto autoseeding to sweep up entropy from plugins.
+* Version 2.3 adds support for "new", module loading, and a null seed arg.
+* Version 2.3.1 adds a build environment, module packaging, and tests.
+* Version 2.3.4 fixes bugs on IE8, and switches to MIT license.
+* Version 2.3.6 adds a readable options object argument.
+* Version 2.3.10 adds support for node.js crypto (contributed by ctd1500).
+
+The standard ARC4 key scheduler cycles short keys, which means that
+seedrandom('ab') is equivalent to seedrandom('abab') and 'ababab'.
+Therefore it is a good idea to add a terminator to avoid trivial
+equivalences on short string seeds, e.g., Math.seedrandom(str + '\0').
+Starting with version 2.0, a terminator is added automatically for
+non-string seeds, so seeding with the number 111 is the same as seeding
+with '111\0'.
+
+When seedrandom() is called with zero args or a null seed, it uses a
+seed drawn from the browser crypto object if present.  If there is no
+crypto support, seedrandom() uses the current time, the native rng,
+and a walk of several DOM objects to collect a few bits of entropy.
+
+Each time the one- or two-argument forms of seedrandom are called,
+entropy from the passed seed is accumulated in a pool to help generate
+future seeds for the zero- and two-argument forms of seedrandom.
+
+On speed - This javascript implementation of Math.random() is several
+times slower than the built-in Math.random() because it is not native
+code, but that is typically fast enough.  Some details (timings on
+Chrome 25 on a 2010 vintage macbook):
+
+* seeded Math.random()          - avg less than 0.0002 milliseconds per call
+* seedrandom('explicit.')       - avg less than 0.2 milliseconds per call
+* seedrandom('explicit.', true) - avg less than 0.2 milliseconds per call
+* seedrandom() with crypto      - avg less than 0.2 milliseconds per call
+
+Autoseeding without crypto is somewhat slower, about 20-30 milliseconds on
+a 2012 windows 7 1.5ghz i5 laptop, as seen on Firefox 19, IE 10, and Opera.
+Seeded rng calls themselves are fast across these browsers, with slowest
+numbers on Opera at about 0.0005 ms per seeded Math.random().
+
+
+LICENSE (MIT)
+-------------
+
+Copyright 2014 David Bau.
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+/**
+ * All code is in an anonymous closure to keep the global namespace clean.
+ */
+(function(
+global, pool, math, width, chunks, digits, module, define, rngname)
+{
+
+    //
+    // The following constants are related to IEEE 754 limits.
+    //
+    var startdenom = math.pow(width, chunks),
+        significance = math.pow(2, digits),
+        overflow = significance * 2,
+        mask = width - 1,
+        nodecrypto;
+
+    //
+    // seedrandom()
+    // This is the seedrandom function described above.
+    //
+    var impl = math['seed' + rngname] = function(seed, options, callback)
+    {
+        var key = [];
+        options = (options == true) ? {
+            entropy: true
+        } : (options || {});
+
+        // Flatten the seed string or build one from local entropy if needed.
+        var shortseed = mixkey(flatten(
+        options.entropy ? [seed, tostring(pool)] :
+            (seed == null) ? autoseed() : seed, 3), key);
+
+        // Use the seed to initialize an ARC4 generator.
+        var arc4 = new ARC4(key);
+
+        // Mix the randomness into accumulated entropy.
+        mixkey(tostring(arc4.S), pool);
+
+        // Calling convention: what to return as a function of prng, seed, is_math.
+        return (options.pass || callback ||
+        // If called as a method of Math (Math.seedrandom()), mutate Math.random
+        // because that is how seedrandom.js has worked since v1.0.  Otherwise,
+        // it is a newer calling convention, so return the prng directly.
+
+        function(prng, seed, is_math_call)
+        {
+            if (is_math_call)
+            {
+                math[rngname] = prng;
+                return seed;
+            }
+            else return prng;
+        })(
+
+        // This function returns a random double in [0, 1) that contains
+        // randomness in every bit of the mantissa of the IEEE 754 value.
+
+        function()
+        {
+            var n = arc4.g(chunks), // Start with a numerator n < 2 ^ 48
+                d = startdenom, //   and denominator d = 2 ^ 48.
+                x = 0; //   and no 'extra last byte'.
+            while (n < significance)
+            { // Fill up all significant digits by
+                n = (n + x) * width; //   shifting numerator and
+                d *= width; //   denominator and generating a
+                x = arc4.g(1); //   new least-significant-byte.
+            }
+            while (n >= overflow)
+            { // To avoid rounding up, before adding
+                n /= 2; //   last byte, shift everything
+                d /= 2; //   right using integer math until
+                x >>>= 1; //   we have exactly the desired bits.
+            }
+            return (n + x) / d; // Form the number within [0, 1).
+        }, shortseed, 'global' in options ? options.global : (this == math));
+    };
+
+    //
+    // ARC4
+    //
+    // An ARC4 implementation.  The constructor takes a key in the form of
+    // an array of at most (width) integers that should be 0 <= x < (width).
+    //
+    // The g(count) method returns a pseudorandom integer that concatenates
+    // the next (count) outputs from ARC4.  Its return value is a number x
+    // that is in the range 0 <= x < (width ^ count).
+    //
+    /** @constructor */
+
+    function ARC4(key)
+    {
+        var t, keylen = key.length,
+            me = this,
+            i = 0,
+            j = me.i = me.j = 0,
+            s = me.S = [];
+
+        // The empty key [] is treated as [0].
+        if (!keylen)
+        {
+            key = [keylen++];
+        }
+
+        // Set up S using the standard key scheduling algorithm.
+        while (i < width)
+        {
+            s[i] = i++;
+        }
+        for (i = 0; i < width; i++)
+        {
+            s[i] = s[j = mask & (j + key[i % keylen] + (t = s[i]))];
+            s[j] = t;
+        }
+
+        // The "g" method returns the next (count) outputs as one number.
+        (me.g = function(count)
+        {
+            // Using instance members instead of closure state nearly doubles speed.
+            var t, r = 0,
+                i = me.i,
+                j = me.j,
+                s = me.S;
+            while (count--)
+            {
+                t = s[i = mask & (i + 1)];
+                r = r * width + s[mask & ((s[i] = s[j = mask & (j + t)]) + (s[j] = t))];
+            }
+            me.i = i;
+            me.j = j;
+            return r;
+            // For robust unpredictability, the function call below automatically
+            // discards an initial batch of values.  This is called RC4-drop[256].
+            // See http://google.com/search?q=rsa+fluhrer+response&btnI
+        })(width);
+    }
+
+    //
+    // flatten()
+    // Converts an object tree to nested arrays of strings.
+    //
+
+    function flatten(obj, depth)
+    {
+        var result = [],
+            typ = (typeof obj),
+            prop;
+        if (depth && typ == 'object')
+        {
+            for (prop in obj)
+            {
+                try
+                {
+                    result.push(flatten(obj[prop], depth - 1));
+                }
+                catch (e)
+                {}
+            }
+        }
+        return (result.length ? result : typ == 'string' ? obj : obj + '\0');
+    }
+
+    //
+    // mixkey()
+    // Mixes a string seed into a key that is an array of integers, and
+    // returns a shortened string seed that is equivalent to the result key.
+    //
+
+    function mixkey(seed, key)
+    {
+        var stringseed = seed + '',
+            smear, j = 0;
+        while (j < stringseed.length)
+        {
+            key[mask & j] =
+                mask & ((smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++));
+        }
+        return tostring(key);
+    }
+
+    //
+    // autoseed()
+    // Returns an object for autoseeding, using window.crypto if available.
+    //
+    /** @param {Uint8Array|Navigator=} seed */
+
+    function autoseed(seed)
+    {
+        try
+        {
+            if (nodecrypto) return tostring(nodecrypto.randomBytes(width));
+            global.crypto.getRandomValues(seed = new Uint8Array(width));
+            return tostring(seed);
+        }
+        catch (e)
+        {
+            return [+new Date, global, (seed = global.navigator) && seed.plugins,
+            global.screen, tostring(pool)];
+        }
+    }
+
+    //
+    // tostring()
+    // Converts an array of charcodes to a string
+    //
+
+    function tostring(a)
+    {
+        return String.fromCharCode.apply(0, a);
+    }
+
+    //
+    // When seedrandom.js is loaded, we immediately mix a few bits
+    // from the built-in RNG into the entropy pool.  Because we do
+    // not want to interfere with deterministic PRNG state later,
+    // seedrandom will not call math.random on its own again after
+    // initialization.
+    //
+    mixkey(math[rngname](), pool);
+
+    //
+    // Nodejs and AMD support: export the implementation as a module using
+    // either convention.
+    //
+    if (module && module.exports)
+    {
+        module.exports = impl;
+        try
+        {
+            // When in node.js, try using crypto package for autoseeding.
+            nodecrypto = require('crypto');
+        }
+        catch (ex)
+        {}
+    }
+    else if (define && define.amd)
+    {
+        define(function()
+        {
+            return impl;
+        });
+    }
+
+    //
+    // Node.js native crypto support.
+    //
+
+    // End anonymous scope, and pass initial values.
+})(
+this, // global window object
+[], // pool: entropy pool starts empty
+Math, // math: package containing random, pow, and seedrandom
+256, // width: each RC4 output is 0 <= x < 256
+6, // chunks: at least six RC4 outputs for each double
+52, // digits: there are 52 significant digits in a double
+(typeof module) == 'object' && module, // present in node.js
+(typeof define) == 'function' && define, // present with an AMD loader
+'random' // rngname: name for Math.random and Math.seedrandom
+);
+@@BYTES
+LyoqCgpzZWVkcmFuZG9tLmpzCj09PT09PT09PT09PT0KClNlZWRlZCByYW5kb20gbnVtYmVyIGdlbmVyYXRvciBmb3IgSmF2YXNjcmlwdC4KCnZlcnNpb24gMi4zLjEwCkF1dGhvcjogRGF2aWQgQmF1CkRhdGU6IDIwMTQgU2VwIDIwCgpDYW4gYmUgdXNlZCBhcyBhIHBsYWluIHNjcmlwdCwgYSBub2RlLmpzIG1vZHVsZSBvciBhbiBBTUQgbW9kdWxlLgoKU2NyaXB0IHRhZyB1c2FnZQotLS0tLS0tLS0tLS0tLS0tCgo8c2NyaXB0IHNyYz0vL2NkbmpzLmNsb3VkZmxhcmUuY29tL2FqYXgvbGlicy9zZWVkcmFuZG9tLzIuMy4xMC9zZWVkcmFuZG9tLm1pbi5qcz4KPC9zY3JpcHQ+CgovLyBTZXRzIE1hdGgucmFuZG9tIHRvIGEgUFJORyBpbml0aWFsaXplZCB1c2luZyB0aGUgZ2l2ZW4gZXhwbGljaXQgc2VlZC4KTWF0aC5zZWVkcmFuZG9tKCdoZWxsby4nKTsKY29uc29sZS5sb2coTWF0aC5yYW5kb20oKSk7ICAgICAgICAgIC8vIEFsd2F5cyAwLjkyODI1Nzg3OTU3OTI0NTQKY29uc29sZS5sb2coTWF0aC5yYW5kb20oKSk7ICAgICAgICAgIC8vIEFsd2F5cyAwLjM3NTI1Njk3Njg2NDY3ODQKCi8vIFNldHMgTWF0aC5yYW5kb20gdG8gYW4gQVJDNC1iYXNlZCBQUk5HIHRoYXQgaXMgYXV0b3NlZWRlZCB1c2luZyB0aGUKLy8gY3VycmVudCB0aW1lLCBkb20gc3RhdGUsIGFuZCBvdGhlciBhY2N1bXVsYXRlZCBsb2NhbCBlbnRyb3B5LgovLyBUaGUgZ2VuZXJhdGVkIHNlZWQgc3RyaW5nIGlzIHJldHVybmVkLgpNYXRoLnNlZWRyYW5kb20oKTsKY29uc29sZS5sb2coTWF0aC5yYW5kb20oKSk7ICAgICAgICAgIC8vIFJlYXNvbmFibHkgdW5wcmVkaWN0YWJsZS4KCi8vIFNlZWRzIHVzaW5nIHRoZSBnaXZlbiBleHBsaWNpdCBzZWVkIG1peGVkIHdpdGggYWNjdW11bGF0ZWQgZW50cm9weS4KTWF0aC5zZWVkcmFuZG9tKCdhZGRlZCBlbnRyb3B5LicsIHsgZW50cm9weTogdHJ1ZSB9KTsKY29uc29sZS5sb2coTWF0aC5yYW5kb20oKSk7ICAgICAgICAgIC8vIEFzIHVucHJlZGljdGFibGUgYXMgYWRkZWQgZW50cm9weS4KCi8vIFVzZSAibmV3IiB0byBjcmVhdGUgYSBsb2NhbCBwcm5nIHdpdGhvdXQgYWx0ZXJpbmcgTWF0aC5yYW5kb20uCnZhciBteXJuZyA9IG5ldyBNYXRoLnNlZWRyYW5kb20oJ2hlbGxvLicpOwpjb25zb2xlLmxvZyhteXJuZygpKTsgICAgICAgICAgICAgICAgLy8gQWx3YXlzIDAuOTI4MjU3ODc5NTc5MjQ1NAoKCk5vZGUuanMgdXNhZ2UKLS0tLS0tLS0tLS0tLQoKbnBtIGluc3RhbGwgc2VlZHJhbmRvbQoKLy8gTG9jYWwgUFJORzogZG9lcyBub3QgYWZmZWN0IE1hdGgucmFuZG9tLgp2YXIgc2VlZHJhbmRvbSA9IHJlcXVpcmUoJ3NlZWRyYW5kb20nKTsKdmFyIHJuZyA9IHNlZWRyYW5kb20oJ2hlbGxvLicpOwpjb25zb2xlLmxvZyhybmcoKSk7ICAgICAgICAgICAgICAgICAgLy8gQWx3YXlzIDAuOTI4MjU3ODc5NTc5MjQ1NAoKLy8gQXV0b3NlZWRlZCBBUkM0LWJhc2VkIFBSTkcuCnJuZyA9IHNlZWRyYW5kb20oKTsKY29uc29sZS5sb2cocm5nKCkpOyAgICAgICAgICAgICAgICAgIC8vIFJlYXNvbmFibHkgdW5wcmVkaWN0YWJsZS4KCi8vIEdsb2JhbCBQUk5HOiBzZXQgTWF0aC5yYW5kb20uCnNlZWRyYW5kb20oJ2hlbGxvLicsIHsgZ2xvYmFsOiB0cnVlIH0pOwpjb25zb2xlLmxvZyhNYXRoLnJhbmRvbSgpKTsgICAgICAgICAgLy8gQWx3YXlzIDAuOTI4MjU3ODc5NTc5MjQ1NAoKLy8gTWl4aW5nIGFjY3VtdWxhdGVkIGVudHJvcHkuCnJuZyA9IHNlZWRyYW5kb20oJ2FkZGVkIGVudHJvcHkuJywgeyBlbnRyb3B5OiB0cnVlIH0pOwpjb25zb2xlLmxvZyhybmcoKSk7ICAgICAgICAgICAgICAgICAgLy8gQXMgdW5wcmVkaWN0YWJsZSBhcyBhZGRlZCBlbnRyb3B5LgoKClJlcXVpcmUuanMgdXNhZ2UKLS0tLS0tLS0tLS0tLS0tLQoKU2ltaWxhciB0byBub2RlLmpzIHVzYWdlOgoKYm93ZXIgaW5zdGFsbCBzZWVkcmFuZG9tCgpyZXF1aXJlKFsnc2VlZHJhbmRvbSddLCBmdW5jdGlvbihzZWVkcmFuZG9tKSB7CiAgdmFyIHJuZyA9IHNlZWRyYW5kb20oJ2hlbGxvLicpOwogIGNvbnNvbGUubG9nKHJuZygpKTsgICAgICAgICAgICAgICAgICAvLyBBbHdheXMgMC45MjgyNTc4Nzk1NzkyNDU0Cn0pOwoKCk5ldHdvcmsgc2VlZGluZwotLS0tLS0tLS0tLS0tLS0KCjxzY3JpcHQgc3JjPS8vY2RuanMuY2xvdWRmbGFyZS5jb20vYWpheC9saWJzL3NlZWRyYW5kb20vMi4zLjEwL3NlZWRyYW5kb20ubWluLmpzPgo8L3NjcmlwdD4KCjwhLS0gU2VlZHMgdXNpbmcgdXJhbmRvbSBiaXRzIGZyb20gYSBzZXJ2ZXIuIC0tPgo8c2NyaXB0IHNyYz0vL2pzb25saWIuYXBwc3BvdC5jb20vdXJhbmRvbT9jYWxsYmFjaz1NYXRoLnNlZWRyYW5kb20iPgo8L3NjcmlwdD4KCjwhLS0gU2VlZHMgbWl4aW5nIGluIHJhbmRvbS5vcmcgYml0cyAtLT4KPHNjcmlwdD4KKGZ1bmN0aW9uKHgsIHUsIHMpewogIHRyeSB7CiAgICAvLyBNYWtlIGEgc3luY2hyb25vdXMgcmVxdWVzdCB0byByYW5kb20ub3JnLgogICAgeC5vcGVuKCdHRVQnLCB1LCBmYWxzZSk7CiAgICB4LnNlbmQoKTsKICAgIHMgPSB1bmVzY2FwZSh4LnJlc3BvbnNlLnRyaW0oKS5yZXBsYWNlKC9efFxzL2csICclJykpOwogIH0gZmluYWxseSB7CiAgICAvLyBTZWVkIHdpdGggdGhlIHJlc3BvbnNlLCBvciBhdXRvc2VlZCBvbiBmYWlsdXJlLgogICAgTWF0aC5zZWVkcmFuZG9tKHMsICEhcyk7CiAgfQp9KShuZXcgWE1MSHR0cFJlcXVlc3QsICdodHRwczovL3d3dy5yYW5kb20ub3JnL2ludGVnZXJzLycgKwogICc/bnVtPTI1NiZtaW49MCZtYXg9MjU1JmNvbD0xJmJhc2U9MTYmZm9ybWF0PXBsYWluJnJuZD1uZXcnKTsKPC9zY3JpcHQ+CgpSZXNlZWRpbmcgdXNpbmcgdXNlciBpbnB1dAotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKdmFyIHNlZWQgPSBNYXRoLnNlZWRyYW5kb20oKTsgICAgICAgIC8vIFVzZSBwcm5nIHdpdGggYW4gYXV0b21hdGljIHNlZWQuCmRvY3VtZW50LndyaXRlKE1hdGgucmFuZG9tKCkpOyAgICAgICAvLyBQcmV0dHkgbXVjaCB1bnByZWRpY3RhYmxlIHguCgp2YXIgcm5nID0gbmV3IE1hdGguc2VlZHJhbmRvbShzZWVkKTsgLy8gQSBuZXcgcHJuZyB3aXRoIHRoZSBzYW1lIHNlZWQuCmRvY3VtZW50LndyaXRlKHJuZygpKTsgICAgICAgICAgICAgICAvLyBSZXBlYXQgdGhlICd1bnByZWRpY3RhYmxlJyB4LgoKZnVuY3Rpb24gcmVzZWVkKGV2ZW50LCBjb3VudCkgeyAgICAgIC8vIERlZmluZSBhIGN1c3RvbSBlbnRyb3B5IGNvbGxlY3Rvci4KICB2YXIgdCA9IFtdOwogIGZ1bmN0aW9uIHcoZSkgewogICAgdC5wdXNoKFtlLnBhZ2VYLCBlLnBhZ2VZLCArbmV3IERhdGVdKTsKICAgIGlmICh0Lmxlbmd0aCAmbHQ7IGNvdW50KSB7IHJldHVybjsgfQogICAgZG9jdW1lbnQucmVtb3ZlRXZlbnRMaXN0ZW5lcihldmVudCwgdyk7CiAgICBNYXRoLnNlZWRyYW5kb20odCwgeyBlbnRyb3B5OiB0cnVlIH0pOwogIH0KICBkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKGV2ZW50LCB3KTsKfQpyZXNlZWQoJ21vdXNlbW92ZScsIDEwMCk7ICAgICAgICAgICAgLy8gUmVzZWVkIGFmdGVyIDEwMCBtb3VzZSBtb3Zlcy4KClRoZSAicGFzcyIgb3B0aW9uIGNhbiBiZSB1c2VkIHRvIGdldCBib3RoIHRoZSBwcm5nIGFuZCB0aGUgc2VlZC4KVGhlIGZvbGxvd2luZyByZXR1cm5zIGJvdGggYW4gYXV0b3NlZWRlZCBwcm5nIGFuZCB0aGUgc2VlZCBhcyBhbiBvYmplY3QsCndpdGhvdXQgbXV0YXRpbmcgTWF0aC5yYW5kb206Cgp2YXIgb2JqID0gTWF0aC5zZWVkcmFuZG9tKG51bGwsIHsgcGFzczogZnVuY3Rpb24ocHJuZywgc2VlZCkgewogIHJldHVybiB7IHJhbmRvbTogcHJuZywgc2VlZDogc2VlZCB9Owp9fSk7CgoKVmVyc2lvbiBub3RlcwotLS0tLS0tLS0tLS0tCgpUaGUgcmFuZG9tIG51bWJlciBzZXF1ZW5jZSBpcyB0aGUgc2FtZSBhcyB2ZXJzaW9uIDEuMCBmb3Igc3RyaW5nIHNlZWRzLgoqIFZlcnNpb24gMi4wIGNoYW5nZWQgdGhlIHNlcXVlbmNlIGZvciBub24tc3RyaW5nIHNlZWRzLgoqIFZlcnNpb24gMi4xIHNwZWVkcyBzZWVkaW5nIGFuZCB1c2VzIHdpbmRvdy5jcnlwdG8gdG8gYXV0b3NlZWQgaWYgcHJlc2VudC4KKiBWZXJzaW9uIDIuMiBhbHRlcnMgbm9uLWNyeXB0byBhdXRvc2VlZGluZyB0byBzd2VlcCB1cCBlbnRyb3B5IGZyb20gcGx1Z2lucy4KKiBWZXJzaW9uIDIuMyBhZGRzIHN1cHBvcnQgZm9yICJuZXciLCBtb2R1bGUgbG9hZGluZywgYW5kIGEgbnVsbCBzZWVkIGFyZy4KKiBWZXJzaW9uIDIuMy4xIGFkZHMgYSBidWlsZCBlbnZpcm9ubWVudCwgbW9kdWxlIHBhY2thZ2luZywgYW5kIHRlc3RzLgoqIFZlcnNpb24gMi4zLjQgZml4ZXMgYnVncyBvbiBJRTgsIGFuZCBzd2l0Y2hlcyB0byBNSVQgbGljZW5zZS4KKiBWZXJzaW9uIDIuMy42IGFkZHMgYSByZWFkYWJsZSBvcHRpb25zIG9iamVjdCBhcmd1bWVudC4KKiBWZXJzaW9uIDIuMy4xMCBhZGRzIHN1cHBvcnQgZm9yIG5vZGUuanMgY3J5cHRvIChjb250cmlidXRlZCBieSBjdGQxNTAwKS4KClRoZSBzdGFuZGFyZCBBUkM0IGtleSBzY2hlZHVsZXIgY3ljbGVzIHNob3J0IGtleXMsIHdoaWNoIG1lYW5zIHRoYXQKc2VlZHJhbmRvbSgnYWInKSBpcyBlcXVpdmFsZW50IHRvIHNlZWRyYW5kb20oJ2FiYWInKSBhbmQgJ2FiYWJhYicuClRoZXJlZm9yZSBpdCBpcyBhIGdvb2QgaWRlYSB0byBhZGQgYSB0ZXJtaW5hdG9yIHRvIGF2b2lkIHRyaXZpYWwKZXF1aXZhbGVuY2VzIG9uIHNob3J0IHN0cmluZyBzZWVkcywgZS5nLiwgTWF0aC5zZWVkcmFuZG9tKHN0ciArICdcMCcpLgpTdGFydGluZyB3aXRoIHZlcnNpb24gMi4wLCBhIHRlcm1pbmF0b3IgaXMgYWRkZWQgYXV0b21hdGljYWxseSBmb3IKbm9uLXN0cmluZyBzZWVkcywgc28gc2VlZGluZyB3aXRoIHRoZSBudW1iZXIgMTExIGlzIHRoZSBzYW1lIGFzIHNlZWRpbmcKd2l0aCAnMTExXDAnLgoKV2hlbiBzZWVkcmFuZG9tKCkgaXMgY2FsbGVkIHdpdGggemVybyBhcmdzIG9yIGEgbnVsbCBzZWVkLCBpdCB1c2VzIGEKc2VlZCBkcmF3biBmcm9tIHRoZSBicm93c2VyIGNyeXB0byBvYmplY3QgaWYgcHJlc2VudC4gIElmIHRoZXJlIGlzIG5vCmNyeXB0byBzdXBwb3J0LCBzZWVkcmFuZG9tKCkgdXNlcyB0aGUgY3VycmVudCB0aW1lLCB0aGUgbmF0aXZlIHJuZywKYW5kIGEgd2FsayBvZiBzZXZlcmFsIERPTSBvYmplY3RzIHRvIGNvbGxlY3QgYSBmZXcgYml0cyBvZiBlbnRyb3B5LgoKRWFjaCB0aW1lIHRoZSBvbmUtIG9yIHR3by1hcmd1bWVudCBmb3JtcyBvZiBzZWVkcmFuZG9tIGFyZSBjYWxsZWQsCmVudHJvcHkgZnJvbSB0aGUgcGFzc2VkIHNlZWQgaXMgYWNjdW11bGF0ZWQgaW4gYSBwb29sIHRvIGhlbHAgZ2VuZXJhdGUKZnV0dXJlIHNlZWRzIGZvciB0aGUgemVyby0gYW5kIHR3by1hcmd1bWVudCBmb3JtcyBvZiBzZWVkcmFuZG9tLgoKT24gc3BlZWQgLSBUaGlzIGphdmFzY3JpcHQgaW1wbGVtZW50YXRpb24gb2YgTWF0aC5yYW5kb20oKSBpcyBzZXZlcmFsCnRpbWVzIHNsb3dlciB0aGFuIHRoZSBidWlsdC1pbiBNYXRoLnJhbmRvbSgpIGJlY2F1c2UgaXQgaXMgbm90IG5hdGl2ZQpjb2RlLCBidXQgdGhhdCBpcyB0eXBpY2FsbHkgZmFzdCBlbm91Z2guICBTb21lIGRldGFpbHMgKHRpbWluZ3Mgb24KQ2hyb21lIDI1IG9uIGEgMjAxMCB2aW50YWdlIG1hY2Jvb2spOgoKKiBzZWVkZWQgTWF0aC5yYW5kb20oKSAgICAgICAgICAtIGF2ZyBsZXNzIHRoYW4gMC4wMDAyIG1pbGxpc2Vjb25kcyBwZXIgY2FsbAoqIHNlZWRyYW5kb20oJ2V4cGxpY2l0LicpICAgICAgIC0gYXZnIGxlc3MgdGhhbiAwLjIgbWlsbGlzZWNvbmRzIHBlciBjYWxsCiogc2VlZHJhbmRvbSgnZXhwbGljaXQuJywgdHJ1ZSkgLSBhdmcgbGVzcyB0aGFuIDAuMiBtaWxsaXNlY29uZHMgcGVyIGNhbGwKKiBzZWVkcmFuZG9tKCkgd2l0aCBjcnlwdG8gICAgICAtIGF2ZyBsZXNzIHRoYW4gMC4yIG1pbGxpc2Vjb25kcyBwZXIgY2FsbAoKQXV0b3NlZWRpbmcgd2l0aG91dCBjcnlwdG8gaXMgc29tZXdoYXQgc2xvd2VyLCBhYm91dCAyMC0zMCBtaWxsaXNlY29uZHMgb24KYSAyMDEyIHdpbmRvd3MgNyAxLjVnaHogaTUgbGFwdG9wLCBhcyBzZWVuIG9uIEZpcmVmb3ggMTksIElFIDEwLCBhbmQgT3BlcmEuClNlZWRlZCBybmcgY2FsbHMgdGhlbXNlbHZlcyBhcmUgZmFzdCBhY3Jvc3MgdGhlc2UgYnJvd3NlcnMsIHdpdGggc2xvd2VzdApudW1iZXJzIG9uIE9wZXJhIGF0IGFib3V0IDAuMDAwNSBtcyBwZXIgc2VlZGVkIE1hdGgucmFuZG9tKCkuCgoKTElDRU5TRSAoTUlUKQotLS0tLS0tLS0tLS0tCgpDb3B5cmlnaHQgMjAxNCBEYXZpZCBCYXUuCgpQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcKYSBjb3B5IG9mIHRoaXMgc29mdHdhcmUgYW5kIGFzc29jaWF0ZWQgZG9jdW1lbnRhdGlvbiBmaWxlcyAodGhlCiJTb2Z0d2FyZSIpLCB0byBkZWFsIGluIHRoZSBTb2Z0d2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcKd2l0aG91dCBsaW1pdGF0aW9uIHRoZSByaWdodHMgdG8gdXNlLCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLApkaXN0cmlidXRlLCBzdWJsaWNlbnNlLCBhbmQvb3Igc2VsbCBjb3BpZXMgb2YgdGhlIFNvZnR3YXJlLCBhbmQgdG8KcGVybWl0IHBlcnNvbnMgdG8gd2hvbSB0aGUgU29mdHdhcmUgaXMgZnVybmlzaGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvCnRoZSBmb2xsb3dpbmcgY29uZGl0aW9uczoKClRoZSBhYm92ZSBjb3B5cmlnaHQgbm90aWNlIGFuZCB0aGlzIHBlcm1pc3Npb24gbm90aWNlIHNoYWxsIGJlCmluY2x1ZGVkIGluIGFsbCBjb3BpZXMgb3Igc3Vic3RhbnRpYWwgcG9ydGlvbnMgb2YgdGhlIFNvZnR3YXJlLgoKVEhFIFNPRlRXQVJFIElTIFBST1ZJREVEICJBUyBJUyIsIFdJVEhPVVQgV0FSUkFOVFkgT0YgQU5ZIEtJTkQsCkVYUFJFU1MgT1IgSU1QTElFRCwgSU5DTFVESU5HIEJVVCBOT1QgTElNSVRFRCBUTyBUSEUgV0FSUkFOVElFUyBPRgpNRVJDSEFOVEFCSUxJVFksIEZJVE5FU1MgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFIEFORCBOT05JTkZSSU5HRU1FTlQuCklOIE5PIEVWRU5UIFNIQUxMIFRIRSBBVVRIT1JTIE9SIENPUFlSSUdIVCBIT0xERVJTIEJFIExJQUJMRSBGT1IgQU5ZCkNMQUlNLCBEQU1BR0VTIE9SIE9USEVSIExJQUJJTElUWSwgV0hFVEhFUiBJTiBBTiBBQ1RJT04gT0YgQ09OVFJBQ1QsClRPUlQgT1IgT1RIRVJXSVNFLCBBUklTSU5HIEZST00sIE9VVCBPRiBPUiBJTiBDT05ORUNUSU9OIFdJVEggVEhFClNPRlRXQVJFIE9SIFRIRSBVU0UgT1IgT1RIRVIgREVBTElOR1MgSU4gVEhFIFNPRlRXQVJFLgoKKi8KCi8qKgogKiBBbGwgY29kZSBpcyBpbiBhbiBhbm9ueW1vdXMgY2xvc3VyZSB0byBrZWVwIHRoZSBnbG9iYWwgbmFtZXNwYWNlIGNsZWFuLgogKi8KKGZ1bmN0aW9uKApnbG9iYWwsIHBvb2wsIG1hdGgsIHdpZHRoLCBjaHVua3MsIGRpZ2l0cywgbW9kdWxlLCBkZWZpbmUsIHJuZ25hbWUpCnsKCiAgICAvLwogICAgLy8gVGhlIGZvbGxvd2luZyBjb25zdGFudHMgYXJlIHJlbGF0ZWQgdG8gSUVFRSA3NTQgbGltaXRzLgogICAgLy8KICAgIHZhciBzdGFydGRlbm9tID0gbWF0aC5wb3cod2lkdGgsIGNodW5rcyksCiAgICAgICAgc2lnbmlmaWNhbmNlID0gbWF0aC5wb3coMiwgZGlnaXRzKSwKICAgICAgICBvdmVyZmxvdyA9IHNpZ25pZmljYW5jZSAqIDIsCiAgICAgICAgbWFzayA9IHdpZHRoIC0gMSwKICAgICAgICBub2RlY3J5cHRvOwoKICAgIC8vCiAgICAvLyBzZWVkcmFuZG9tKCkKICAgIC8vIFRoaXMgaXMgdGhlIHNlZWRyYW5kb20gZnVuY3Rpb24gZGVzY3JpYmVkIGFib3ZlLgogICAgLy8KICAgIHZhciBpbXBsID0gbWF0aFsnc2VlZCcgKyBybmduYW1lXSA9IGZ1bmN0aW9uKHNlZWQsIG9wdGlvbnMsIGNhbGxiYWNrKQogICAgewogICAgICAgIHZhciBrZXkgPSBbXTsKICAgICAgICBvcHRpb25zID0gKG9wdGlvbnMgPT0gdHJ1ZSkgPyB7CiAgICAgICAgICAgIGVudHJvcHk6IHRydWUKICAgICAgICB9IDogKG9wdGlvbnMgfHwge30pOwoKICAgICAgICAvLyBGbGF0dGVuIHRoZSBzZWVkIHN0cmluZyBvciBidWlsZCBvbmUgZnJvbSBsb2NhbCBlbnRyb3B5IGlmIG5lZWRlZC4KICAgICAgICB2YXIgc2hvcnRzZWVkID0gbWl4a2V5KGZsYXR0ZW4oCiAgICAgICAgb3B0aW9ucy5lbnRyb3B5ID8gW3NlZWQsIHRvc3RyaW5nKHBvb2wpXSA6CiAgICAgICAgICAgIChzZWVkID09IG51bGwpID8gYXV0b3NlZWQoKSA6IHNlZWQsIDMpLCBrZXkpOwoKICAgICAgICAvLyBVc2UgdGhlIHNlZWQgdG8gaW5pdGlhbGl6ZSBhbiBBUkM0IGdlbmVyYXRvci4KICAgICAgICB2YXIgYXJjNCA9IG5ldyBBUkM0KGtleSk7CgogICAgICAgIC8vIE1peCB0aGUgcmFuZG9tbmVzcyBpbnRvIGFjY3VtdWxhdGVkIGVudHJvcHkuCiAgICAgICAgbWl4a2V5KHRvc3RyaW5nKGFyYzQuUyksIHBvb2wpOwoKICAgICAgICAvLyBDYWxsaW5nIGNvbnZlbnRpb246IHdoYXQgdG8gcmV0dXJuIGFzIGEgZnVuY3Rpb24gb2YgcHJuZywgc2VlZCwgaXNfbWF0aC4KICAgICAgICByZXR1cm4gKG9wdGlvbnMucGFzcyB8fCBjYWxsYmFjayB8fAogICAgICAgIC8vIElmIGNhbGxlZCBhcyBhIG1ldGhvZCBvZiBNYXRoIChNYXRoLnNlZWRyYW5kb20oKSksIG11dGF0ZSBNYXRoLnJhbmRvbQogICAgICAgIC8vIGJlY2F1c2UgdGhhdCBpcyBob3cgc2VlZHJhbmRvbS5qcyBoYXMgd29ya2VkIHNpbmNlIHYxLjAuICBPdGhlcndpc2UsCiAgICAgICAgLy8gaXQgaXMgYSBuZXdlciBjYWxsaW5nIGNvbnZlbnRpb24sIHNvIHJldHVybiB0aGUgcHJuZyBkaXJlY3RseS4KCiAgICAgICAgZnVuY3Rpb24ocHJuZywgc2VlZCwgaXNfbWF0aF9jYWxsKQogICAgICAgIHsKICAgICAgICAgICAgaWYgKGlzX21hdGhfY2FsbCkKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgbWF0aFtybmduYW1lXSA9IHBybmc7CiAgICAgICAgICAgICAgICByZXR1cm4gc2VlZDsKICAgICAgICAgICAgfQogICAgICAgICAgICBlbHNlIHJldHVybiBwcm5nOwogICAgICAgIH0pKAoKICAgICAgICAvLyBUaGlzIGZ1bmN0aW9uIHJldHVybnMgYSByYW5kb20gZG91YmxlIGluIFswLCAxKSB0aGF0IGNvbnRhaW5zCiAgICAgICAgLy8gcmFuZG9tbmVzcyBpbiBldmVyeSBiaXQgb2YgdGhlIG1hbnRpc3NhIG9mIHRoZSBJRUVFIDc1NCB2YWx1ZS4KCiAgICAgICAgZnVuY3Rpb24oKQogICAgICAgIHsKICAgICAgICAgICAgdmFyIG4gPSBhcmM0LmcoY2h1bmtzKSwgLy8gU3RhcnQgd2l0aCBhIG51bWVyYXRvciBuIDwgMiBeIDQ4CiAgICAgICAgICAgICAgICBkID0gc3RhcnRkZW5vbSwgLy8gICBhbmQgZGVub21pbmF0b3IgZCA9IDIgXiA0OC4KICAgICAgICAgICAgICAgIHggPSAwOyAvLyAgIGFuZCBubyAnZXh0cmEgbGFzdCBieXRlJy4KICAgICAgICAgICAgd2hpbGUgKG4gPCBzaWduaWZpY2FuY2UpCiAgICAgICAgICAgIHsgLy8gRmlsbCB1cCBhbGwgc2lnbmlmaWNhbnQgZGlnaXRzIGJ5CiAgICAgICAgICAgICAgICBuID0gKG4gKyB4KSAqIHdpZHRoOyAvLyAgIHNoaWZ0aW5nIG51bWVyYXRvciBhbmQKICAgICAgICAgICAgICAgIGQgKj0gd2lkdGg7IC8vICAgZGVub21pbmF0b3IgYW5kIGdlbmVyYXRpbmcgYQogICAgICAgICAgICAgICAgeCA9IGFyYzQuZygxKTsgLy8gICBuZXcgbGVhc3Qtc2lnbmlmaWNhbnQtYnl0ZS4KICAgICAgICAgICAgfQogICAgICAgICAgICB3aGlsZSAobiA+PSBvdmVyZmxvdykKICAgICAgICAgICAgeyAvLyBUbyBhdm9pZCByb3VuZGluZyB1cCwgYmVmb3JlIGFkZGluZwogICAgICAgICAgICAgICAgbiAvPSAyOyAvLyAgIGxhc3QgYnl0ZSwgc2hpZnQgZXZlcnl0aGluZwogICAgICAgICAgICAgICAgZCAvPSAyOyAvLyAgIHJpZ2h0IHVzaW5nIGludGVnZXIgbWF0aCB1bnRpbAogICAgICAgICAgICAgICAgeCA+Pj49IDE7IC8vICAgd2UgaGF2ZSBleGFjdGx5IHRoZSBkZXNpcmVkIGJpdHMuCiAgICAgICAgICAgIH0KICAgICAgICAgICAgcmV0dXJuIChuICsgeCkgLyBkOyAvLyBGb3JtIHRoZSBudW1iZXIgd2l0aGluIFswLCAxKS4KICAgICAgICB9LCBzaG9ydHNlZWQsICdnbG9iYWwnIGluIG9wdGlvbnMgPyBvcHRpb25zLmdsb2JhbCA6ICh0aGlzID09IG1hdGgpKTsKICAgIH07CgogICAgLy8KICAgIC8vIEFSQzQKICAgIC8vCiAgICAvLyBBbiBBUkM0IGltcGxlbWVudGF0aW9uLiAgVGhlIGNvbnN0cnVjdG9yIHRha2VzIGEga2V5IGluIHRoZSBmb3JtIG9mCiAgICAvLyBhbiBhcnJheSBvZiBhdCBtb3N0ICh3aWR0aCkgaW50ZWdlcnMgdGhhdCBzaG91bGQgYmUgMCA8PSB4IDwgKHdpZHRoKS4KICAgIC8vCiAgICAvLyBUaGUgZyhjb3VudCkgbWV0aG9kIHJldHVybnMgYSBwc2V1ZG9yYW5kb20gaW50ZWdlciB0aGF0IGNvbmNhdGVuYXRlcwogICAgLy8gdGhlIG5leHQgKGNvdW50KSBvdXRwdXRzIGZyb20gQVJDNC4gIEl0cyByZXR1cm4gdmFsdWUgaXMgYSBudW1iZXIgeAogICAgLy8gdGhhdCBpcyBpbiB0aGUgcmFuZ2UgMCA8PSB4IDwgKHdpZHRoIF4gY291bnQpLgogICAgLy8KICAgIC8qKiBAY29uc3RydWN0b3IgKi8KCiAgICBmdW5jdGlvbiBBUkM0KGtleSkKICAgIHsKICAgICAgICB2YXIgdCwga2V5bGVuID0ga2V5Lmxlbmd0aCwKICAgICAgICAgICAgbWUgPSB0aGlzLAogICAgICAgICAgICBpID0gMCwKICAgICAgICAgICAgaiA9IG1lLmkgPSBtZS5qID0gMCwKICAgICAgICAgICAgcyA9IG1lLlMgPSBbXTsKCiAgICAgICAgLy8gVGhlIGVtcHR5IGtleSBbXSBpcyB0cmVhdGVkIGFzIFswXS4KICAgICAgICBpZiAoIWtleWxlbikKICAgICAgICB7CiAgICAgICAgICAgIGtleSA9IFtrZXlsZW4rK107CiAgICAgICAgfQoKICAgICAgICAvLyBTZXQgdXAgUyB1c2luZyB0aGUgc3RhbmRhcmQga2V5IHNjaGVkdWxpbmcgYWxnb3JpdGhtLgogICAgICAgIHdoaWxlIChpIDwgd2lkdGgpCiAgICAgICAgewogICAgICAgICAgICBzW2ldID0gaSsrOwogICAgICAgIH0KICAgICAgICBmb3IgKGkgPSAwOyBpIDwgd2lkdGg7IGkrKykKICAgICAgICB7CiAgICAgICAgICAgIHNbaV0gPSBzW2ogPSBtYXNrICYgKGogKyBrZXlbaSAlIGtleWxlbl0gKyAodCA9IHNbaV0pKV07CiAgICAgICAgICAgIHNbal0gPSB0OwogICAgICAgIH0KCiAgICAgICAgLy8gVGhlICJnIiBtZXRob2QgcmV0dXJucyB0aGUgbmV4dCAoY291bnQpIG91dHB1dHMgYXMgb25lIG51bWJlci4KICAgICAgICAobWUuZyA9IGZ1bmN0aW9uKGNvdW50KQogICAgICAgIHsKICAgICAgICAgICAgLy8gVXNpbmcgaW5zdGFuY2UgbWVtYmVycyBpbnN0ZWFkIG9mIGNsb3N1cmUgc3RhdGUgbmVhcmx5IGRvdWJsZXMgc3BlZWQuCiAgICAgICAgICAgIHZhciB0LCByID0gMCwKICAgICAgICAgICAgICAgIGkgPSBtZS5pLAogICAgICAgICAgICAgICAgaiA9IG1lLmosCiAgICAgICAgICAgICAgICBzID0gbWUuUzsKICAgICAgICAgICAgd2hpbGUgKGNvdW50LS0pCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgIHQgPSBzW2kgPSBtYXNrICYgKGkgKyAxKV07CiAgICAgICAgICAgICAgICByID0gciAqIHdpZHRoICsgc1ttYXNrICYgKChzW2ldID0gc1tqID0gbWFzayAmIChqICsgdCldKSArIChzW2pdID0gdCkpXTsKICAgICAgICAgICAgfQogICAgICAgICAgICBtZS5pID0gaTsKICAgICAgICAgICAgbWUuaiA9IGo7CiAgICAgICAgICAgIHJldHVybiByOwogICAgICAgICAgICAvLyBGb3Igcm9idXN0IHVucHJlZGljdGFiaWxpdHksIHRoZSBmdW5jdGlvbiBjYWxsIGJlbG93IGF1dG9tYXRpY2FsbHkKICAgICAgICAgICAgLy8gZGlzY2FyZHMgYW4gaW5pdGlhbCBiYXRjaCBvZiB2YWx1ZXMuICBUaGlzIGlzIGNhbGxlZCBSQzQtZHJvcFsyNTZdLgogICAgICAgICAgICAvLyBTZWUgaHR0cDovL2dvb2dsZS5jb20vc2VhcmNoP3E9cnNhK2ZsdWhyZXIrcmVzcG9uc2UmYnRuSQogICAgICAgIH0pKHdpZHRoKTsKICAgIH0KCiAgICAvLwogICAgLy8gZmxhdHRlbigpCiAgICAvLyBDb252ZXJ0cyBhbiBvYmplY3QgdHJlZSB0byBuZXN0ZWQgYXJyYXlzIG9mIHN0cmluZ3MuCiAgICAvLwoKICAgIGZ1bmN0aW9uIGZsYXR0ZW4ob2JqLCBkZXB0aCkKICAgIHsKICAgICAgICB2YXIgcmVzdWx0ID0gW10sCiAgICAgICAgICAgIHR5cCA9ICh0eXBlb2Ygb2JqKSwKICAgICAgICAgICAgcHJvcDsKICAgICAgICBpZiAoZGVwdGggJiYgdHlwID09ICdvYmplY3QnKQogICAgICAgIHsKICAgICAgICAgICAgZm9yIChwcm9wIGluIG9iaikKICAgICAgICAgICAgewogICAgICAgICAgICAgICAgdHJ5CiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgcmVzdWx0LnB1c2goZmxhdHRlbihvYmpbcHJvcF0sIGRlcHRoIC0gMSkpOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY2F0Y2ggKGUpCiAgICAgICAgICAgICAgICB7fQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIHJldHVybiAocmVzdWx0Lmxlbmd0aCA/IHJlc3VsdCA6IHR5cCA9PSAnc3RyaW5nJyA/IG9iaiA6IG9iaiArICdcMCcpOwogICAgfQoKICAgIC8vCiAgICAvLyBtaXhrZXkoKQogICAgLy8gTWl4ZXMgYSBzdHJpbmcgc2VlZCBpbnRvIGEga2V5IHRoYXQgaXMgYW4gYXJyYXkgb2YgaW50ZWdlcnMsIGFuZAogICAgLy8gcmV0dXJucyBhIHNob3J0ZW5lZCBzdHJpbmcgc2VlZCB0aGF0IGlzIGVxdWl2YWxlbnQgdG8gdGhlIHJlc3VsdCBrZXkuCiAgICAvLwoKICAgIGZ1bmN0aW9uIG1peGtleShzZWVkLCBrZXkpCiAgICB7CiAgICAgICAgdmFyIHN0cmluZ3NlZWQgPSBzZWVkICsgJycsCiAgICAgICAgICAgIHNtZWFyLCBqID0gMDsKICAgICAgICB3aGlsZSAoaiA8IHN0cmluZ3NlZWQubGVuZ3RoKQogICAgICAgIHsKICAgICAgICAgICAga2V5W21hc2sgJiBqXSA9CiAgICAgICAgICAgICAgICBtYXNrICYgKChzbWVhciBePSBrZXlbbWFzayAmIGpdICogMTkpICsgc3RyaW5nc2VlZC5jaGFyQ29kZUF0KGorKykpOwogICAgICAgIH0KICAgICAgICByZXR1cm4gdG9zdHJpbmcoa2V5KTsKICAgIH0KCiAgICAvLwogICAgLy8gYXV0b3NlZWQoKQogICAgLy8gUmV0dXJucyBhbiBvYmplY3QgZm9yIGF1dG9zZWVkaW5nLCB1c2luZyB3aW5kb3cuY3J5cHRvIGlmIGF2YWlsYWJsZS4KICAgIC8vCiAgICAvKiogQHBhcmFtIHtVaW50OEFycmF5fE5hdmlnYXRvcj19IHNlZWQgKi8KCiAgICBmdW5jdGlvbiBhdXRvc2VlZChzZWVkKQogICAgewogICAgICAgIHRyeQogICAgICAgIHsKICAgICAgICAgICAgaWYgKG5vZGVjcnlwdG8pIHJldHVybiB0b3N0cmluZyhub2RlY3J5cHRvLnJhbmRvbUJ5dGVzKHdpZHRoKSk7CiAgICAgICAgICAgIGdsb2JhbC5jcnlwdG8uZ2V0UmFuZG9tVmFsdWVzKHNlZWQgPSBuZXcgVWludDhBcnJheSh3aWR0aCkpOwogICAgICAgICAgICByZXR1cm4gdG9zdHJpbmcoc2VlZCk7CiAgICAgICAgfQogICAgICAgIGNhdGNoIChlKQogICAgICAgIHsKICAgICAgICAgICAgcmV0dXJuIFsrbmV3IERhdGUsIGdsb2JhbCwgKHNlZWQgPSBnbG9iYWwubmF2aWdhdG9yKSAmJiBzZWVkLnBsdWdpbnMsCiAgICAgICAgICAgIGdsb2JhbC5zY3JlZW4sIHRvc3RyaW5nKHBvb2wpXTsKICAgICAgICB9CiAgICB9CgogICAgLy8KICAgIC8vIHRvc3RyaW5nKCkKICAgIC8vIENvbnZlcnRzIGFuIGFycmF5IG9mIGNoYXJjb2RlcyB0byBhIHN0cmluZwogICAgLy8KCiAgICBmdW5jdGlvbiB0b3N0cmluZyhhKQogICAgewogICAgICAgIHJldHVybiBTdHJpbmcuZnJvbUNoYXJDb2RlLmFwcGx5KDAsIGEpOwogICAgfQoKICAgIC8vCiAgICAvLyBXaGVuIHNlZWRyYW5kb20uanMgaXMgbG9hZGVkLCB3ZSBpbW1lZGlhdGVseSBtaXggYSBmZXcgYml0cwogICAgLy8gZnJvbSB0aGUgYnVpbHQtaW4gUk5HIGludG8gdGhlIGVudHJvcHkgcG9vbC4gIEJlY2F1c2Ugd2UgZG8KICAgIC8vIG5vdCB3YW50IHRvIGludGVyZmVyZSB3aXRoIGRldGVybWluaXN0aWMgUFJORyBzdGF0ZSBsYXRlciwKICAgIC8vIHNlZWRyYW5kb20gd2lsbCBub3QgY2FsbCBtYXRoLnJhbmRvbSBvbiBpdHMgb3duIGFnYWluIGFmdGVyCiAgICAvLyBpbml0aWFsaXphdGlvbi4KICAgIC8vCiAgICBtaXhrZXkobWF0aFtybmduYW1lXSgpLCBwb29sKTsKCiAgICAvLwogICAgLy8gTm9kZWpzIGFuZCBBTUQgc3VwcG9ydDogZXhwb3J0IHRoZSBpbXBsZW1lbnRhdGlvbiBhcyBhIG1vZHVsZSB1c2luZwogICAgLy8gZWl0aGVyIGNvbnZlbnRpb24uCiAgICAvLwogICAgaWYgKG1vZHVsZSAmJiBtb2R1bGUuZXhwb3J0cykKICAgIHsKICAgICAgICBtb2R1bGUuZXhwb3J0cyA9IGltcGw7CiAgICAgICAgdHJ5CiAgICAgICAgewogICAgICAgICAgICAvLyBXaGVuIGluIG5vZGUuanMsIHRyeSB1c2luZyBjcnlwdG8gcGFja2FnZSBmb3IgYXV0b3NlZWRpbmcuCiAgICAgICAgICAgIG5vZGVjcnlwdG8gPSByZXF1aXJlKCdjcnlwdG8nKTsKICAgICAgICB9CiAgICAgICAgY2F0Y2ggKGV4KQogICAgICAgIHt9CiAgICB9CiAgICBlbHNlIGlmIChkZWZpbmUgJiYgZGVmaW5lLmFtZCkKICAgIHsKICAgICAgICBkZWZpbmUoZnVuY3Rpb24oKQogICAgICAgIHsKICAgICAgICAgICAgcmV0dXJuIGltcGw7CiAgICAgICAgfSk7CiAgICB9CgogICAgLy8KICAgIC8vIE5vZGUuanMgbmF0aXZlIGNyeXB0byBzdXBwb3J0LgogICAgLy8KCiAgICAvLyBFbmQgYW5vbnltb3VzIHNjb3BlLCBhbmQgcGFzcyBpbml0aWFsIHZhbHVlcy4KfSkoCnRoaXMsIC8vIGdsb2JhbCB3aW5kb3cgb2JqZWN0CltdLCAvLyBwb29sOiBlbnRyb3B5IHBvb2wgc3RhcnRzIGVtcHR5Ck1hdGgsIC8vIG1hdGg6IHBhY2thZ2UgY29udGFpbmluZyByYW5kb20sIHBvdywgYW5kIHNlZWRyYW5kb20KMjU2LCAvLyB3aWR0aDogZWFjaCBSQzQgb3V0cHV0IGlzIDAgPD0geCA8IDI1Ngo2LCAvLyBjaHVua3M6IGF0IGxlYXN0IHNpeCBSQzQgb3V0cHV0cyBmb3IgZWFjaCBkb3VibGUKNTIsIC8vIGRpZ2l0czogdGhlcmUgYXJlIDUyIHNpZ25pZmljYW50IGRpZ2l0cyBpbiBhIGRvdWJsZQoodHlwZW9mIG1vZHVsZSkgPT0gJ29iamVjdCcgJiYgbW9kdWxlLCAvLyBwcmVzZW50IGluIG5vZGUuanMKKHR5cGVvZiBkZWZpbmUpID09ICdmdW5jdGlvbicgJiYgZGVmaW5lLCAvLyBwcmVzZW50IHdpdGggYW4gQU1EIGxvYWRlcgoncmFuZG9tJyAvLyBybmduYW1lOiBuYW1lIGZvciBNYXRoLnJhbmRvbSBhbmQgTWF0aC5zZWVkcmFuZG9tCik7
+@@END seedrandom.js
+
