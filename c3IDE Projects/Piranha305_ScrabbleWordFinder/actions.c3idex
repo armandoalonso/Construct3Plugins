@@ -57,3 +57,35 @@ ClearWordList()
 }
 @@END clear-word-list
 
+@@START set-seed|word
+@@ACE
+{
+  "id": "set-seed",
+  "scriptName": "SetSeed",
+  "highlight": false,
+  "params": [
+    {
+      "id": "seed",
+      "type": "any"
+    }
+  ]
+}
+@@LANG
+"set-seed": {
+	"list-name": "Set Seed",
+	"display-text": "Set Seed [b]{0}[/b] ",
+	"description": "Sets the seed for random operations",
+	"params": {
+        "seed": {
+            "name": "Seed",
+            "desc": "The seed to set"
+        }
+    }
+}
+@@CODE
+SetSeed(seed)
+{
+	Math.seedrandom(seed);
+}
+@@END set-seed
+

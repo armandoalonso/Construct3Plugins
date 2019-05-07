@@ -46,10 +46,6 @@ CheckWord(word)
     {
       "id": "count",
       "type": "number"
-    },
-    {
-      "id": "seed",
-      "type": "any"
     }
   ]
 }
@@ -61,25 +57,22 @@ CheckWord(word)
     "count": {
       "name": "Count",
       "desc": "The number of letters to generate"
-    },
-    "seed": {
-      "name": "Seed",
-      "desc": "The seed for the random generation"
     }
   }
-} 
+}
 @@CODE
-GenerateRandomLetters(count, seed)
+GenerateRandomLetters(count)
 {
 	var result = '';
 	const characters = 'aabcdeefghiijklmnoopqrstuuvwxyyz'
-	Math.seedrandom(seed);
+	
 	var charactersLength = characters.length;
 	
 	for ( var i = 0; i < count; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-   return result;
+    
+    return result;
 }
 @@END generate-random-letters
 

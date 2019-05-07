@@ -74,7 +74,6 @@ DeleteItem(item)
 	"scriptName": "ClearList",
 	"highlight": false
 }
-
 @@LANG
 "clear-list": {
 	"list-name": "Clear List",

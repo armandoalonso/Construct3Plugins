@@ -90,3 +90,36 @@ CurIndex(index)
 }
 @@END cur-index
 
+@@START to-string|list
+@@ACE
+{
+  "id": "to-string",
+  "expressionName": "ToString",
+  "returnType": "string",
+  "params": [
+    {
+      "id": "delimiter",
+      "type": "string",
+      "initialValue": ""
+    }
+  ]
+}
+@@LANG
+"to-string": { 
+	"translated-name": "ToString",
+	"description": "Generates the list as a string",
+	"params": {
+        "delimiter": {
+            "name": "Delimiter",
+            "desc": "Delimiter to seperate all the values in strings "
+        }
+    }
+}
+@@CODE
+ToString(delimiter)
+{
+	return this.data.join(delimiter);
+	
+}
+@@END to-string
+

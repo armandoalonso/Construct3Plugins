@@ -1,4 +1,4 @@
-@@START rot.js|.js|false|true|false|
+@@START rot.js|.js|false|true|false|inline-script
 @@TEMPLATE
 this._info.AddFileDependency(
 {

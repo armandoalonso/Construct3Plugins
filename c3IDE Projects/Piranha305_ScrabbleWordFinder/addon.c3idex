@@ -4,7 +4,7 @@
   "type": "plugin",
   "name": "Scrabble Word Finder",
   "id": "Piranha305_ScrabbleWordFinder",
-  "version": "1.0.0.0",
+  "version": "1.0.0.1",
   "author": "Piranha305",
   "website": "https://www.construct.net",
   "documentation": "https://www.construct.net",
@@ -29,7 +29,8 @@
     "plugin.js",
     "type.js",
     "c3runtime/ScrabbleWordList.js",
-    "c3runtime/ScrabbleWordFinder.js"
+    "c3runtime/ScrabbleWordFinder.js",
+    "c3runtime/seedrandom.js"
   ]
 }
 @@END ADDON.JSON
@@ -39,7 +40,7 @@
 {
 
     const PLUGIN_ID = "Piranha305_ScrabbleWordFinder";
-    const PLUGIN_VERSION = "1.0.0.0";
+    const PLUGIN_VERSION = "1.0.0.1";
     const PLUGIN_CATEGORY = "other";
 
     const PLUGIN_CLASS = SDK.Plugins.Piranha305_ScrabbleWordFinder = class ScrabbleWordFinderPlugin extends SDK.IPluginBase
@@ -68,6 +69,12 @@
 
             this._info.AddFileDependency(
             {
+                filename: "c3runtime/seedrandom.js",
+                type: "inline-script"
+            });
+            
+            this._info.AddFileDependency(
+            {
                 filename: "c3runtime/ScrabbleWordList.js",
                 type: "inline-script"
             });
@@ -77,7 +84,7 @@
                 filename: "c3runtime/ScrabbleWordFinder.js",
                 type: "inline-script"
             });
-
+            
             SDK.Lang.PopContext(); //.properties
             SDK.Lang.PopContext();
         }
