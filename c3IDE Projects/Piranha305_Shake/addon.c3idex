@@ -244,8 +244,55 @@
 				return;
 			}
 			
-			var dt = this.runtime.getDt(this.inst);
+			var dt = this.GetRuntime().GetDt(this);
 			if (dt == 0) return;
+			
+			// save origin to current position
+			this.OX = this.inst.x;
+			this.OY = this.inst.y;
+			var isEnded = this.ShakePos(dt);
+			
+			if (isEnded) {
+				this.OX = null;
+				this.OY = null;
+				this.isShaking = false;
+				this.is_my_call = true;
+				this.Trigger(C3.Behaviors.Piranha305_Shake.Cnds.OnShackingEnd);
+				this.is_my_call = false;
+			}
+		}
+		
+		ShakePos(dt)
+		{
+			var isEnded = (this.remaining <= dt);
+			
+			var offx, offy;
+			if (isEnded) {
+				offx = 0;
+				offy = 0;
+			}
+			else {
+				var mag = this.magnitude * Math.min(this.GetRuntime().GetTimescale(), 1);
+				if (this.magMode === 1)  // decay
+				{
+					mag *= this.remaining / this.duration;
+				}
+				var a = Math.random() * Math.PI * 2;
+				offx = Math.cos(a) * mag;
+				offy = Math.sin(a) * mag;
+			}
+	
+			// add offset to origin
+			var nx = this.OX + offx;
+			var ny = this.OY + offy;
+			if ((nx !== this.inst.x) || (ny !== this.inst.y)) {
+				this.inst.x = nx;
+				this.inst.y = ny;
+				this.inst.set_bbox_changed();
+			}
+	
+			this.remaining -= dt;
+			return isEnded;
 		}
 
 	};
