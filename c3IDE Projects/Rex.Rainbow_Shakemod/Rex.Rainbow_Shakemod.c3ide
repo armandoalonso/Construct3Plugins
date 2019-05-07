@@ -1,0 +1,16 @@
+@@METADATA
+Id|b3800dc0-37ce-4826-8fa1-400bb951e77b
+Name|Shake mod
+Class|Shakemod
+Company|Rex.Rainbow
+Author|Rex.Rainbow
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|Shake an object in the X and Y axis.
+Category|movements
+Type|Behavior
+CreateDate|5/7/2019 7:02:58 AM
+DateModified|5/7/2019 7:09:15 AM
+AddonId|Rex_ShakeMod

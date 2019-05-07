@@ -1,0 +1,39 @@
+@@START on-shacking-end|shake
+@@ACE
+{
+  "c2id": 0,
+  "id": "on-shacking-end",
+  "scriptName": "OnShackingEnd",
+  "isTrigger": "true",
+  "highlight": false
+}
+@@LANG
+"on-shacking-end":{
+  "list-name": "On shacking end",
+  "display-text": "On {my} shacking end",
+  "description": "Triggered when shacking end."
+}
+@@CODE
+OnShackingEnd() { 
+}
+@@END on-shacking-end
+
+@@START is-shaking|shake
+@@ACE
+{
+  "c2id": 3,
+  "id": "is-shaking",
+  "scriptName": "IsShaking",
+  "highlight": false
+}
+@@LANG
+"is-shaking":{
+  "list-name": "Is shaking",
+  "display-text": "Is {my} shaking",
+  "description": "Is object shaking."
+}
+@@CODE
+IsShaking() { 
+}
+@@END is-shaking
+

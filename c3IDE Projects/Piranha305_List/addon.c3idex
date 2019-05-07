@@ -4,7 +4,7 @@
   "type": "plugin",
   "name": "List",
   "id": "Piranha305_List",
-  "version": "1.0.0.0",
+  "version": "1.0.0.2",
   "author": "Piranha305",
   "website": "https://www.construct.net",
   "documentation": "https://www.construct.net",
@@ -37,7 +37,7 @@
 {
 
 	const PLUGIN_ID = "Piranha305_List";	
-	const PLUGIN_VERSION = "1.0.0.0";
+	const PLUGIN_VERSION = "1.0.0.2";
 	const PLUGIN_CATEGORY = "data-and-storage";
 	
 	const PLUGIN_CLASS = SDK.Plugins.Piranha305_List = class ListPlugin extends SDK.IPluginBase
@@ -195,6 +195,22 @@
 		LoadFromJson(o)
 		{
 			// load state for savegames
+		}
+		
+		GetDebuggerProperties()
+		{
+			const prefix = "";
+			return [{
+				title: "Piranha305_List",
+				properties: [
+					{ name:"List Data", value:this.data.toString() },
+					{ name:"Count", value:this.data.length },
+					{ name:"Last Added", value:this.lastAdded },
+					{ name:"Last Deleted", value:this.lastDeleted },
+					{ name:"Current Value", value:this.curValue },
+					{ name:"Current Index", value:this.curIndex }
+				]
+			}];
 		}
 	};
 }

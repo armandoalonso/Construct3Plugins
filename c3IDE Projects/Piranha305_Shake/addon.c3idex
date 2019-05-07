@@ -1,0 +1,262 @@
+@@START ADDON.JSON
+{
+  "is-c3-addon": true,
+  "type": "behavior",
+  "name": "Shake",
+  "id": "Piranha305_Shake",
+  "version": "1.0.0.0",
+  "author": "Piranha305",
+  "website": "https://www.construct.net",
+  "documentation": "https://www.construct.net",
+  "description": "Shake an object in the X and Y axis.",
+  "editor-scripts": [
+    "behavior.js",
+    "type.js",
+    "instance.js"
+  ],
+  "file-list": [
+    "c3runtime/behavior.js",
+    "c3runtime/type.js",
+    "c3runtime/instance.js",
+    "c3runtime/conditions.js",
+    "c3runtime/actions.js",
+    "c3runtime/expressions.js",
+    "lang/en-US.json",
+    "aces.json",
+    "addon.json",
+    "icon.svg",
+    "instance.js",
+    "behavior.js",
+    "type.js"
+  ]
+}
+@@END ADDON.JSON
+
+@@START PLUGIN_EDIT.JS
+"use strict";
+{
+
+	const BEHAVIOR_ID = "Piranha305_Shake";	
+	const BEHAVIOR_VERSION = "1.0.0.0";
+	const BEHAVIOR_CATEGORY = "movements";
+	
+	const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_Shake = class ShakeBehavior extends SDK.IBehaviorBase
+	{
+		constructor()
+		{
+			super(BEHAVIOR_ID);
+			
+			SDK.Lang.PushContext("behaviors." + BEHAVIOR_ID.toLowerCase());
+			
+			this._info.SetName(lang(".name"));
+			this._info.SetDescription(lang(".description"));
+			this._info.SetVersion(BEHAVIOR_VERSION);
+			this._info.SetCategory(BEHAVIOR_CATEGORY);
+			this._info.SetAuthor("Piranha305");
+			this._info.SetHelpUrl(lang(".help-url"));
+			this._info.SetIsOnlyOneAllowed(false);
+
+			this._info.SetSupportedRuntimes(["c3"]);
+			
+			SDK.Lang.PushContext(".properties");
+	
+			this._info.SetProperties([
+				new SDK.PluginProperty("check", "activated", true),
+				new SDK.PluginProperty("combo", "mode", {initialValue:"effect", items:["effect","behavior"]}),
+				new SDK.PluginProperty("float", "duration", 0.5),
+				new SDK.PluginProperty("float", "magnitude", 10),
+				new SDK.PluginProperty("combo", "magnitude-mode", {initialValue:"decay", items:["constant","decay"]})
+			]);
+			
+            SDK.Lang.PopContext(); //.properties
+			SDK.Lang.PopContext();
+		}
+	};
+	
+	BEHAVIOR_CLASS.Register(BEHAVIOR_ID, BEHAVIOR_CLASS);
+}
+@@END PLUGIN_EDIT.JS
+
+@@START PLUGIN_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Piranha305_Shake = class ShakeBehavior extends C3.SDKBehaviorBase
+	{
+		constructor(opts)
+		{
+			super(opts);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+	};
+}
+@@END PLUGIN_RUN.JS
+
+@@START TYPE_EDIT.JS
+"use strict";
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_Shake;
+	
+	BEHAVIOR_CLASS.Type = class ShakeType extends SDK.IBehaviorTypeBase
+	{
+		constructor(sdkPlugin, iBehaviorType)
+		{
+			super(sdkPlugin, iBehaviorType);
+		}
+	};
+}
+@@END TYPE_EDIT.JS
+
+@@START TYPE_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Piranha305_Shake.Type = class ShakeType extends C3.SDKBehaviorTypeBase
+	{
+		constructor(objectClass)
+		{
+			super(objectClass);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+@@END TYPE_RUN.JS
+
+@@START INSTANCE_EDIT.JS
+"use strict";
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Piranha305_Shake;
+	
+	BEHAVIOR_CLASS.Instance = class ShakeInstance extends SDK.IBehaviorInstanceBase
+	{
+		constructor(sdkBehType, behInst)
+		{
+			super(sdkBehType, behInst);
+		}
+		
+		Release()
+		{
+		}
+		
+		OnCreate()
+		{
+		}
+		
+		OnPropertyChanged(id, value)
+		{
+		}
+		
+		LoadC2Property(name, valueString)
+		{
+			return false;		// not handled
+		}
+	};
+}
+@@END INSTANCE_EDIT.JS
+
+@@START INSTANCE_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Piranha305_Shake.Instance = class ShakeInstance extends C3.SDKBehaviorInstanceBase
+	{
+		constructor(behInst, properties)
+		{
+			super(behInst);
+			
+			this.enabled = true;
+			this.duration = 0;
+			this.magnitude = 0;
+			this.magMode = 0;
+			this.effectMode = false;
+			this.behaviorMode = true;
+			
+			this.isShaking = false;
+			this.OX = null;
+			this.OY = null;
+			this.remaining = 0;
+			this.is_my_call = false;
+				
+			if (properties)
+			{
+				this.enabled = this.properties[0];
+				var mode = this.properties[1];
+				this.duration = this.properties[2];
+				this.magnitude = this.properties[3];
+				this.magMode = this.properties[4];
+				this.effectMode = (mode === 0);
+				this.behaviorMode = (mode === 1);
+			}
+
+			// Opt-in to getting calls to Tick()
+			//this._StartTicking();
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		SaveToJson()
+		{
+			return {
+				// data to be saved for savegames
+			};
+		}
+		
+		LoadFromJson(o)
+		{
+			// load state for savegames
+		}
+
+		Tick()
+		{
+			if (this.effectMode)          // Effect
+			{
+				this.BackToOrigin();
+			}
+			else if (this.behaviorMode)  // Behavior
+			{
+				this.BackToOrigin(true);
+				this.Shake();
+			}
+		}
+		
+		Tick2()
+		{
+			if (this.effectMode) {
+				this.Shake();
+			}
+		}
+		
+		Shake()
+		{
+			if ((!this.enabled) || (!this.isShaking)){
+				return;
+			}
+			
+			var dt = this.runtime.getDt(this.inst);
+			if (dt == 0) return;
+		}
+
+	};
+}
+@@END INSTANCE_RUN.JS
+
+@@START LANG_PROP.JSON
+"properties": { }
+@@END LANG_PROP.JSON
+
+@@START LANG_CAT.JSON
+"aceCategories": { }
+@@END LANG_CAT.JSON
+

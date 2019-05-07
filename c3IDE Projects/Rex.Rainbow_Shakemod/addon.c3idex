@@ -1,0 +1,250 @@
+@@START ADDON.JSON
+{
+	"is-c3-addon": true,
+	"type": "behavior",
+	"name": "Shake mod",
+	"id": "Rex_ShakeMod",
+	"version": "1.0.0.0",
+	"author": "Rex.Rainbow",
+	"website": "https://www.construct.net",
+	"documentation": "https://www.construct.net",
+	"description": "Shake an object in the X and Y axis.",
+	"editor-scripts": [
+						"behavior.js",
+						"type.js",
+						"instance.js"
+					],
+	"file-list": [
+		"c3runtime/behavior.js",
+		"c3runtime/type.js",
+		"c3runtime/instance.js",
+		"c3runtime/conditions.js",
+		"c3runtime/actions.js",
+		"c3runtime/expressions.js",
+		"lang/en-US.json",
+		"aces.json",
+		"addon.json",
+		"icon.svg",
+		"instance.js",
+		"behavior.js",
+		"type.js"
+	]
+}
+@@END ADDON.JSON
+
+@@START PLUGIN_EDIT.JS
+//Converted with C2C3AddonConverter v1.0.0.8
+"use strict";
+
+{
+	const BEHAVIOR_ID = "Rex_ShakeMod";
+	const BEHAVIOR_VERSION = "0.1.0.0";
+	const BEHAVIOR_CATEGORY = "movements";
+	const BEHAVIOR_CLASS = SDK.Behaviors.Rex_ShakeMod = class Rex_ShakeMod extends SDK.IBehaviorBase
+	{
+		constructor()
+		{
+			super(BEHAVIOR_ID);
+			SDK.Lang.PushContext("behaviors." + BEHAVIOR_ID.toLowerCase());
+			this._info.SetIcon("icon.svg", "image/svg+xml");
+			this._info.SetName(lang(".name"));
+			this._info.SetDescription(lang(".description"));
+			this._info.SetVersion(BEHAVIOR_VERSION);
+			this._info.SetCategory(BEHAVIOR_CATEGORY);
+			this._info.SetAuthor("Rex.Rainbow");
+			this._info.SetHelpUrl(lang(".help-url"));
+			this._info.SetIsOnlyOneAllowed(false);
+			SDK.Lang.PushContext(".properties");
+			this._info.SetProperties([
+				new SDK.PluginProperty("check", "activated", true),
+				new SDK.PluginProperty("combo", "mode", {initialValue:"effect", items:["effect","behavior"]}),
+				new SDK.PluginProperty("float", "duration", 0.5),
+				new SDK.PluginProperty("float", "magnitude", 10),
+				new SDK.PluginProperty("combo", "magnitude-mode", {initialValue:"decay", items:["constant","decay"]})
+			]);
+			SDK.Lang.PopContext();		// .properties
+			SDK.Lang.PopContext();
+		}
+	};
+	BEHAVIOR_CLASS.Register(BEHAVIOR_ID, BEHAVIOR_CLASS);
+}
+@@END PLUGIN_EDIT.JS
+
+@@START PLUGIN_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Rex_ShakeMod = class ShakemodBehavior extends C3.SDKBehaviorBase
+	{
+		constructor(opts)
+		{
+			super(opts);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+	};
+}
+@@END PLUGIN_RUN.JS
+
+@@START TYPE_EDIT.JS
+"use strict";
+
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Rex_ShakeMod;
+
+	BEHAVIOR_CLASS.Type = class Rex_ShakeModType extends SDK.IBehaviorTypeBase
+	{
+		constructor(sdkPlugin, iBehaviorType)
+		{
+			super(sdkPlugin, iBehaviorType);
+		}
+	};
+}
+@@END TYPE_EDIT.JS
+
+@@START TYPE_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Rex_ShakeMod.Type = class ShakemodType extends C3.SDKBehaviorTypeBase
+	{
+		constructor(objectClass)
+		{
+			super(objectClass);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+@@END TYPE_RUN.JS
+
+@@START INSTANCE_EDIT.JS
+"use strict";
+
+{
+	const BEHAVIOR_CLASS = SDK.Behaviors.Rex_ShakeMod;
+
+	BEHAVIOR_CLASS.Instance = class Rex_ShakeModInstance extends SDK.IBehaviorInstanceBase
+	{
+		constructor(sdkBehType, behInst)
+		{
+			super(sdkBehType, behInst);
+		}
+		Release()
+		{
+		}
+		OnCreate()
+		{
+		}
+		OnPropertyChanged(id, value)
+		{
+		}
+		LoadC2Property(name, valueString)
+		{
+			return false;       // not handled
+		}
+	};
+}
+@@END INSTANCE_EDIT.JS
+
+@@START INSTANCE_RUN.JS
+"use strict";
+{
+	C3.Behaviors.Rex_ShakeMod.Instance = class ShakemodInstance extends C3.SDKBehaviorInstanceBase
+	{
+		constructor(behInst, properties)
+		{
+			super(behInst);
+			
+			//this._testProperty = 0;
+			
+			if (properties)
+			{
+				//this._testProperty = properties[0];
+			}
+
+			// Opt-in to getting calls to Tick()
+			//this._StartTicking();
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		SaveToJson()
+		{
+			return {
+				// data to be saved for savegames
+			};
+		}
+		
+		LoadFromJson(o)
+		{
+			// load state for savegames
+		}
+
+		/*
+		Tick()
+		{
+			const dt = this._runtime.GetDt(this._inst);
+			const wi = this._inst.GetWorldInfo();
+			
+			// ... code to run every tick for this behavior ...
+		}
+		*/
+	};
+}
+@@END INSTANCE_RUN.JS
+
+@@START LANG_PROP.JSON
+"properties": {
+  "activated": {
+    "name": "Activated",
+    "desc": "Enable if you wish this to begin at the start of the layout."
+  },
+  "mode": {
+    "name": "Mode",
+    "desc": "Effect mode only sets position for render.",
+    "items": {
+      "effect": "Effect",
+      "behavior": "Behavior"
+    }
+  },
+  "duration": {
+    "name": "Duration",
+    "desc": "The time the shake should last, in seconds."
+  },
+  "magnitude": {
+    "name": "Magnitude",
+    "desc": "The strength of the shake, in pixels."
+  },
+  "magnitude-mode": {
+    "name": "Magnitude mode",
+    "desc": "Decay or constant magnitude.",
+    "items": {
+      "constant": "Constant",
+      "decay": "Decay"
+    }
+  }
+}
+@@END LANG_PROP.JSON
+
+@@START LANG_CAT.JSON
+"aceCategories": {
+  "enable": "Enable",
+  "shake": "Shake",
+  "duration": "Duration",
+  "magnitude": "Magnitude",
+  "origin": "Origin"
+}
+@@END LANG_CAT.JSON
+

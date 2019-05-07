@@ -1,0 +1,16 @@
+@@METADATA
+Id|4471783c-8c28-45ed-a097-9e1540cd7850
+Name|Shake
+Class|Shake
+Company|Piranha305
+Author|Piranha305
+MajorVersion|1
+MinorVersion|0
+RevisionVersion|0
+BuildVersion|0
+Description|Shake an object in the X and Y axis.
+Category|movements
+Type|Behavior
+CreateDate|5/7/2019 7:09:19 AM
+DateModified|5/7/2019 7:25:08 AM
+AddonId|Piranha305_Shake

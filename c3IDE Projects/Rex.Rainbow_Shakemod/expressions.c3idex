@@ -1,0 +1,80 @@
+@@START duration|duration
+@@ACE
+{
+  "c2id": 11,
+  "id": "duration",
+  "expressionName": "Duration",
+  "scriptName": "Duration",
+  "highlight": false,
+  "returnType": "number"
+}
+@@LANG
+"duration":{
+  "description": "Get duration.",
+  "translated-name": "Duration"
+}
+@@CODE
+Duration() { 
+}
+@@END duration
+
+@@START remainder|duration
+@@ACE
+{
+  "c2id": 12,
+  "id": "remainder",
+  "expressionName": "Remainder",
+  "scriptName": "Remainder",
+  "highlight": false,
+  "returnType": "number"
+}
+@@LANG
+"remainder":{
+  "description": "Get remaining time.",
+  "translated-name": "Remainder"
+}
+@@CODE
+Remainder() { 
+}
+@@END remainder
+
+@@START ox|origin
+@@ACE
+{
+  "c2id": 1,
+  "id": "ox",
+  "expressionName": "OX",
+  "scriptName": "OX",
+  "highlight": false,
+  "returnType": "number"
+}
+@@LANG
+"ox":{
+  "description": "Get X co-ordinate of shaking origin.",
+  "translated-name": "OX"
+}
+@@CODE
+OX() { 
+}
+@@END ox
+
+@@START oy|origin
+@@ACE
+{
+  "c2id": 2,
+  "id": "oy",
+  "expressionName": "OY",
+  "scriptName": "OY",
+  "highlight": false,
+  "returnType": "number"
+}
+@@LANG
+"oy":{
+  "description": "Get Y co-ordinate of shaking origin.",
+  "translated-name": "OY"
+}
+@@CODE
+OY() { 
+}
+@@END oy
+
