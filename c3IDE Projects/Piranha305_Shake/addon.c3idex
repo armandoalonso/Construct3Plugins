@@ -209,13 +209,29 @@
 		SaveToJson()
 		{
 			return {
-				// data to be saved for savegames
+				"e": this.enable,
+				"dur": this.duration,
+				"mag": this.magnitude,
+				"magMode": this.magMode,
+	
+				"isShake": this.isShaking,
+				"ox": this.OX,
+				"oy": this.OY,
+				"rem": this.remaining,
 			};
 		}
 		
 		LoadFromJson(o)
 		{
-			// load state for savegames
+			this.enable = o["e"];
+			this.duration = o["dur"]
+			this.magnitude = o["mag"];
+			this.magMode = o["magMode"];
+	
+			this.isShaking = o["isShake"];
+			this.OX = o["ox"];
+			this.OY = o["oy"];
+			this.remaining = o["rem"];
 		}
 
 		Tick()
@@ -286,13 +302,38 @@
 			var nx = this.OX + offx;
 			var ny = this.OY + offy;
 			if ((nx !== this.inst.x) || (ny !== this.inst.y)) {
-				this.inst.x = nx;
-				this.inst.y = ny;
-				this.inst.set_bbox_changed();
+				let wi = this.GetWorldInfo()
+				wi.SetXY(nx, ny);
+				wi.SetBboxChanged();
 			}
 	
 			this.remaining -= dt;
 			return isEnded;
+		}
+		
+		BackToOrgin(noUpdateBBox)
+		{
+			if ((!this.enabled) || (!this.isShaking)){
+				return;
+			}
+	
+			if (this.OX === null){
+				return;
+			}
+			
+			if ((this.OX === this.inst.x) && (this.OY === this.inst.y)){
+				return;
+			}
+			
+			// go back to origin point
+			let wi = this.GetWorldInfo();
+			wi.SetXY(this.OX, this.OY);
+			this.OX = null;
+			this.OY = null;
+	
+			if (!noUpdateBBox){
+				wi.SetBboxChanged();
+			}
 		}
 
 	};
