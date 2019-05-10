@@ -1,0 +1,78 @@
+@@START duration|duration
+@@ACE
+{
+	"id": "duration",
+	"expressionName": "Duration",
+	"returnType": "number"
+}
+@@LANG
+"duration": { 
+	"translated-name": "Duration",
+	"description": "Get duration"
+}
+@@CODE
+Duration()
+{
+	return this.duration;
+}
+@@END duration
+
+@@START remainder|duration
+@@ACE
+{
+	"id": "remainder",
+	"expressionName": "Remainder",
+	"returnType": "number"
+}
+@@LANG
+"remainder": { 
+	"translated-name": "Remainder",
+	"description": "Get remaining time"
+}
+@@CODE
+Remainder()
+{
+	return (this.remaining > 0) ? this.remaining : 0;
+}
+@@END remainder
+
+@@START ox|orgin
+@@ACE
+{
+	"id": "ox",
+	"expressionName": "OX",
+	"returnType": "number"
+}
+@@LANG
+"ox": { 
+	"translated-name": "OX",
+	"description": "Get x co-ordinate of shaking orgin"
+}
+@@CODE
+OX()
+{
+	const wi = this._inst.GetWorldInfo()
+	return (this.OX !== null) ? this.OX : wi.GetX();
+}
+@@END ox
+
+@@START oy|orgin
+@@ACE
+{
+	"id": "oy",
+	"expressionName": "OY",
+	"returnType": "number"
+}
+@@LANG
+"oy": { 
+	"translated-name": "OY",
+	"description": "Get y co-ordinate of shaking orgin"
+}
+@@CODE
+OY()
+{
+	const wi = this._inst.GetWorldInfo()
+	return (this.OY !== null) ? this.OY : wi.GetY();
+}
+@@END oy
+

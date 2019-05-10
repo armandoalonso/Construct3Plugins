@@ -188,17 +188,20 @@
 				
 			if (properties)
 			{
-				this.enabled = this.properties[0];
-				var mode = this.properties[1];
-				this.duration = this.properties[2];
-				this.magnitude = this.properties[3];
-				this.magMode = this.properties[4];
+				this.enabled = properties[0];
+				var mode = properties[1];
+				this.duration = properties[2];
+				this.magnitude = properties[3];
+				this.magMode = properties[4];
 				this.effectMode = (mode === 0);
 				this.behaviorMode = (mode === 1);
 			}
 
 			// Opt-in to getting calls to Tick()
-			//this._StartTicking();
+			if(this.enabled){
+				this._StartTicking();
+				this._StartTicking2();
+			}
 		}
 		
 		Release()
@@ -209,7 +212,7 @@
 		SaveToJson()
 		{
 			return {
-				"e": this.enable,
+				"e": this.enabled,
 				"dur": this.duration,
 				"mag": this.magnitude,
 				"magMode": this.magMode,
@@ -223,7 +226,7 @@
 		
 		LoadFromJson(o)
 		{
-			this.enable = o["e"];
+			this.enabled = o["e"];
 			this.duration = o["dur"]
 			this.magnitude = o["mag"];
 			this.magMode = o["magMode"];
@@ -260,12 +263,13 @@
 				return;
 			}
 			
-			var dt = this.GetRuntime().GetDt(this);
+			var dt = this._runtime.GetDt(this._inst);
 			if (dt == 0) return;
 			
 			// save origin to current position
-			this.OX = this.inst.x;
-			this.OY = this.inst.y;
+			const wi = this._inst.GetWorldInfo();
+			this.OX = wi.GetX();
+			this.OY = wi.GetY();
 			var isEnded = this.ShakePos(dt);
 			
 			if (isEnded) {
@@ -288,7 +292,14 @@
 				offy = 0;
 			}
 			else {
-				var mag = this.magnitude * Math.min(this.GetRuntime().GetTimescale(), 1);
+			
+				console.log(this.GetRuntime());
+				console.log(this._runtime);
+				debugger;
+				
+				
+				var mag = this.magnitude * Math.min(this.GetRuntime().GetTimeScale(), 1);
+				
 				if (this.magMode === 1)  // decay
 				{
 					mag *= this.remaining / this.duration;
@@ -301,8 +312,8 @@
 			// add offset to origin
 			var nx = this.OX + offx;
 			var ny = this.OY + offy;
-			if ((nx !== this.inst.x) || (ny !== this.inst.y)) {
-				let wi = this.GetWorldInfo()
+			const wi = this._inst.GetWorldInfo();
+			if ((nx !== wi.GetX()) || (ny !== wi.GetY())) {
 				wi.SetXY(nx, ny);
 				wi.SetBboxChanged();
 			}
@@ -311,8 +322,9 @@
 			return isEnded;
 		}
 		
-		BackToOrgin(noUpdateBBox)
+		BackToOrigin(noUpdateBBox)
 		{
+			const wi = this._inst.GetWorldInfo();
 			if ((!this.enabled) || (!this.isShaking)){
 				return;
 			}
@@ -321,12 +333,11 @@
 				return;
 			}
 			
-			if ((this.OX === this.inst.x) && (this.OY === this.inst.y)){
+			if ((this.OX === wi.GetX()) && (this.OY === wi.GetY())){
 				return;
 			}
 			
 			// go back to origin point
-			let wi = this.GetWorldInfo();
 			wi.SetXY(this.OX, this.OY);
 			this.OX = null;
 			this.OY = null;
@@ -335,16 +346,67 @@
 				wi.SetBboxChanged();
 			}
 		}
+		
+		GetDebuggerProperties()
+		{
+			return [{
+				title: "Piranha305_Shake",
+				properties: [
+					{name: "Enabled",		value: this.enabled },
+					{name: "Duration",		value: this.duration },
+					{name: "Magnitude",		value: this.magnitude },
+					{name: "Is Shaking",	value: this.isShaking },
+					{name: "Orgin X",		value: this.OX },
+					{name: "Orgin Y",		value: this.OY },
+					{name: "Remaining",		value: this.remaining }
+				]
+			}];
+		}
 
 	};
 }
 @@END INSTANCE_RUN.JS
 
 @@START LANG_PROP.JSON
-"properties": { }
+"properties": {
+  "activated": {
+    "name": "Activated",
+    "desc": "Enable if you wish this to begin at the start of the layout."
+  },
+  "mode": {
+    "name": "Mode",
+    "desc": "Effect mode only sets position for render.",
+    "items": {
+      "effect": "Effect",
+      "behavior": "Behavior"
+    }
+  },
+  "duration": {
+    "name": "Duration",
+    "desc": "The time the shake should last, in seconds."
+  },
+  "magnitude": {
+    "name": "Magnitude",
+    "desc": "The strength of the shake, in pixels."
+  },
+  "magnitude-mode": {
+    "name": "Magnitude mode",
+    "desc": "Decay or constant magnitude.",
+    "items": {
+      "constant": "Constant",
+      "decay": "Decay"
+    }
+  }
+}
 @@END LANG_PROP.JSON
 
 @@START LANG_CAT.JSON
-"aceCategories": { }
+"aceCategories": {
+    "enable" : "Enable",
+    "shake" : "Shake",
+    "duration" : "Duration",
+    "magnitude" : "Magnitude",
+    "orgin" : "Origin"
+}
 @@END LANG_CAT.JSON
 

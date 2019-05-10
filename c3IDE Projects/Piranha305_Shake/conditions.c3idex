@@ -1,0 +1,41 @@
+@@START on-shaking-end|shake
+@@ACE
+{
+	"id": "on-shaking-end",
+	"scriptName": "OnShakingEnd",
+	"highlight": false,
+	"isTrigger": true
+}
+@@LANG
+"on-shaking-end": {
+	"list-name": "On Shaking End",
+	"display-text": "On {my} shacking end",
+	"description": "Triggered when shacking end"
+}
+@@CODE
+OnShakingEnd()
+{
+	return (this.is_my_call);
+}
+@@END on-shaking-end
+
+@@START is-shaking|shake
+@@ACE
+{
+	"id": "is-shaking",
+	"scriptName": "IsShaking",
+	"highlight": false
+}
+@@LANG
+"is-shaking": {
+	"list-name": "Is Shaking",
+	"display-text": "Is {my} shaking",
+	"description": "Is object shaking"
+}
+@@CODE
+IsShaking()
+{
+	return (this.enabled && this.IsShaking);
+}
+@@END is-shaking
+
