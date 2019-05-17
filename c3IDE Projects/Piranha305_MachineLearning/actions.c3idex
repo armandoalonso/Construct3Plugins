@@ -1,0 +1,120 @@
+@@START load-model|models
+@@ACE
+{
+  "id": "load-model",
+  "scriptName": "LoadModel",
+  "highlight": false,
+  "isAsync": true,
+  "params": [
+    {
+      "id": "model",
+      "type": "combo",
+      "items": [
+        "MobileNet"
+      ]
+    }
+  ]
+}
+@@LANG
+"load-model": {
+	"list-name": "Load Model",
+	"display-text": "Load Model {0}",
+	"description": "Loads the model",
+	"params": {
+        "model": {
+            "name": "Model",
+            "desc": "The models to load",
+            "items":{
+                "MobileNet": "MobileNet",
+            }
+        }
+    }
+}
+@@CODE
+async LoadModel(model)
+{
+	switch(model){	
+		case 0: 
+			this.classifier = await ml5.imageClassifier("MobileNet");
+			break;
+		default :
+			console.log("specified model does not exists");
+	}	
+	
+	
+}
+@@END load-model
+
+@@START load-image-url|image
+@@ACE
+{
+  "id": "load-image-url",
+  "scriptName": "LoadImageUrl",
+  "highlight": false,
+  "params": [
+    {
+      "id": "url",
+      "type": "string"
+    }
+  ]
+}
+@@LANG
+"load-image-url": {
+	"list-name": "Load Image From Url",
+	"display-text": "Load Image from URL {0}",
+	"description": "Loads image data from url",
+	"params": {
+        "url": {
+            "name": "Url",
+            "desc": "The url to load image data"
+        }
+    }
+}
+@@CODE
+LoadImageUrl(url)
+{
+	this.img = loadImage(url);
+}
+@@END load-image-url
+
+@@START predict|image
+@@ACE
+{
+	"id": "predict",
+	"scriptName": "Predict",
+	"highlight": false,
+	"isAsync": true
+}
+@@LANG
+"predict": {
+	"list-name": "Predict",
+	"display-text": "Predict Image",
+	"description": "Predicst the currently loaded image "
+}
+@@CODE
+async Predict()
+{
+	this.result = this.classifier.predict(this.img);
+}
+@@END predict
+
+@@START debug-results|debug
+@@ACE
+{
+	"id": "debug-results",
+	"scriptName": "DebugResults",
+	"highlight": false
+}
+@@LANG
+"debug-results": {
+	"list-name": "Debug Results",
+	"display-text": "Debug Results",
+	"description": "Console logs result object"
+}
+@@CODE
+DebugResults()
+{
+	console.log(this.result);
+}
+@@END debug-results
+
